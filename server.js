@@ -22,13 +22,43 @@ app.get('/artists', (req, res) => {
   res.send(myArtists);
 });
 
+// return an object with an 'id' (which can be searched on Spotify) and 'name'
+app.get('/artistID/:artistName', (req, res) => {
+  let artistName    = req.params.artistName;
+  let formattedName = artistName.split(' ').join('+');
+
+  let myURL = 'https://api.spotify.com/v1/search?q=' +
+              formattedName + '&type=artist&limit=1';
+
+  request(myURL, (error, response, body) => {
+    if(!error && response.statusCode == 200) {
+
+      let jsonData = JSON.parse(body)['artists']['items'][0];
+      let artistID = undefined;
+
+      // check if we received information from Spotify
+      if(jsonData) {
+        artistID = jsonData['id'];
+      } else {
+        console.log(artistName + '\'s id was not found.');
+      }
+
+      let data     = {};
+      data['id']   = artistID;
+      data['name'] = artistName;
+
+      res.send(data);
+    }
+  });
+});
+
 // returns an array of Album objects
 app.get('/albums/:artistID', (req, res) => {
   let artistID = req.params.artistID;
   // let myUrl = 'https://api.spotify.com/v1/artists/' +
   //           artistID + '/albums?limit=10';
 
-  // test URL
+  // TODO clear out test URL
   let myUrl = 'https://api.spotify.com/v1/artists/1vCWHaC5f2uS3yhpwWbIA6/albums?limit=5';
 
   // hit spotify API
@@ -56,6 +86,9 @@ app.get('/albums/:artistID', (req, res) => {
     }
   });
 });
+
+// TODO get tracks from album
+
 
 const server = app.listen(3000, () => {
   console.log('Express server running...');
