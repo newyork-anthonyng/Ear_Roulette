@@ -20,8 +20,9 @@ $(function() {
 let playMusic = function() {
   $.ajax({
     url:'/play'
-  }).done(() => {
+  }).done((songInformation) => {
     console.log('Playing music');
+    console.log(songInformation);
   });
 }
 
