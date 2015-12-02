@@ -1,10 +1,14 @@
 'use strict'
 
-let myArtists = ['billy joel', 'cher', 'madonna', 'killers'];
+let myArtists = ['billy joel'];
 
 $(function() {
   $('#artist').click(() => {
     getTracks(myArtists);
+  });
+
+  $('#play').click(() => {
+    console.log('play button clicked');
   });
 
 });
@@ -33,6 +37,12 @@ let getTracks = function(artistNameArray) {
       $.when.apply($, deferredTrackId).done(() => {
         console.log('All track information retrieved');
         console.log(myTracksArray);
+
+        // update the tracks information on the server
+        $.ajax({
+          url: '/updateTracks',
+          data: {'data': myTracksArray}
+        });
 
       }); // close $.when for getting Track information
     }); // close $.when for getting Album ID's
@@ -93,7 +103,7 @@ let getTracksPromises = function(albumIdArray, compiledArray) {
     }).done((data) => {
       // data returns an array of Track objects
       for(let i = 0, j = data.length; i < j; i++) {
-        compiledArray.push(data[i]['title']);
+        compiledArray.push(data[i]);
       }
 
     });
