@@ -4,35 +4,40 @@ let myArtists = ['billy joel', 'cher', 'madonna', 'killers'];
 
 $(function() {
   $('#artist').click(() => {
-    let myArtistIdArray = [];
-    let myAlbumIdArray  = [];
-    let myTracksArray   = [];
-
-    let deferredArtistId = getArtistIdPromises(myArtists, myArtistIdArray);
-
-    // When all Artist Id's are stored, get each album from the artist
-    $.when.apply($, deferredArtistId).done(() => {
-      console.log('All artist ID\'s retrieved');
-
-      let deferredAlbumId = getAlbumsPromises(myArtistIdArray, myAlbumIdArray);
-
-      // When all Album Id's are stored, get each track from the album
-      $.when.apply($, deferredAlbumId).done(() => {
-        console.log('All album ID\'s retrieved');
-
-        let deferredTrackId = getTracksPromises(myAlbumIdArray, myTracksArray);
-
-        // When all Track information is stored...
-        $.when.apply($, deferredTrackId).done(() => {
-          console.log('All track information retrieved');
-          console.log(myTracksArray);
-
-        }); // close $.when for getting Track information
-      }); // close $.when for getting Album ID's
-    }); // close $.when for getting Artist ID's
-  }); // close $('artist').click event
+    getTracks(myArtists);
+  });
 
 });
+
+// returns an array of Track Objects
+let getTracks = function(artistNameArray) {
+  let myArtistIdArray = [];
+  let myAlbumIdArray  = [];
+  let myTracksArray   = [];
+
+  let deferredArtistId = getArtistIdPromises(artistNameArray, myArtistIdArray);
+
+  // When all Artist Id's are stored, get each album from the artist
+  $.when.apply($, deferredArtistId).done(() => {
+    console.log('All artist ID\'s retrieved');
+
+    let deferredAlbumId = getAlbumsPromises(myArtistIdArray, myAlbumIdArray);
+
+    // When all Album Id's are stored, get each track from the album
+    $.when.apply($, deferredAlbumId).done(() => {
+      console.log('All album ID\'s retrieved');
+
+      let deferredTrackId = getTracksPromises(myAlbumIdArray, myTracksArray);
+
+      // When all Track information is stored...
+      $.when.apply($, deferredTrackId).done(() => {
+        console.log('All track information retrieved');
+        console.log(myTracksArray);
+
+      }); // close $.when for getting Track information
+    }); // close $.when for getting Album ID's
+  }); // close $.when for getting Artist ID's
+}
 
 // 'artistArray' holds an array of artist names
 // 'compiledArray' will hold all returned Artist ID's
@@ -53,7 +58,7 @@ let getArtistIdPromises = function(artistArray, compiledArray) {
   return deferreds;
 }
 
-// 'artistIDArray' holds an array of artist ID's
+// 'artistIdArray' holds an array of artist ID's
 // 'compiledArray' will hold all returned Album ID's
 // method will return an array of AJAX calls
 let getAlbumsPromises = function(artistIdArray, compiledArray) {
@@ -76,6 +81,9 @@ let getAlbumsPromises = function(artistIdArray, compiledArray) {
   return deferreds;
 }
 
+// 'albumIdArray' holds an array of album ID's
+// 'compiledArray' will hold all returned Track objects
+// method will return an array of AJAX calls
 let getTracksPromises = function(albumIdArray, compiledArray) {
   let deferreds = [];
 
