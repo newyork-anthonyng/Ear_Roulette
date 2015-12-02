@@ -5,6 +5,7 @@ const app         = express();
 const bodyParser  = require('body-parser');
 const logger      = require('morgan');
 const request     = require('request');
+const Player      = require('player');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -131,8 +132,10 @@ app.get('/updateTracks', (req, res) => {
     myTracks.push(data[track]['preview']);
   }
 
-  console.log(myTracks);
+  res.status(200).send();
 });
+
+// play
 
 const server = app.listen(3000, () => {
   console.log('Express server running...');
