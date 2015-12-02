@@ -42,6 +42,12 @@ let getTracks = function(artistNameArray) {
         $.ajax({
           url: '/updateTracks',
           data: {'data': myTracksArray}
+        }).done(() => {
+          // start playing music when track listing is updated
+          $.ajax({
+            url: '/play'
+          });
+
         });
 
       }); // close $.when for getting Track information
