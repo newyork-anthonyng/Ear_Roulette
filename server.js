@@ -139,8 +139,11 @@ app.get('/updateTracks', (req, res) => {
 
 // play music
 app.get('/play', (req, res) => {
-  player = new Player(myTracks);
-  player.play();
+  
+  if(!player) {
+    player = new Player(myTracks);
+    player.play();
+  }
 
   res.status(200).send();
 });
