@@ -4,29 +4,31 @@ let myArtists = ['billy joel', 'cher', 'madonna'];
 
 $(function() {
   $('#artist').click(() => {
-    console.log('button clicked');
-    // let i = 0;
-    // getArtistID(i);
-    getArtistId(myArtists);
+    let myArtistId = [];
+    let deferreds = getArtistIdPromises(myArtists, myArtistId);
+
+    $.when.apply($, deferreds).done(function(data) {
+      console.log(myArtistId);
+    });
   });
+
 });
 
-let getArtistId = function(artistArray) {
+// 'artistArray' holds an array of artist names
+// 'compiledArray' is the array which will hold all of your artist data
+// method will return an array of AJAX calls
+let getArtistIdPromises = function(artistArray, compiledArray) {
+  let deferreds = [];
 
-  $.ajax({
-    url: '/artistID/' + artistArray[0]
-  }).done((artist) => {
-    console.log(artist['name'] + ': ' + artist['id']);
-  });
+  for(let i = 0, j = artistArray.length; i < j; i++) {
+    let newRequest = $.ajax({
+      url: 'artistID/' + artistArray[i]
+    }).done((data) => {
+      compiledArray.push(data);
+    });
 
-  // make a copy of artist array
-  // remove the first artist from the array and call getArtistId again
-  let myArtistArray = artistArray;
-  myArtistArray.splice(0, 1);
-
-  if(myArtistArray.length > 0) {
-    getArtistId(myArtistArray);
-  } else {
-    return true;
+    deferreds.push(newRequest);
   }
+
+  return deferreds;
 }
