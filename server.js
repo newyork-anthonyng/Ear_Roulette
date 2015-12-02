@@ -118,6 +118,22 @@ app.get('/tracks/:albumID', (req, res) => {
 
 });
 
+// myTracks will hold all previewURLs
+let myTracks = [];
+
+// saves all tracks into array
+app.get('/updateTracks', (req, res) => {
+  // console.log(req.query['data'][0]['preview']);
+  let data = req.query['data'];
+
+  // go through each track and update myTracks with previewURL
+  for(let track in data) {
+    myTracks.push(data[track]['preview']);
+  }
+
+  console.log(myTracks);
+});
+
 const server = app.listen(3000, () => {
   console.log('Express server running...');
 })
