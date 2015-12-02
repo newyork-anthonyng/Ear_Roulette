@@ -9,9 +9,10 @@ const request     = require('request');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.send('Hello World');
+  
 });
 
 // TODO: need to populate mongodb with list of artists
@@ -119,7 +120,6 @@ app.get('/tracks/:albumID', (req, res) => {
   });
 
 });
-
 
 const server = app.listen(3000, () => {
   console.log('Express server running...');
