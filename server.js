@@ -139,13 +139,23 @@ app.get('/updateTracks', (req, res) => {
 
 // play music
 app.get('/play', (req, res) => {
-  
+
   if(!player) {
+    console.log('Playing music');
     player = new Player(myTracks);
     player.play();
+  } else {
+    player.pause();
   }
 
   res.status(200).send();
+});
+
+// pause music
+app.get('/pause', (req, res) => {
+  if(player) player.pause();
+
+  res.status(200).send()
 });
 
 const server = app.listen(3000, () => {

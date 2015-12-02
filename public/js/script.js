@@ -1,26 +1,35 @@
 'use strict'
 
 let myArtists = ['killers'];
+let songsLoaded = false;
 
 $(function() {
   // load all tracks for artists
   getTracks(myArtists);
 
   $('#play').click(() => {
-    playMusic();
-    console.log('play button clicked');
+    if(songsLoaded) playMusic();
   });
 
-
+  $('#pause').click(() => {
+    pauseMusic();
+  })
 
 });
 
-// play music
 let playMusic = function() {
   $.ajax({
     url:'/play'
   }).done(() => {
     console.log('Playing music');
+  });
+}
+
+let pauseMusic = function() {
+  $.ajax({
+    url:'/pause'
+  }).done(() => {
+    console.log('Pausing music');
   });
 }
 
@@ -34,26 +43,23 @@ let getTracks = function(artistNameArray) {
 
   // When all Artist Id's are stored, get each album from the artist
   $.when.apply($, deferredArtistId).done(() => {
-    console.log('All artist ID\'s retrieved');
 
     let deferredAlbumId = getAlbumsPromises(myArtistIdArray, myAlbumIdArray);
 
     // When all Album Id's are stored, get each track from the album
     $.when.apply($, deferredAlbumId).done(() => {
-      console.log('All album ID\'s retrieved');
 
       let deferredTrackId = getTracksPromises(myAlbumIdArray, myTracksArray);
 
       // When all Track information is stored...
       $.when.apply($, deferredTrackId).done(() => {
-        console.log('All track information retrieved');
-
         // update tracks on the server
         $.ajax({
           url: '/updateTracks',
           data: {'data': myTracksArray}
         }).done(() => {
-          console.log('Server.js information updated with tracks');
+          console.log('Ready to play');
+          songsLoaded = true;
         });
 
       }); // close $.when for getting Track information
