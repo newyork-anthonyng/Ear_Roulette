@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  
+
 });
 
 // TODO: need to populate mongodb with list of artists
@@ -56,11 +56,9 @@ app.get('/artistID/:artistName', (req, res) => {
 // returns an array of objects, with keys of 'id', 'name' and 'image'
 app.get('/albums/:artistID', (req, res) => {
   let artistID = req.params.artistID;
-  // let myUrl = 'https://api.spotify.com/v1/artists/' +
-  //           artistID + '/albums?limit=10';
 
-  // TODO clear out test URL
-  let myUrl = 'https://api.spotify.com/v1/artists/1vCWHaC5f2uS3yhpwWbIA6/albums?limit=5';
+  let myUrl = 'https://api.spotify.com/v1/artists/' +
+            artistID + '/albums?limit=10';
 
   // hit spotify API
   request(myUrl, (error, response, body) => {
@@ -92,9 +90,8 @@ app.get('/albums/:artistID', (req, res) => {
 app.get('/tracks/:albumID', (req, res) => {
   let albumID = req.params.albumID;
 
-  // TODO get real URL to work
-  // let myURL = 'https://api.spotify.com/v1/albums/' + albumID + '/tracks?limit=30';
-  let myURL = 'https://api.spotify.com/v1/albums/2nrtgcTaTEy4KF742WvVC3/tracks?limit=30';
+  let myURL = 'https://api.spotify.com/v1/albums/' +
+              albumID + '/tracks?limit=30';
 
   request(myURL, (error, response, body) => {
     if(!error && response.statusCode == 200) {
