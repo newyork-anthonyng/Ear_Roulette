@@ -132,12 +132,13 @@ app.get('/updateTracks', (req, res) => {
   // go through each track and update myTracks with previewURL
   for(let track in data) {
     myTracks.push(data[track]['preview']);
+    myTracksInformation.push(data[track]);
   }
+  console.log(myTracksInformation);
 
   res.status(200).send();
 });
 
-// play music
 app.get('/play', (req, res) => {
 
   if(!player) {
@@ -148,10 +149,15 @@ app.get('/play', (req, res) => {
     player.pause();
   }
 
-  res.status(200).send();
+  // res.status(200).send();
+  // send title and artist
+  let songInformation = {};
+  songInformation['title']  = myTracksInformation[0]['title'];
+  songInformation['artist'] = myTracksInformation[0]['artist'];
+
+  res.send(songInformation);
 });
 
-// pause music
 app.get('/pause', (req, res) => {
   if(player) player.pause();
 
