@@ -1,17 +1,28 @@
 'use strict'
 
-let myArtists = ['billy joel'];
+let myArtists = ['killers'];
 
 $(function() {
-  $('#artist').click(() => {
-    getTracks(myArtists);
-  });
+  // load all tracks for artists
+  getTracks(myArtists);
 
   $('#play').click(() => {
+    playMusic();
     console.log('play button clicked');
   });
 
+
+
 });
+
+// play music
+let playMusic = function() {
+  $.ajax({
+    url:'/play'
+  }).done(() => {
+    console.log('Playing music');
+  });
+}
 
 // returns an array of Track Objects
 let getTracks = function(artistNameArray) {
@@ -36,18 +47,13 @@ let getTracks = function(artistNameArray) {
       // When all Track information is stored...
       $.when.apply($, deferredTrackId).done(() => {
         console.log('All track information retrieved');
-        console.log(myTracksArray);
 
-        // update the tracks information on the server
+        // update tracks on the server
         $.ajax({
           url: '/updateTracks',
           data: {'data': myTracksArray}
         }).done(() => {
-          // start playing music when track listing is updated
-          $.ajax({
-            url: '/play'
-          });
-
+          console.log('Server.js information updated with tracks');
         });
 
       }); // close $.when for getting Track information

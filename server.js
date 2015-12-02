@@ -120,8 +120,10 @@ app.get('/tracks/:albumID', (req, res) => {
 });
 
 // myTracks will hold all previewURLs
-let myTracks = [];
-let player   = undefined;
+let myTracks            = [];
+// myTracksInformation will hold 'title' and 'artist'
+let myTracksInformation = [];
+let player              = undefined;
 
 // saves all tracks into array
 app.get('/updateTracks', (req, res) => {
@@ -141,9 +143,6 @@ app.get('/play', (req, res) => {
   player.play();
 
   res.status(200).send();
-  // console.log('playing music');
-  // console.log(myTracks);
-  // player.play();
 });
 
 const server = app.listen(3000, () => {
