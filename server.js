@@ -6,6 +6,10 @@ const bodyParser  = require('body-parser');
 const logger      = require('morgan');
 const request     = require('request');
 const Player      = require('player');
+const Track       = require('./public/js/Track');
+
+// use Angular
+app.use('/scripts', express.static(__dirname + '/node_modules/angular'));
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -143,8 +147,11 @@ app.get('/play', (req, res) => {
 
   if(!player) {
     console.log('Playing music');
-    player = new Player(myTracks);
+    player = new Player(myTracks[0]);
     player.play();
+    player.on('error', (song) => {
+      console.log('error');
+    });
   } else {
     player.pause();
   }
