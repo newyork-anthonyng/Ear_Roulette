@@ -5,8 +5,8 @@ let app = angular.module('Roulette', []);
 app.controller('RouletteController', function($http, $interval) {
 
   this.currentSong = {
-    title:  'Mr. Brightside',
-    artist: 'Killers'
+    title:  '',
+    artist: ''
   }
 
   this.playSong = function() {
@@ -45,12 +45,10 @@ app.controller('RouletteController', function($http, $interval) {
     this.currentSong['artist']  = artist;
   };
 
-  // TEST CODE
-  this.intervalTest = function() {
-    $interval(() => {
-      console.log('tick');
-    }, 1000);
-  };
-
+  // Check for song title every second
+  $interval(() => {
+    console.log('tick');
+    this.getSong();
+  }, 1000);
 
 });
