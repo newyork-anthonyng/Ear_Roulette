@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-
+  res.json({ success: true });
 });
 
 // TODO: need to populate mongodb with list of artists
@@ -63,7 +63,7 @@ app.get('/albums/:artistID', (req, res) => {
   let artistID = req.params.artistID;
 
   let myUrl = 'https://api.spotify.com/v1/artists/' +
-            artistID + '/albums?limit=10';
+            artistID + '/albums?limit=1';
 
   // hit spotify API
   request(myUrl, (error, response, body) => {
@@ -96,7 +96,7 @@ app.get('/tracks/:albumID', (req, res) => {
   let albumID = req.params.albumID;
 
   let myURL = 'https://api.spotify.com/v1/albums/' +
-              albumID + '/tracks?limit=30';
+              albumID + '/tracks?limit=2';
 
   request(myURL, (error, response, body) => {
     if(!error && response.statusCode == 200) {
@@ -147,7 +147,7 @@ app.get('/play', (req, res) => {
 
   if(!player) {
     console.log('Playing music');
-    player = new Player(myTracks[0]);
+    player = new Player(myTracks);
     player.play();
     player.on('error', (song) => {
       console.log('error');
@@ -169,6 +169,11 @@ app.get('/pause', (req, res) => {
   if(player) player.pause();
 
   res.status(200).send()
+});
+
+// return the current song information
+app.get('/currentSong', (req, res) => {
+  res.send(myTracksInformation[0]);
 });
 
 const server = app.listen(3000, () => {
