@@ -7,13 +7,13 @@ $(function() {
   // load all tracks for artists
   getTracks(myArtists);
 
-  $('#play').click(() => {
-    if(songsLoaded) playMusic();
-  });
-
-  $('#pause').click(() => {
-    pauseMusic();
-  })
+  // $('#play').click(() => {
+  //   if(songsLoaded) playMusic();
+  // });
+  //
+  // $('#pause').click(() => {
+  //   pauseMusic();
+  // })
 
 });
 
