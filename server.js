@@ -6,7 +6,6 @@ const bodyParser  = require('body-parser');
 const logger      = require('morgan');
 const request     = require('request');
 const Player      = require('player');
-const Track       = require('./public/js/Track');
 
 // use Angular
 app.use('/scripts', express.static(__dirname + '/node_modules/angular'));
