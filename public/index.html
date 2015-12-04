@@ -15,8 +15,8 @@
       <p ng-bind="roulette.currentSong['title']"></p>
       <p ng-bind="roulette.currentSong['artist']"></p>
 
-      <button id="play">Play</button>
-      <button id="pause">Pause</button>
+      <button ng-click="roulette.playSong()">Play</button>
+      <button >Pause</button>
       <button ng-click="roulette.getSong()">Get Song</button>
 
       <button ng-click="roulette.intervalTest()">Interval Test</button>
