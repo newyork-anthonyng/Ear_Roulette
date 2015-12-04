@@ -10,13 +10,16 @@
   <body>
     <h1>Ear Roulette</h1>
 
-    <!-- test code -->
-    <button id="play">Play</button>
-    <button id="pause">Pause</button>
 
     <section ng-controller="RouletteController as roulette">
-      <p> {{ roulette.helloWorld }}</p>
+      <p ng-bind="roulette.currentSong['title']"></p>
+      <p ng-bind="roulette.currentSong['artist']"></p>
 
+      <button id="play">Play</button>
+      <button id="pause">Pause</button>
+      <button ng-click="roulette.getSong()">Get Song</button>
+
+      <button ng-click="roulette.intervalTest()">Interval Test</button>
     </section>
 
     <script src="./js/script.js"></script>
