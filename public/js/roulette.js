@@ -9,7 +9,6 @@ app.controller('RouletteController', function($http, $interval) {
     artist: 'Killers'
   }
 
-  // play song
   this.playSong = function() {
     let myUrl = '/play'
 
@@ -17,9 +16,18 @@ app.controller('RouletteController', function($http, $interval) {
       .then(() => {
         console.log('roulette.js = get /play');
       });
-  }
+  };
 
-  // update song information
+  this.pauseSong = function() {
+    let myUrl = '/pause'
+
+    $http.get(myUrl)
+      .then(() => {
+        console.log('roulette.js = get /pause');
+      });
+  };
+
+  // update current song information
   this.getSong = function() {
     let myUrl = '/currentSong';
 
@@ -37,6 +45,7 @@ app.controller('RouletteController', function($http, $interval) {
     this.currentSong['artist']  = artist;
   };
 
+  // TEST CODE
   this.intervalTest = function() {
     $interval(() => {
       console.log('tick');

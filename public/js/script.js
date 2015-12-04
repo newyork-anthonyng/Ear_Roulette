@@ -7,32 +7,7 @@ $(function() {
   // load all tracks for artists
   getTracks(myArtists);
 
-  // $('#play').click(() => {
-  //   if(songsLoaded) playMusic();
-  // });
-  //
-  // $('#pause').click(() => {
-  //   pauseMusic();
-  // })
-
 });
-
-let playMusic = function() {
-  $.ajax({
-    url:'/play'
-  }).done((songInformation) => {
-    console.log('Playing music');
-    console.log(songInformation);
-  });
-}
-
-let pauseMusic = function() {
-  $.ajax({
-    url:'/pause'
-  }).done(() => {
-    console.log('Pausing music');
-  });
-}
 
 // returns an array of Track Objects
 let getTracks = function(artistNameArray) {
