@@ -1,10 +1,36 @@
 'use strict'
 
-angular.module('Roulette', [])
-  .controller('RouletteController', RouletteController);
+let app = angular.module('Roulette', []);
 
-function RouletteController() {
-  let self = this;
+app.controller('RouletteController', function($http, $interval) {
 
-  self.helloWorld = 'Hello World';
-}
+  this.currentSong = {
+    title:  'Mr. Brightside',
+    artist: 'Killers'
+  }
+
+  // update song information
+  this.getSong = function() {
+    let myUrl = '/currentSong';
+
+    $http.get(myUrl)
+      .then((response) => {
+        let myTitle   = response.data.title;
+        let myArtist  = response.data.artist;
+
+        this.updateCurrentSong(myTitle, myArtist);
+      });
+  }
+
+  this.updateCurrentSong = function(title, artist) {
+    this.currentSong['title']   = title;
+    this.currentSong['artist']  = artist;
+  }
+  this.intervalTest = function() {
+    $interval(() => {
+      console.log('tick');
+    }, 1000);
+  };
+
+
+});
