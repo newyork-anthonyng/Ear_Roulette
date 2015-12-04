@@ -127,8 +127,6 @@ let myTracks            = [];
 // myTracksInformation will hold 'title' and 'artist'
 let myTracksInformation = [];
 let player              = undefined;
-
-// currentTrack will hold the index of the current myTracks
 let currentTrack = 0;
 
 // saves all tracks into array
@@ -140,31 +138,12 @@ app.get('/updateTracks', (req, res) => {
     myTracks.push(data[track]['preview']);
     myTracksInformation.push(data[track]);
   }
-  console.log(myTracksInformation);
 
   res.status(200).send();
 });
 
 app.get('/play', (req, res) => {
-
-  createPlayer(player, myTracks);
-  // if(!player) {
-  //   console.log('Playing music');
-  //
-  //   createPlayer(player, myTracks);
-  //
-  //   // error catches when the current song has ended
-  //   // player.on('error', (song) => {
-  //   //   console.log('on error: song ended');
-  //   //   currentTrack += 1;
-  //   //
-  //   //   // create a new player with the next song
-  //   //   player = new Player(myTracks[currentTrack]);
-  //   //   player.play();
-  //   // });
-  // } else {
-  //   player.pause();
-  // }
+  player = createPlayer(player, myTracks);
 
   // send title and artist
   let songInformation = {};
@@ -175,6 +154,7 @@ app.get('/play', (req, res) => {
 });
 
 app.get('/pause', (req, res) => {
+  console.log('player: ' + player);
   if(player) player.pause();
 
   res.status(200).send()
@@ -201,4 +181,6 @@ let createPlayer = function(player, songList) {
     console.log('on error: song ended');
     createPlayer(player, songList)
   });
+
+  return player;
 }
