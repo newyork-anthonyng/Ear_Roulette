@@ -62,7 +62,7 @@ app.get('/albums/:artistID', (req, res) => {
   let artistID = req.params.artistID;
 
   let myUrl = 'https://api.spotify.com/v1/artists/' +
-            artistID + '/albums?limit=1';
+            artistID + '/albums?limit=10';
 
   // hit spotify API
   request(myUrl, (error, response, body) => {
@@ -95,7 +95,7 @@ app.get('/tracks/:albumID', (req, res) => {
   let albumID = req.params.albumID;
 
   let myURL = 'https://api.spotify.com/v1/albums/' +
-              albumID + '/tracks?limit=2';
+              albumID + '/tracks?limit=10';
 
   request(myURL, (error, response, body) => {
     if(!error && response.statusCode == 200) {
@@ -128,6 +128,9 @@ let myTracks            = [];
 let myTracksInformation = [];
 let player              = undefined;
 
+// currentTrack will hold the index of the current myTracks
+let currentTrack = 0;
+
 // saves all tracks into array
 app.get('/updateTracks', (req, res) => {
   let data = req.query['data'];
@@ -144,22 +147,29 @@ app.get('/updateTracks', (req, res) => {
 
 app.get('/play', (req, res) => {
 
-  if(!player) {
-    console.log('Playing music');
-    player = new Player(myTracks);
-    player.play();
-    player.on('error', (song) => {
-      console.log('error');
-    });
-  } else {
-    player.pause();
-  }
+  createPlayer(player, myTracks);
+  // if(!player) {
+  //   console.log('Playing music');
+  //
+  //   createPlayer(player, myTracks);
+  //
+  //   // error catches when the current song has ended
+  //   // player.on('error', (song) => {
+  //   //   console.log('on error: song ended');
+  //   //   currentTrack += 1;
+  //   //
+  //   //   // create a new player with the next song
+  //   //   player = new Player(myTracks[currentTrack]);
+  //   //   player.play();
+  //   // });
+  // } else {
+  //   player.pause();
+  // }
 
-  // res.status(200).send();
   // send title and artist
   let songInformation = {};
-  songInformation['title']  = myTracksInformation[0]['title'];
-  songInformation['artist'] = myTracksInformation[0]['artist'];
+  songInformation['title']  = myTracksInformation[currentTrack]['title'];
+  songInformation['artist'] = myTracksInformation[currentTrack]['artist'];
 
   res.send(songInformation);
 });
@@ -172,9 +182,23 @@ app.get('/pause', (req, res) => {
 
 // return the current song information
 app.get('/currentSong', (req, res) => {
-  res.send(myTracksInformation[0]);
+  res.send(myTracksInformation[currentTrack]);
 });
 
 const server = app.listen(3000, () => {
   console.log('Express server running...');
 })
+
+// create a new player with a song list
+// attach an error handler to it
+let createPlayer = function(player, songList) {
+  player = new Player(songList[currentTrack]);
+  player.play();
+
+  player.on('error', (song) => {
+    player.stop();
+    currentTrack += 1;
+    console.log('on error: song ended');
+    createPlayer(player, songList)
+  });
+}
