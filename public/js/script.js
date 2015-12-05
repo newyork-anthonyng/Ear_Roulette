@@ -27,12 +27,19 @@ $(function() {
       data: data,
       method: 'POST'
     }).done((data) => {
-      console.log(data);
+      // if login was successful, then show the player and hide the login page
+      if(data['success']) loginPage();
     });
   }); // close out ('#login').click
 
-  
+
 });
+
+// show the player page
+let loginPage = function() {
+  $('#login-form').hide();
+  $('#player').show();
+};
 
 // returns an array of Track Objects
 let getTracks = function(artistNameArray) {

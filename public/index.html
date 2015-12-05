@@ -6,21 +6,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="./scripts/angular.js"></script>
     <script src="./js/roulette.js"></script>
+    <link href="./css/style.css" rel="stylesheet" type="text/css"></link>
   </head>
+
   <body>
     <h1>Ear Roulette</h1>
 
-    <section>
+    <section id="login-form">
       <label>Name</label>
       <input type="type" id="name"></input>
       <br>
       <label>Password</label>
       <input type="password" id="password"></input>
-
+      <br>
       <input type="submit" value="Login" id="login"></input>
     </section>
 
-    <section ng-controller="RouletteController as roulette">
+    <section id="player" ng-controller="RouletteController as roulette">
       <p ng-show="roulette.currentlyPlaying">Playing song...</p>
       <p ng-show="!roulette.currentlyPlaying">Paused song...</p>
       <p ng-bind="roulette.currentSong['title']"></p>

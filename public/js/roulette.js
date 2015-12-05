@@ -59,7 +59,6 @@ app.controller('RouletteController', function($http, $interval) {
 
   // Check for song title every second
   $interval(() => {
-    console.log('tick');
     this.getSong();
   }, 1000);
 
