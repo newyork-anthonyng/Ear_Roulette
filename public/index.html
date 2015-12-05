@@ -10,6 +10,15 @@
   <body>
     <h1>Ear Roulette</h1>
 
+    <section>
+      <label>Name</label>
+      <input type="type" id="name"></input>
+      <br>
+      <label>Password</label>
+      <input type="password" id="password"></input>
+
+      <input type="submit" value="Login" id="login"></input>
+    </section>
 
     <section ng-controller="RouletteController as roulette">
       <p ng-show="roulette.currentlyPlaying">Playing song...</p>
