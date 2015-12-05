@@ -3,10 +3,35 @@
 let myArtists = ['killers'];
 let songsLoaded = false;
 
+// get token from local storage and send it in header
+function verifyToken(xhr) {
+  xhr.setRequestHeader('x-access-token', localStorage['token']);
+}
+
 $(function() {
   // load all tracks for artists
   getTracks(myArtists);
 
+  // login user and give them token
+  $('#login').click(() => {
+    // get username and password from index.html
+    let name = $('#name').val();
+    let password = $('#password').val();
+
+    let data = {};
+    data['name'] = name;
+    data['password'] = password;
+
+    $.ajax({
+      url: '/user/authenticate',
+      data: data,
+      method: 'POST'
+    }).done((data) => {
+      console.log(data);
+    });
+  }); // close out ('#login').click
+
+  
 });
 
 // returns an array of Track Objects
