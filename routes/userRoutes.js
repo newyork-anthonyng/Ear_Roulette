@@ -39,6 +39,7 @@ router.post('/authenticate', (req, res) => {
         // return the token information
         console.log('token: ' + token);
         res.json({
+          user:    user,
           success: true,
           message: 'Enjoy your token.',
           token:   token

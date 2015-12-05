@@ -15,6 +15,21 @@ router.get('/', (req, res) => {
   res.json({ success: true, message: 'get player/' });
 });
 
+router.post('/like', (req, res) => {
+  // create a new liked song
+  let title = req.body.title ;
+  let artist = req.body.artist ;
+  let mySong = { title: title, artist: artist };
+
+  // grab the current user
+  // let myUser =
+
+  // push the current liked song into the user's favorites
+
+
+  res.json(mySong);
+});
+
 // saves all tracks into array
 router.get('/updateTracks', (req, res) => {
   let data = req.query['data'];
