@@ -31,7 +31,7 @@ let getTracks = function(artistNameArray) {
       $.when.apply($, deferredTrackId).done(() => {
         // update tracks on the server
         $.ajax({
-          url: '/updateTracks',
+          url: '/player/updateTracks',
           data: {'data': myTracksArray}
         }).done(() => {
           console.log('Ready to play');
@@ -51,7 +51,7 @@ let getArtistIdPromises = function(artistArray, compiledArray) {
 
   for(let i = 0, j = artistArray.length; i < j; i++) {
     let newRequest = $.ajax({
-      url: 'artistID/' + artistArray[i]
+      url: 'api/artistID/' + artistArray[i]
     }).done((data) => {
       compiledArray.push(data['id']);
     });
@@ -70,7 +70,7 @@ let getAlbumsPromises = function(artistIdArray, compiledArray) {
 
   for(let i = 0, j = artistIdArray.length; i < j; i++) {
     let newRequest = $.ajax({
-      url: 'albums/' + artistIdArray[i]
+      url: 'api/albums/' + artistIdArray[i]
     }).done((data) => {
       // data returns an array of Album objects
       for(let i = 0, j = data.length; i < j; i++) {
@@ -93,7 +93,7 @@ let getTracksPromises = function(albumIdArray, compiledArray) {
 
   for(let i = 0, j = albumIdArray.length; i < j; i++) {
     let newRequest = $.ajax({
-      url: 'tracks/' + albumIdArray[i]
+      url: 'api/tracks/' + albumIdArray[i]
     }).done((data) => {
       // data returns an array of Track objects
       for(let i = 0, j = data.length; i < j; i++) {
