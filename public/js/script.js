@@ -28,10 +28,27 @@ $(function() {
       method: 'POST'
     }).done((data) => {
       // if login was successful, then show the player and hide the login page
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', data.user);
+      console.log(data);
       if(data['success']) loginPage();
     });
   }); // close out ('#login').click
 
+  $('#likeSong').click(() => {
+    // get song title and artist
+    let title = $('#player-title');
+    let artist = $('#player-artist');
+
+    let data = {};
+    $.ajax({
+      url: '/player/like',
+      data: data,
+      method: 'POST'
+    }).done((data) => {
+      console.log(data);
+    });
+  });
 
 });
 

@@ -25,10 +25,15 @@
     <section id="player" ng-controller="RouletteController as roulette">
       <p ng-show="roulette.currentlyPlaying">Playing song...</p>
       <p ng-show="!roulette.currentlyPlaying">Paused song...</p>
-      <p ng-bind="roulette.currentSong['title']"></p>
-      <p ng-bind="roulette.currentSong['artist']"></p>
 
-      <button ng-click="roulette.playSong()"> {{ roulette.buttonName() }} </button>
+      <div class="track-information">
+        <p id="player-title" ng-bind="roulette.currentSong['title']"></p>
+        <p id="player-artist" ng-bind="roulette.currentSong['artist']"></p>
+
+        <button ng-click="roulette.playSong()"> {{ roulette.buttonName() }} </button>
+        <button id="likeSong" ng-click="roulette.likeSong()">Like</button>
+      </div>
+
     </section>
 
     <script src="./js/script.js"></script>
