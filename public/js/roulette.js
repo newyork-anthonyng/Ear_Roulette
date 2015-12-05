@@ -57,6 +57,10 @@ app.controller('RouletteController', function($http, $interval) {
     this.currentSong['artist']  = artist;
   };
 
+  this.likeSong = function() {
+    let myUrl = '/player/like';
+  };
+
   // Check for song title every second
   $interval(() => {
     this.getSong();
