@@ -17,8 +17,7 @@
       <p ng-bind="roulette.currentSong['title']"></p>
       <p ng-bind="roulette.currentSong['artist']"></p>
 
-      <button ng-click="roulette.playSong()">Play</button>
-      <button ng-click="roulette.pauseSong()">Pause</button>
+      <button ng-click="roulette.playSong()"> {{ roulette.buttonName() }} </button>
     </section>
 
     <script src="./js/script.js"></script>

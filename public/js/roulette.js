@@ -9,7 +9,11 @@ app.controller('RouletteController', function($http, $interval) {
   this.currentSong = {
     title:  '',
     artist: ''
-  }
+  };
+
+  this.buttonName = function() {
+    return this.currentlyPlaying ? 'Pause' : 'Play';
+  };
 
   this.playSong = function() {
     this.currentlyPlaying = true;

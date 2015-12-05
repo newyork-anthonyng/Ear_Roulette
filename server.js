@@ -143,14 +143,25 @@ app.get('/updateTracks', (req, res) => {
 });
 
 app.get('/play', (req, res) => {
-  player = createPlayer(player, myTracks);
+  // if player doesn't exist, then create one
+  if(!player) {
+    console.log('Playing music.');
+    player = createPlayer(player, myTracks);
+  } else {
+    console.log('Hit play/pause.');
+    player.pause();
+  }
 
-  // send title and artist
-  let songInformation = {};
-  songInformation['title']  = myTracksInformation[currentTrack]['title'];
-  songInformation['artist'] = myTracksInformation[currentTrack]['artist'];
+  res.json({ success: true });
+  // // if not, then play/pause
+  // player = createPlayer(player, myTracks);
 
-  res.send(songInformation);
+  // // send title and artist
+  // let songInformation = {};
+  // songInformation['title']  = myTracksInformation[currentTrack]['title'];
+  // songInformation['artist'] = myTracksInformation[currentTrack]['artist'];
+  //
+  // res.send(songInformation);
 });
 
 app.get('/pause', (req, res) => {
@@ -172,6 +183,8 @@ const server = app.listen(3000, () => {
 // create a new player with a song list
 // attach an error handler to it
 let createPlayer = function(player, songList) {
+  if(player) player.stop();
+
   player = new Player(songList[currentTrack]);
   player.play();
 
@@ -179,7 +192,7 @@ let createPlayer = function(player, songList) {
     player.stop();
     currentTrack += 1;
     console.log('on error: song ended');
-    createPlayer(player, songList)
+    player = createPlayer(player, songList)
   });
 
   return player;
