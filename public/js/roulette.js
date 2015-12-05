@@ -18,7 +18,7 @@ app.controller('RouletteController', function($http, $interval) {
   this.playSong = function() {
     this.currentlyPlaying = true;
 
-    let myUrl = '/play'
+    let myUrl = '/player/play'
 
     $http.get(myUrl)
       .then(() => {
@@ -29,7 +29,7 @@ app.controller('RouletteController', function($http, $interval) {
   this.pauseSong = function() {
     this.currentlyPlaying = !this.currentlyPlaying;
 
-    let myUrl = '/pause'
+    let myUrl = '/player/pause'
 
     $http.get(myUrl)
       .then(() => {
@@ -40,7 +40,7 @@ app.controller('RouletteController', function($http, $interval) {
   // update current song information
   this.getSong = function() {
     if(!this.currentlyPlaying) return false;
-    let myUrl = '/currentSong';
+    let myUrl = '/player/currentSong';
 
     $http.get(myUrl)
       .then((response) => {
