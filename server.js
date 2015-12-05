@@ -35,7 +35,7 @@ app.use('/api', apiRoutes);
 app.use('/player', playerRoutes);
 
 app.get('/', (req, res) => {
-  res.json({ success: true });
+  res.json({ success: true, message: 'get /' });
 });
 
 // Test route to set up a fake user

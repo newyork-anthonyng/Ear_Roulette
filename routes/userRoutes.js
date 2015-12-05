@@ -1,9 +1,14 @@
 'use strict'
 
 const express  = require('express');
+const app      = express();
 const router   = express();
 const User     = require('../models/user');
 const mongoose = require('mongoose');
+const jwt      = require('jsonwebtoken');
+const config      = require('../config');
+
+app.set('secret', config.secret);
 
 router.get('/', (req, res) => {
   res.json({ success: true, message: 'get user/' });
