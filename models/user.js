@@ -7,10 +7,8 @@ let userSchema = new Schema({
   name:     {type: String, required: true, unique: true},
   password: {type: String, required: true},
 
-  favorites: {
-    title:  String,
-    artist: String
-  }
+  // Array will be an array of Objects with key of "title" and "artist"
+  favorites: Array
 });
 
 let User = mongoose.model('User', userSchema);
