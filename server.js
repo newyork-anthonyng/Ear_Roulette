@@ -5,10 +5,20 @@ const app         = express();
 const bodyParser  = require('body-parser');
 const logger      = require('morgan');
 const request     = require('request');
+const mongoose    = require('mongoose');
+
 const Player      = require('player');
+const jwt         = require('jsonwebtoken');
+const config      = require('./config');
+const User        = require('./models/user');
 
 // use Angular
 app.use('/scripts', express.static(__dirname + '/node_modules/angular'));
+
+// configuration
+const port = 3000;
+mongoose.connect(config.database);
+app.set('secret', config.secret);
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -17,6 +27,11 @@ app.use(express.static('public'));
 
 app.get('/', (req, res) => {
   res.json({ success: true });
+});
+
+// Test route to set up a fake user
+app.get('/setup', (req, res) => {
+
 });
 
 // TODO: need to populate mongodb with list of artists
@@ -176,9 +191,6 @@ app.get('/currentSong', (req, res) => {
   res.send(myTracksInformation[currentTrack]);
 });
 
-const server = app.listen(3000, () => {
-  console.log('Express server running...');
-})
 
 // create a new player with a song list
 // attach an error handler to it
@@ -197,3 +209,7 @@ let createPlayer = function(player, songList) {
 
   return player;
 }
+
+const server = app.listen(port, () => {
+  console.log('Express server running...');
+})
