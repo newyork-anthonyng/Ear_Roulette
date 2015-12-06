@@ -17,9 +17,9 @@ router.get('/', (req, res) => {
 
 router.post('/like', (req, res) => {
   // create a new liked song
-  let title = req.body.title ;
-  let artist = req.body.artist ;
-  let name = req.body.user;
+  let title  = req.body.title;
+  let artist = req.body.artist;
+  let name   = req.body.user;
 
   let mySong = { title: title, artist: artist };
 
@@ -39,6 +39,32 @@ router.post('/like', (req, res) => {
 
     res.send(user.favorites);
   });
+});
+
+router.post('/dislike', (req, res) => {
+  let title  = req.body.title;
+  let artist = req.body.artist;
+  let name   = req.body.user;
+
+  let mySong = { title: title, artist: artist };
+
+  // get current user and remove song from favorites
+  User.findOneAndUpdate(
+    { name: name },
+    { $pull: { favorites: { $and: [ { title: title }, { artist: artist } ] } } }, (err, user) => {
+      if(err) throw err;
+
+      console.log('Song removed.');
+    }
+  );
+
+  // get user's favorite songs
+  User.findOne({ name: name }, (err, user) => {
+    if(err) throw err;
+
+    res.send(user.favorites);
+  });
+
 });
 
 // saves all tracks into array

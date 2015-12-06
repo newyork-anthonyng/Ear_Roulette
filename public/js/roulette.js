@@ -64,20 +64,40 @@ app.controller('RouletteController', function($http, $interval) {
   this.likeSong = function() {
     let myUrl = '/player/like';
 
-    let title = this.currentSong['title'];
+    let title  = this.currentSong['title'];
     let artist = this.currentSong['artist'];
-    let user = localStorage['user'];
+    let user   = localStorage['user'];
 
     let data = {
-      title: title,
+      title:  title,
       artist: artist,
-      user: user
+      user:   user
     };
 
     $http.post(myUrl, data)
       .then((response) => {
-        // get user's favorite songs
         this.likedSongs = response.data;
+      });
+  };
+
+  this.deleteSong = function(index) {
+    // delete song from our database
+    let myUrl = 'player/dislike';
+
+    let title  = this.likedSongs[index]['title'];
+    let artist = this.likedSongs[index]['artist'];
+    let user   = localStorage['user'];
+
+    let data = {
+      title:  title,
+      artist: artist,
+      user:   user
+    }
+
+    $http.post(myUrl, data)
+      .then((response) => {
+        // delete song from controller's array
+        this.likedSongs.splice(index, 1);
       });
   };
 

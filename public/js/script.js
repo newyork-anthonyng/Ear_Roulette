@@ -1,6 +1,6 @@
 'use strict'
 
-let myArtists = ['jay-z'];
+let myArtists = ['britney spears'];
 let songsLoaded = false;
 
 // get token from local storage and send it in header
