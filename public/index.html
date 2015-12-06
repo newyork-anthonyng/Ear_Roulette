@@ -38,6 +38,7 @@
         <ul>
           <li ng-repeat="track in roulette.likedSongs">
             {{ track.title }} | {{ track.artist }}
+            <button ng-click="roulette.deleteSong($index)">Delete</button>
           </li>
         </ul>
       </div>
