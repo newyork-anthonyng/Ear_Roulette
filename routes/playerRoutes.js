@@ -21,28 +21,24 @@ router.post('/like', (req, res) => {
   let artist = req.body.artist ;
   let name = req.body.user;
 
-  console.log('inside of /like -- name: ' + name);
-
   let mySong = { title: title, artist: artist };
 
-  // grab the current user
-  console.log()
+  // get current user and add current song
   User.findOneAndUpdate(
     { name: name },
     { $push: { favorites: mySong } }, (err, user) => {
-      console.log('callback inside findOneAndUpdate: ' + user.name);
+      if(err) throw err;
+
+      console.log('Song saved.');
     }
   );
 
+  // get user's favorite songs
   User.findOne({ name: name }, (err, user) => {
-    console.log('user name: ' + user.name);
-    // console.log('user favorites: ' + user.favorites);
-    for(let i = 0, j = user.favorites.length; i < j; i++) {
-      console.log(user.favorites[i]);
-    }
-  });
+    if(err) throw err;
 
-  res.send(mySong);
+    res.send(user.favorites);
+  });
 });
 
 // saves all tracks into array

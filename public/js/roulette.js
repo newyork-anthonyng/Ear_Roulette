@@ -11,6 +11,10 @@ app.controller('RouletteController', function($http, $interval) {
     artist: ''
   };
 
+  // likedSongs will be an array of Song objects, which have...
+  // keys of "title" and "artist"
+  this.likedSongs = [];
+
   this.buttonName = function() {
     return this.currentlyPlaying ? 'Pause' : 'Play';
   };
@@ -59,6 +63,22 @@ app.controller('RouletteController', function($http, $interval) {
 
   this.likeSong = function() {
     let myUrl = '/player/like';
+
+    let title = this.currentSong['title'];
+    let artist = this.currentSong['artist'];
+    let user = localStorage['user'];
+
+    let data = {
+      title: title,
+      artist: artist,
+      user: user
+    };
+
+    $http.post(myUrl, data)
+      .then((response) => {
+        // get user's favorite songs
+        this.likedSongs = response.data;
+      });
   };
 
   // Check for song title every second

@@ -31,7 +31,15 @@
         <p id="player-artist" ng-bind="roulette.currentSong['artist']"></p>
 
         <button ng-click="roulette.playSong()"> {{ roulette.buttonName() }} </button>
-        <button id="likeSong" ng-click="roulette.likeSong()">Like</button>
+        <button ng-click="roulette.likeSong()">Like</button>
+      </div>
+
+      <div class="favorite-songs">
+        <ul>
+          <li ng-repeat="track in roulette.likedSongs">
+            {{ track.title }} | {{ track.artist }}
+          </li>
+        </ul>
       </div>
 
     </section>

@@ -1,6 +1,6 @@
 'use strict'
 
-let myArtists = ['killers'];
+let myArtists = ['jay-z'];
 let songsLoaded = false;
 
 // get token from local storage and send it in header
@@ -34,26 +34,6 @@ $(function() {
       if(data['success']) loginPage();
     });
   }); // close out ('#login').click
-
-  $('#likeSong').click(() => {
-    // get song title and artist
-    let title = $('#player-title').text();
-    let artist = $('#player-artist').text();
-
-    let data = {};
-    data['title'] = title;
-    data['artist'] = artist;
-    data['user'] = localStorage['user'];
-
-    $.ajax({
-      url: '/player/like',
-      data: data,
-      method: 'POST'
-    }).done((data) => {
-      console.log('Song saved.');
-    });
-  });
-
 });
 
 // show the player page
