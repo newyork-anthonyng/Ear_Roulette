@@ -29,24 +29,28 @@ $(function() {
     }).done((data) => {
       // if login was successful, then show the player and hide the login page
       localStorage.setItem('token', data.token);
-      localStorage.setItem('user', data.user);
-      console.log(data);
+      localStorage.setItem('user', data.user.name);
+
       if(data['success']) loginPage();
     });
   }); // close out ('#login').click
 
   $('#likeSong').click(() => {
     // get song title and artist
-    let title = $('#player-title');
-    let artist = $('#player-artist');
+    let title = $('#player-title').text();
+    let artist = $('#player-artist').text();
 
     let data = {};
+    data['title'] = title;
+    data['artist'] = artist;
+    data['user'] = localStorage['user'];
+
     $.ajax({
       url: '/player/like',
       data: data,
       method: 'POST'
     }).done((data) => {
-      console.log(data);
+      console.log('Song saved.');
     });
   });
 
