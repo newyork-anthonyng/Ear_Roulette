@@ -28,18 +28,37 @@ $(function() {
       method: 'POST'
     }).done((data) => {
       // if login was successful, then show the player and hide the login page
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', data.user.name);
+      if(data['success']) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', data.user.name);
 
-      if(data['success']) loginPage();
+        loginPage();
+      }
     });
   }); // close out ('#login').click
+
+  $('#logout').click(() => {
+    // get rid of user token
+    localStorage.setItem('token', undefined);
+    localStorage.setItem('user', undefined);
+
+    logoutPage();
+  }); // close out ('#logout').click
 });
 
 // show the player page
 let loginPage = function() {
+  // clear user inputs
+  $('#name').val('');
+  $('#password').val('');
+
   $('#login-form').hide();
   $('#player').show();
+};
+
+let logoutPage = function() {
+  $('#login-form').show();
+  $('#player').hide();
 };
 
 // returns an array of Track Objects
