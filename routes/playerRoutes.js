@@ -3,7 +3,7 @@
 const express = require('express');
 const router  = express.Router();
 const Player  = require('player');
-
+const User    = require('../models/user');
 // myTracks will hold all previewURLs
 let myTracks            = [];
 // myTracksInformation will hold 'title' and 'artist'
@@ -19,15 +19,30 @@ router.post('/like', (req, res) => {
   // create a new liked song
   let title = req.body.title ;
   let artist = req.body.artist ;
+  let name = req.body.user;
+
+  console.log('inside of /like -- name: ' + name);
+
   let mySong = { title: title, artist: artist };
 
   // grab the current user
-  // let myUser =
+  console.log()
+  User.findOneAndUpdate(
+    { name: name },
+    { $push: { favorites: mySong } }, (err, user) => {
+      console.log('callback inside findOneAndUpdate: ' + user.name);
+    }
+  );
 
-  // push the current liked song into the user's favorites
+  User.findOne({ name: name }, (err, user) => {
+    console.log('user name: ' + user.name);
+    // console.log('user favorites: ' + user.favorites);
+    for(let i = 0, j = user.favorites.length; i < j; i++) {
+      console.log(user.favorites[i]);
+    }
+  });
 
-
-  res.json(mySong);
+  res.send(mySong);
 });
 
 // saves all tracks into array
