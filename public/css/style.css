@@ -6,3 +6,26 @@
   border:1px solid red;
   display:none;
 }
+
+/*****************************************************************************/
+/* Loading Circle Animation **************************************************/
+/*****************************************************************************/
+
+@keyframes circle-loader {
+  0% {
+    transform:rotate(0deg);
+  }
+  100% {
+    transform:rotate(360deg);
+  }
+}
+
+.circle-loader {
+  animation:circle-loader 1250ms infinite linear;
+  border:8px solid #11b854;
+  border-right-color:transparent;
+  border-radius:16px;
+  box-sizing:border-box;
+  width:32px;
+  height:32px;
+}
