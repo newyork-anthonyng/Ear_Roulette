@@ -38,21 +38,6 @@ app.get('/', (req, res) => {
   res.json({ success: true, message: 'get /' });
 });
 
-// // Test route to set up a fake user
-// app.get('/setup', (req, res) => {
-//   let myUser = new User({
-//     name:     'Anthony',
-//     password: 'password'
-//   });
-//
-//   myUser.save((err) => {
-//     if(err) throw err;
-//
-//     console.log('User saved successfully');
-//     res.json({ success: true });
-//   });
-// });
-
 // route middleware to verify token
 app.use((req, res, next) => {
   let token = req.headers['x-access-token'];

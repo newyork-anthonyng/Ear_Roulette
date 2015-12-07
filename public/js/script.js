@@ -18,23 +18,12 @@ $(function() {
     let name = $('#login-name').val();
     let password = $('#login-password').val();
 
-    let data = {};
-    data['name'] = name;
-    data['password'] = password;
+    let data = {
+      name:     name,
+      password: password
+    };
 
-    $.ajax({
-      url: '/user/authenticate',
-      data: data,
-      method: 'POST'
-    }).done((data) => {
-      // if login was successful, then show the player and hide the login page
-      if(data['success']) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', data.user.name);
-
-        loginPage();
-      }
-    });
+    authenticateUser(data);
   }); // close out ('#login').click
 
   $('#logout').click(() => {
@@ -57,30 +46,57 @@ $(function() {
       data: data,
       method: 'POST'
     }).done((data) => {
-      console.log('User created');
+      // generate a token with the new user
+      let name     = data.name;
+      let password = data.password;
+
+      let userData = {
+        name:     name,
+        password: password
+      };
+
+      authenticateUser(userData);
     });
-
-    // generate a token
-
-
   }); // close out ('#signup').click
 
 });
 
-// show the player page
+//=============================================================================
+// User authentication methods ================================================
+//=============================================================================
+
 let loginPage = function() {
-  // clear user inputs
   $('#login-name').val('');
   $('#login-password').val('');
 
   $('#login-form').hide();
   $('#player').show();
-};
+}
 
 let logoutPage = function() {
   $('#login-form').show();
   $('#player').hide();
-};
+}
+
+let authenticateUser = function(data) {
+  $.ajax({
+    url: '/user/authenticate',
+    data: data,
+    method: 'POST'
+  }).done((data) => {
+    // if login was successful, then show the player and hide the login page
+    if(data['success']) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', data.user.name);
+
+      loginPage();
+    }
+  });
+}
+
+//=============================================================================
+// API methods ================================================================
+//=============================================================================
 
 // returns an array of Track Objects
 let getTracks = function(artistNameArray) {

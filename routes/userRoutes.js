@@ -27,7 +27,7 @@ router.post('/new', (req, res) => {
     if(err) throw err;
 
     console.log('User saved successfully');
-    res.json({ success: true });
+    res.json({ success: true, name: name, password: password });
   });
 });
 
