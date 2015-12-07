@@ -37,30 +37,34 @@ router.post('/authenticate', (req, res) => {
   }, (err, user) => {
     if(err) throw err;
 
+    // user doesn't exist in our database
     if(!user) {
       res.json({
         success: false,
         message: 'Authentication failed. User not found.'
       });
     } else {
+      // check if password matches
 
-      if(user.password != req.body.password) {
-        res.json({
-          success: false,
-          message: 'Authentication failed. Wrong password.'
-        });
-      } else {
-        // user is authenticated
-        let token = jwt.sign(user, app.get('secret'), { expiresIn: 3600 });
+      user.comparePassword(req.body.password, (err, isMatch) => {
+        if(err) throw err;
 
-        // return the token information
-        res.json({
-          user:    user,
-          success: true,
-          message: 'Enjoy your token.',
-          token:   token
-        });
-      }
+        if(isMatch) {
+          let token = jwt.sign(user, app.get('secret'), { expiresIn: 3600 });
+
+          res.json({
+            user:    user,
+            success: true,
+            message: 'Enjoy your token.',
+            token:   token
+          });
+        } else {
+          res.json({
+            success: false,
+            message: 'Authentication failed. Wrong password.'
+          });
+        }
+      });
     }
   });
 });

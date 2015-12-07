@@ -12,10 +12,12 @@ let userSchema = new Schema({
   favorites: { type: Array, default: [] }
 });
 
-userSchema.pre('save', (next) => {
+// must use "function()..." syntax over "() =>..."
+// to keep the scoping of "this"
+userSchema.pre('save', function(next) {
   let user = this;
 
-  // Has password if password has changed
+  // Generate salt and hash only when password has been updated
   if(!user.isModified('password')) return next();
 
   // Salt the password
@@ -30,6 +32,15 @@ userSchema.pre('save', (next) => {
     });
   });
 });
+
+userSchema.methods.comparePassword = function(password, cb) {
+  // check if password, once encrypted matches, to the second argument
+  bcrypt.compare(password, this.password, (err, isMatch) => {
+    if(err) return cb(err);
+
+    cb(null, isMatch);
+  });
+};
 
 let User = mongoose.model('User', userSchema);
 module.exports = User;
