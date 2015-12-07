@@ -52,6 +52,14 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
     let artist = this.currentSong['artist'];
     let user   = localStorage['user'];
 
+    // check if we already have song favorited
+    for(let i = 0, j = this.likedSongs.length; i < j; i++) {
+      let sameTitle  = this.likedSongs[i]['title'] === title;
+      let sameArtist = this.likedSongs[i]['artist'] === artist;
+
+      if(sameTitle & sameArtist) return false;
+    }
+
     let data = {
       title:  title,
       artist: artist,
