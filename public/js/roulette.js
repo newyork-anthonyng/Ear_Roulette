@@ -101,6 +101,12 @@ app.controller('RouletteController', function($http, $interval) {
       });
   };
 
+  this.stopSong = function() {
+    this.currentlyPlaying = false;
+
+    $http.get('player/stop');
+  }
+
   // Check for song title every second
   $interval(() => {
     this.getSong();

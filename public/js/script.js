@@ -27,7 +27,6 @@ $(function() {
   }); // close out ('#login').click
 
   $('#logout').click(() => {
-    // get rid of user token
     localStorage.setItem('token', undefined);
     localStorage.setItem('user', undefined);
 

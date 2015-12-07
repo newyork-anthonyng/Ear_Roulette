@@ -32,7 +32,7 @@
     </section>
 
     <section id="player" ng-controller="RouletteController as roulette">
-      <button id="logout">Logout</button>
+      <button id="logout" ng-click="roulette.stopSong()">Logout</button>
       <br>
       <p ng-show="roulette.currentlyPlaying">Playing song...</p>
       <p ng-show="!roulette.currentlyPlaying">Paused song...</p>

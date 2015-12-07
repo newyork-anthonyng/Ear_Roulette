@@ -103,10 +103,15 @@ router.get('/play', (req, res) => {
 });
 
 router.get('/pause', (req, res) => {
-  console.log('player: ' + player);
   if(player) player.pause();
 
-  res.status(200).send()
+  res.status(200).send();
+});
+
+router.get('/stop', (req, res) => {
+  if(player) player.stop();
+
+  res.status(200).send();
 });
 
 // return the current song information
