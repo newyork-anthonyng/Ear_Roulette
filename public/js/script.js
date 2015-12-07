@@ -3,61 +3,10 @@
 let myArtists = ['linkin park', 'shawn mendes'];
 let songsLoaded = false;
 
-// get token from local storage and send it in header
-function verifyToken(xhr) {
-  xhr.setRequestHeader('x-access-token', localStorage['token']);
-}
-
 $(function() {
   // load all tracks for artists
   getTracks(myArtists);
-
-  $('#signup').click(() => {
-    // get information and create new user
-    let name = $('#signup-name').val();
-    let password = $('#signup-password').val();
-
-    let data = { name: name, password: password };
-
-    $.ajax({
-      url: '/user/new',
-      data: data,
-      method: 'POST'
-    }).done((data) => {
-      // generate a token with the new user
-      let name     = data.name;
-      let password = data.password;
-
-      let userData = {
-        name:     name,
-        password: password
-      };
-
-      authenticateUser(userData);
-    });
-  }); // close out ('#signup').click
-
 });
-
-//=============================================================================
-// User authentication methods ================================================
-//=============================================================================
-
-let authenticateUser = function(data) {
-  $.ajax({
-    url: '/user/authenticate',
-    data: data,
-    method: 'POST'
-  }).done((data) => {
-    // if login was successful, then show the player and hide the login page
-    if(data['success']) {
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', data.user.name);
-
-      loginPage();
-    }
-  });
-}
 
 //=============================================================================
 // API methods ================================================================

@@ -113,6 +113,34 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
     this.likedSongs = [];
   };
 
+  this.signup = function() {
+    let name     = this.signup_name;
+    let password = this.signup_password;
+
+    let data = {
+      name:     name,
+      password: password
+    }
+
+    let myUrl = '/user/new';
+
+    $http.post(myUrl, data)
+      .then((response) => {
+        let data = response.data;
+
+        // generate token with newly created user
+        let name     = data.name;
+        let password = data.password;
+
+        let userData = {
+          name:     name,
+          password: password
+        };
+
+        this.authenticateUser(userData);
+      });
+  };
+
   this.getFavoriteSongs = function() {
     let myUrl = '/player/favorites';
 

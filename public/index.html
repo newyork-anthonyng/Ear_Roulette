@@ -24,12 +24,12 @@
       <br><br>
 
       <label>Name</label>
-      <input type="type" id="signup-name"></input>
+      <input type="type" id="signup-name" ng-model="roulette.signup_name"></input>
       <br>
       <label>Password</label>
-      <input type="password" id="signup-password"></input>
+      <input type="password" id="signup-password" ng-model="roulette.signup_password"></input>
       <br>
-      <input type="submit" value="Sign up" id="signup"></input>
+      <input type="submit" value="Sign up" id="signup" ng-click="roulette.signup()"></input>
     </section>
 
     <section ng-show="roulette.loggedIn" id="player">
