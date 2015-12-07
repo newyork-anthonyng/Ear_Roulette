@@ -12,27 +12,6 @@ $(function() {
   // load all tracks for artists
   getTracks(myArtists);
 
-  // login user and give them token
-  $('#login').click(() => {
-    // get username and password from index.html
-    let name = $('#login-name').val();
-    let password = $('#login-password').val();
-
-    let data = {
-      name:     name,
-      password: password
-    };
-
-    authenticateUser(data);
-  }); // close out ('#login').click
-
-  $('#logout').click(() => {
-    localStorage.setItem('token', undefined);
-    localStorage.setItem('user', undefined);
-
-    logoutPage();
-  }); // close out ('#logout').click
-
   $('#signup').click(() => {
     // get information and create new user
     let name = $('#signup-name').val();
@@ -63,19 +42,6 @@ $(function() {
 //=============================================================================
 // User authentication methods ================================================
 //=============================================================================
-
-let loginPage = function() {
-  $('#login-name').val('');
-  $('#login-password').val('');
-
-  $('#login-form').hide();
-  $('#player').show();
-}
-
-let logoutPage = function() {
-  $('#login-form').show();
-  $('#player').hide();
-}
 
 let authenticateUser = function(data) {
   $.ajax({

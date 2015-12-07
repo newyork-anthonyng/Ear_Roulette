@@ -14,6 +14,7 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
   // likedSongs will be an array of Song objects, which have...
   // keys of "title" and "artist"
   this.likedSongs = [];
+  this.loggedIn = false;
 
   this.buttonName = function() {
     return this.currentlyPlaying ? 'Pause' : 'Play';
@@ -63,30 +64,6 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
       });
   };
 
-  this.login = function() {
-    $timeout(() => {
-      this.getFavoriteSongs();
-    }, 1000);
-  };
-
-  this.logout = function() {
-    this.stopSong();
-    this.likedSongs = [];
-  };
-
-  this.getFavoriteSongs = function() {
-    let myUrl = '/player/favorites';
-
-    let data = {
-      user: localStorage['user']
-    };
-
-    $http.post(myUrl, data)
-      .then((response) => {
-        this.likedSongs = response.data;
-      });
-  };
-
   this.deleteSong = function(index) {
     // delete song from our database
     let myUrl = 'player/dislike';
@@ -112,6 +89,64 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
     this.currentlyPlaying = false;
 
     $http.get('player/stop');
+  }
+
+  this.login = function() {
+    let name = this.login_name;
+    let password = this.login_password;
+
+    let data = {
+      name: name,
+      password: password
+    };
+
+    this.authenticateUser(data);
+  };
+
+  this.logout = function() {
+    this.loggedIn = false;
+
+    localStorage.setItem('token', undefined);
+    localStorage.setItem('user', undefined);
+
+    this.stopSong();
+    this.likedSongs = [];
+  };
+
+  this.getFavoriteSongs = function() {
+    let myUrl = '/player/favorites';
+
+    let data = {
+      user: localStorage['user']
+    };
+
+    $http.post(myUrl, data)
+      .then((response) => {
+        this.likedSongs = response.data;
+      });
+  };
+
+  this.authenticateUser = function(data) {
+    let myUrl = '/user/authenticate';
+
+    $http.post(myUrl, data)
+      .then((response) => {
+        let data = response.data;
+
+        if(data['success']) {
+          // if login was successful, then show the player and hide login page
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', data.user.name);
+
+          // show favorite songs from user
+          this.loggedIn = true;
+          this.getFavoriteSongs();
+
+          // clear out DOM login screen username and password
+          this.login_name = '';
+          this.login_password = '';
+        }
+      });
   }
 
   // Check for song title every second

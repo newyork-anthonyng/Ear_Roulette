@@ -10,16 +10,15 @@
   </head>
 
   <body ng-controller="RouletteController as roulette">
-    <div class="circle-loader"></div>
 
     <h1>Ear Roulette</h1>
 
-    <section id="login-form">
+    <section ng-hide="roulette.loggedIn" id="login-form">
       <label>Name</label>
-      <input type="type" id="login-name"></input>
+      <input type="type" id="login-name" ng-model="roulette.login_name"></input>
       <br>
       <label>Password</label>
-      <input type="password" id="login-password"></input>
+      <input type="password" id="login-password" ng-model="roulette.login_password"></input>
       <br>
       <input type="submit" value="Login" id="login" ng-click="roulette.login()"></input>
       <br><br>
@@ -33,7 +32,7 @@
       <input type="submit" value="Sign up" id="signup"></input>
     </section>
 
-    <section id="player">
+    <section ng-show="roulette.loggedIn" id="player">
       <button id="logout" ng-click="roulette.logout()">Logout</button>
       <br>
       <p ng-show="roulette.currentlyPlaying">Playing song...</p>

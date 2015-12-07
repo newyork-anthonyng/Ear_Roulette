@@ -45,7 +45,6 @@ router.post('/authenticate', (req, res) => {
       });
     } else {
       // check if password matches
-
       user.comparePassword(req.body.password, (err, isMatch) => {
         if(err) throw err;
 
