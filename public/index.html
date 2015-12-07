@@ -9,7 +9,7 @@
     <link href="./css/style.css" rel="stylesheet" type="text/css"></link>
   </head>
 
-  <body>
+  <body ng-controller="RouletteController as roulette">
     <h1>Ear Roulette</h1>
 
     <section id="login-form">
@@ -19,7 +19,7 @@
       <label>Password</label>
       <input type="password" id="login-password"></input>
       <br>
-      <input type="submit" value="Login" id="login"></input>
+      <input type="submit" value="Login" id="login" ng-click="roulette.getFavoriteSongs()"></input>
       <br><br>
 
       <label>Name</label>
@@ -31,7 +31,7 @@
       <input type="submit" value="Sign up" id="signup"></input>
     </section>
 
-    <section id="player" ng-controller="RouletteController as roulette">
+    <section id="player">
       <button id="logout" ng-click="roulette.stopSong()">Logout</button>
       <br>
       <p ng-show="roulette.currentlyPlaying">Playing song...</p>

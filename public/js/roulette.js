@@ -40,7 +40,6 @@ app.controller('RouletteController', function($http, $interval) {
   };
 
   this.updateCurrentSong = function(title, artist) {
-
     this.currentSong['title']   = title;
     this.currentSong['artist']  = artist;
   };
@@ -56,6 +55,19 @@ app.controller('RouletteController', function($http, $interval) {
       title:  title,
       artist: artist,
       user:   user
+    };
+
+    $http.post(myUrl, data)
+      .then((response) => {
+        this.likedSongs = response.data;
+      });
+  };
+
+  this.getFavoriteSongs = function() {
+    let myUrl = '/player/favorites';
+
+    let data = {
+      user: localStorage['user']
     };
 
     $http.post(myUrl, data)

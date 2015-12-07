@@ -34,12 +34,15 @@ router.post('/like', (req, res) => {
     }
   );
 
-  // get user's favorite songs
-  User.findOne({ name: name }, (err, user) => {
-    if(err) throw err;
+  // send back user's favorite songs
+  getFavoriteSongs(name, res);
+});
 
-    res.send(user.favorites);
-  });
+router.post('/favorites', (req, res) => {
+  let name = req.body.user;
+
+  // send back user's favorite songs
+  getFavoriteSongs(name, res);
 });
 
 router.post('/dislike', (req, res) => {
@@ -60,12 +63,7 @@ router.post('/dislike', (req, res) => {
   );
 
   // get user's favorite songs
-  User.findOne({ name: name }, (err, user) => {
-    if(err) throw err;
-
-    res.send(user.favorites);
-  });
-
+  getFavoriteSongs(name, res);
 });
 
 // saves all tracks into array
@@ -134,6 +132,15 @@ let createPlayer = function(songList) {
 
   return player
 };
+
+// get user's favorite songs
+let getFavoriteSongs = function(userName, response) {
+  User.findOne({ name: userName }, (err, user) => {
+    if(err) throw err;
+
+    response.send(user.favorites);
+  });
+}
 
 // shuffle an array
 let shuffle = function(array) {
