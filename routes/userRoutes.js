@@ -6,7 +6,7 @@ const router   = express();
 const User     = require('../models/user');
 const mongoose = require('mongoose');
 const jwt      = require('jsonwebtoken');
-const config      = require('../config');
+const config   = require('../config');
 
 app.set('secret', config.secret);
 

@@ -71,11 +71,19 @@ router.post('/dislike', (req, res) => {
 // saves all tracks into array
 router.get('/updateTracks', (req, res) => {
   let data = req.query['data'];
+  let dataArray = [];
+
+  // transform 'data' into a shuffled array of objects
+  for(let track in data) {
+    dataArray.push(data[track]);
+  }
+
+  dataArray = shuffle(dataArray);
 
   // go through each track and update myTracks with previewURL
-  for(let track in data) {
-    myTracks.push(data[track]['preview']);
-    myTracksInformation.push(data[track]);
+  for(let i = 0, j = dataArray.length; i < j; i++) {
+    myTracks.push(dataArray[i]['preview']);
+    myTracksInformation.push(dataArray[i]);
   }
 
   res.json({ success: true, tracks: myTracks });
@@ -133,7 +141,6 @@ let shuffle = function(array) {
 
   // While there remain elements to shuffle...
   while (0 !== currentIndex) {
-
     // Pick a remaining element...
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
@@ -145,6 +152,6 @@ let shuffle = function(array) {
   }
 
   return array;
-}
+};
 
 module.exports = router;

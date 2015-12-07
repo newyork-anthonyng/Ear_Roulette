@@ -1,6 +1,6 @@
 'use strict'
 
-let myArtists = ['nsync'];
+let myArtists = ['killers', 'shawn mendes'];
 let songsLoaded = false;
 
 // get token from local storage and send it in header
