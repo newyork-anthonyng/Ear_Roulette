@@ -8,7 +8,8 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
 
   this.currentSong = {
     title:  '',
-    artist: ''
+    artist: '',
+    image:  ''
   };
 
   // likedSongs will be an array of Song objects, which have...
@@ -35,14 +36,16 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
       .then((response) => {
         let myTitle   = response.data.title;
         let myArtist  = response.data.artist;
+        let myImage   = response.data.image;
 
-        this.updateCurrentSong(myTitle, myArtist);
+        this.updateCurrentSong(myTitle, myArtist, myImage);
       });
   };
 
-  this.updateCurrentSong = function(title, artist) {
+  this.updateCurrentSong = function(title, artist, image) {
     this.currentSong['title']   = title;
     this.currentSong['artist']  = artist;
+    this.currentSong['image']   = image;
   };
 
   this.likeSong = function() {

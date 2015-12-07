@@ -15,6 +15,7 @@ $(function() {
 // returns an array of Track Objects
 let getTracks = function(artistNameArray) {
   let myArtistIdArray = [];
+  // myAlbumIdArray will hold 'id' and 'image' for albums
   let myAlbumIdArray  = [];
   let myTracksArray   = [];
 
@@ -77,9 +78,13 @@ let getAlbumsPromises = function(artistIdArray, compiledArray) {
     }).done((data) => {
       // data returns an array of Album objects
       for(let i = 0, j = data.length; i < j; i++) {
-        compiledArray.push(data[i]['id']);
+        // compiledArray.push(data[i]['id']);
+        let newData = {
+          id: data[i]['id'],
+          image: data[i]['image']
+        }
+        compiledArray.push(newData);
       }
-
     });
 
     deferreds.push(newRequest);
@@ -88,15 +93,21 @@ let getAlbumsPromises = function(artistIdArray, compiledArray) {
   return deferreds;
 }
 
-// 'albumIdArray' holds an array of album ID's
+// 'albumIdArray' holds an array of album 'id' and 'image'
 // 'compiledArray' will hold all returned Track objects
 // method will return an array of AJAX calls
 let getTracksPromises = function(albumIdArray, compiledArray) {
   let deferreds = [];
 
   for(let i = 0, j = albumIdArray.length; i < j; i++) {
+    let newData = {
+      id: albumIdArray[i]['id'],
+      image: albumIdArray[i]['image']
+    };
+
     let newRequest = $.ajax({
-      url: 'api/tracks/' + albumIdArray[i]
+      url: 'api/tracks/' + albumIdArray[i]['id'],
+      data: newData
     }).done((data) => {
       // data returns an array of Track objects
       for(let i = 0, j = data.length; i < j; i++) {

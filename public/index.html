@@ -41,6 +41,9 @@
       <div class="track-information">
         <p id="player-title" ng-bind="roulette.currentSong['title']"></p>
         <p id="player-artist" ng-bind="roulette.currentSong['artist']"></p>
+        <div id="album-img" ng-show="roulette.currentlyPlaying">
+          <img src="{{ roulette.currentSong['image'] }}"></img>
+        </div>
 
         <button ng-click="roulette.playSong()"> {{ roulette.buttonName() }} </button>
         <button ng-click="roulette.likeSong()">Like</button>

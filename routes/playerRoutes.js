@@ -7,7 +7,7 @@ const User    = require('../models/user');
 
 // myTracks will hold all previewURLs
 let myTracks            = [];
-// myTracksInformation will hold 'title' and 'artist'
+// myTracksInformation will hold 'title', 'artist' and 'image'
 let myTracksInformation = [];
 let player              = undefined;
 let currentTrack        = 0;
@@ -123,7 +123,7 @@ let createPlayer = function(songList) {
   player.play();
 
   player.on('error', (song) => {
-    console.log('on error: song ended');
+    console.log('Song ended');
     player.stop();
     currentTrack += 1;
     // player = createPlayer(player, songList);

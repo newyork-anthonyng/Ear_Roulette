@@ -83,6 +83,7 @@ router.get('/albums/:artistID', (req, res) => {
 // returns an array of objects, with keys of 'id', 'title', 'artist' & 'preview'
 router.get('/tracks/:albumID', (req, res) => {
   let albumID = req.params.albumID;
+  let image   = req.query.image;
 
   let myURL = 'https://api.spotify.com/v1/albums/' +
               albumID + '/tracks?limit=10';
@@ -96,15 +97,17 @@ router.get('/tracks/:albumID', (req, res) => {
       let myTracks = [];
 
       for(let i = 0, j = jsonData.length; i < j; i++) {
-        let newTrack = {};
-
-        newTrack['id']      = jsonData[i]['id'];
-        newTrack['title']   = jsonData[i]['name'];
-        newTrack['artist']  = jsonData[i]['artists'][0]['name'];
-        newTrack['preview'] = jsonData[i]['preview_url'];
+        let newTrack = {
+          id: jsonData[i]['id'],
+          title: jsonData[i]['name'],
+          artist: jsonData[i]['artists'][0]['name'],
+          preview: jsonData[i]['preview_url'],
+          image: image
+        };
 
         myTracks.push(newTrack);
       }
+      console.log(myTracks);
 
       res.send(myTracks);
     }
