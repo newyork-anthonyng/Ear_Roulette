@@ -24,10 +24,13 @@ router.post('/new', (req, res) => {
   });
 
   myUser.save((err) => {
-    if(err) throw err;
-
-    console.log('User saved successfully');
-    res.json({ success: true, name: name, password: password });
+    if(err) {
+      console.log('User not saved.');
+      res.json({ success: false });
+    } else {
+      console.log('User saved successfully');
+      res.json({ success: true, name: name, password: password });
+    }
   });
 });
 

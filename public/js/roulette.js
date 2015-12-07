@@ -126,18 +126,20 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
 
     $http.post(myUrl, data)
       .then((response) => {
-        let data = response.data;
+        if(response.data.success) {
+          let data = response.data;
 
-        // generate token with newly created user
-        let name     = data.name;
-        let password = data.password;
+          // generate token with newly created user
+          let name     = data.name;
+          let password = data.password;
 
-        let userData = {
-          name:     name,
-          password: password
-        };
+          let userData = {
+            name:     name,
+            password: password
+          };
 
-        this.authenticateUser(userData);
+          this.authenticateUser(userData);
+        }
       });
   };
 
@@ -171,8 +173,10 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
           this.getFavoriteSongs();
 
           // clear out DOM login screen username and password
-          this.login_name = '';
-          this.login_password = '';
+          this.login_name      = '';
+          this.login_password  = '';
+          this.signup_name     = '';
+          this.signup_password = '';
         }
       });
   }
