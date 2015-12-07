@@ -1,6 +1,6 @@
 'use strict'
 
-let myArtists = ['britney spears'];
+let myArtists = ['nsync'];
 let songsLoaded = false;
 
 // get token from local storage and send it in header
@@ -15,8 +15,8 @@ $(function() {
   // login user and give them token
   $('#login').click(() => {
     // get username and password from index.html
-    let name = $('#name').val();
-    let password = $('#password').val();
+    let name = $('#login-name').val();
+    let password = $('#login-password').val();
 
     let data = {};
     data['name'] = name;
@@ -44,13 +44,34 @@ $(function() {
 
     logoutPage();
   }); // close out ('#logout').click
+
+  $('#signup').click(() => {
+    // get information and create new user
+    let name = $('#signup-name').val();
+    let password = $('#signup-password').val();
+
+    let data = { name: name, password: password };
+
+    $.ajax({
+      url: '/user/new',
+      data: data,
+      method: 'POST'
+    }).done((data) => {
+      console.log('User created');
+    });
+
+    // generate a token
+
+
+  }); // close out ('#signup').click
+
 });
 
 // show the player page
 let loginPage = function() {
   // clear user inputs
-  $('#name').val('');
-  $('#password').val('');
+  $('#login-name').val('');
+  $('#login-password').val('');
 
   $('#login-form').hide();
   $('#player').show();

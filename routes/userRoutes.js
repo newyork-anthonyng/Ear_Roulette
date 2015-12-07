@@ -14,6 +14,23 @@ router.get('/', (req, res) => {
   res.json({ success: true, message: 'get user/' });
 });
 
+router.post('/new', (req, res) => {
+  let name     = req.body.name;
+  let password = req.body.password;
+
+  let myUser = new User({
+    name:     name,
+    password: password
+  });
+
+  myUser.save((err) => {
+    if(err) throw err;
+
+    console.log('User saved successfully');
+    res.json({ success: true });
+  });
+});
+
 router.post('/authenticate', (req, res) => {
   User.findOne({
     name: req.body.name
