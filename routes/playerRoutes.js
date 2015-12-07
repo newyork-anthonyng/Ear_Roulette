@@ -93,19 +93,14 @@ router.get('/play', (req, res) => {
   // if player doesn't exist, then create one
   if(!player) {
     console.log('Playing music.');
-    player = createPlayer(player, myTracks);
+    // player = createPlayer(player, myTracks);
+    createPlayer(myTracks);
   } else {
     console.log('Hit play/pause.');
     player.pause();
   }
 
   res.json({ success: true, player: player });
-});
-
-router.get('/pause', (req, res) => {
-  if(player) player.pause();
-
-  res.status(200).send();
 });
 
 router.get('/stop', (req, res) => {
@@ -122,20 +117,22 @@ router.get('/currentSong', (req, res) => {
 
 // create a new player with a song list
 // attach an error handler to it
-let createPlayer = function(player, songList) {
+// let createPlayer = function(player, songList) {
+let createPlayer = function(songList) {
   if(player) player.stop();
 
   player = new Player(songList[currentTrack]);
   player.play();
 
   player.on('error', (song) => {
+    console.log('on error: song ended');
     player.stop();
     currentTrack += 1;
-    console.log('on error: song ended');
-    player = createPlayer(player, songList)
+    // player = createPlayer(player, songList);
+    player = createPlayer(songList);
   });
 
-  return player;
+  return player
 };
 
 // shuffle an array
