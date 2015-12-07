@@ -38,9 +38,10 @@ router.get('/artistID/:artistName', (req, res) => {
         console.log(artistName + '\'s id was not found.');
       }
 
-      let data     = {};
-      data['id']   = artistID;
-      data['name'] = artistName;
+      let data = {
+        id:   artistID,
+        name: artistName
+      };
 
       res.send(data);
     }
@@ -66,11 +67,11 @@ router.get('/albums/:artistID', (req, res) => {
       let myAlbums = [];
 
       for(let i = 0, j = jsonData.length; i < j; i++) {
-        let newAlbum = {};
-
-        newAlbum['id']    = jsonData[i]['id'];
-        newAlbum['name']  = jsonData[i]['name'];
-        newAlbum['image'] = jsonData[i]['images'][1]['url'];
+        let newAlbum = {
+          id:    jsonData[i]['id'],
+          name:  jsonData[i]['name'],
+          image: jsonData[i]['images'][1]['url']
+        };
 
         myAlbums.push(newAlbum);
       }
@@ -107,7 +108,6 @@ router.get('/tracks/:albumID', (req, res) => {
 
         myTracks.push(newTrack);
       }
-      console.log(myTracks);
 
       res.send(myTracks);
     }

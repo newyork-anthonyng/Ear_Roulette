@@ -5,6 +5,7 @@ let app = angular.module('Roulette', []);
 app.controller('RouletteController', function($http, $interval, $timeout) {
 
   this.currentlyPlaying = false;
+  this.loggedIn = false;
 
   this.currentSong = {
     title:  '',
@@ -15,7 +16,6 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
   // likedSongs will be an array of Song objects, which have...
   // keys of "title" and "artist"
   this.likedSongs = [];
-  this.loggedIn = false;
 
   this.buttonName = function() {
     return this.currentlyPlaying ? 'Pause' : 'Play';
@@ -115,13 +115,19 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
   };
 
   this.logout = function() {
-    this.loggedIn = false;
-
     localStorage.setItem('token', undefined);
     localStorage.setItem('user', undefined);
 
+    this.loggedIn = false;
     this.stopSong();
     this.likedSongs = [];
+    this.currentSong = {
+      title:  '',
+      artist: '',
+      image:  ''
+    };
+
+    $http.get('player/destroy');
   };
 
   this.signup = function() {

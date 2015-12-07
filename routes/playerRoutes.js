@@ -107,6 +107,13 @@ router.get('/stop', (req, res) => {
   res.status(200).send();
 });
 
+// destroy the current player on logout
+router.get('/destroy', (req, res) => {
+  if(player) player = undefined;
+
+  res.status(200).send();
+});
+
 // return the current song information
 router.get('/currentSong', (req, res) => {
   res.send(myTracksInformation[currentTrack]);
