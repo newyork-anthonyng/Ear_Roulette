@@ -20,25 +20,9 @@ app.controller('RouletteController', function($http, $interval) {
   };
 
   this.playSong = function() {
-    this.currentlyPlaying = true;
-
-    let myUrl = '/player/play'
-
-    $http.get(myUrl)
-      .then(() => {
-        console.log('roulette.js = get /play');
-      });
-  };
-
-  this.pauseSong = function() {
     this.currentlyPlaying = !this.currentlyPlaying;
 
-    let myUrl = '/player/pause'
-
-    $http.get(myUrl)
-      .then(() => {
-        console.log('roulette.js = get /pause');
-      });
+    $http.get('/player/play');
   };
 
   // update current song information
