@@ -19,7 +19,7 @@
       <label>Password</label>
       <input type="password" id="login-password"></input>
       <br>
-      <input type="submit" value="Login" id="login" ng-click="roulette.getFavoriteSongs()"></input>
+      <input type="submit" value="Login" id="login" ng-click="roulette.login()"></input>
       <br><br>
 
       <label>Name</label>
@@ -32,7 +32,7 @@
     </section>
 
     <section id="player">
-      <button id="logout" ng-click="roulette.stopSong()">Logout</button>
+      <button id="logout" ng-click="roulette.logout()">Logout</button>
       <br>
       <p ng-show="roulette.currentlyPlaying">Playing song...</p>
       <p ng-show="!roulette.currentlyPlaying">Paused song...</p>

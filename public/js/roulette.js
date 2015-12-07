@@ -2,7 +2,7 @@
 
 let app = angular.module('Roulette', []);
 
-app.controller('RouletteController', function($http, $interval) {
+app.controller('RouletteController', function($http, $interval, $timeout) {
 
   this.currentlyPlaying = false;
 
@@ -61,6 +61,17 @@ app.controller('RouletteController', function($http, $interval) {
       .then((response) => {
         this.likedSongs = response.data;
       });
+  };
+
+  this.login = function() {
+    $timeout(() => {
+      this.getFavoriteSongs();
+    }, 1000);
+  };
+
+  this.logout = function() {
+    this.stopSong();
+    this.likedSongs = [];
   };
 
   this.getFavoriteSongs = function() {
