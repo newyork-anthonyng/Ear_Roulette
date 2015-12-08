@@ -20,7 +20,6 @@ const playerRoutes = require('./routes/playerRoutes');
 app.use('/scripts', express.static(__dirname + '/node_modules/angular'));
 
 // configuration
-const port = 3000;
 mongoose.connect(config.database);
 app.set('secret', config.secret);
 
@@ -63,6 +62,6 @@ app.use((req, res, next) => {
   }
 });
 
-const server = app.listen(port, () => {
+const server = app.listen(process.env.PORT || 3000, () => {
   console.log('Express server running...');
 });
