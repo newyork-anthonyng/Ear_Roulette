@@ -1,12 +1,18 @@
 'use strict'
 
-let myArtists = ['linkin park', 'shawn mendes'];
+let myArtists = ['lil wayne', 'one republic'];
+
 let mySongs = [];
 let currentIndex = 0;
 
 $(function() {
   // load all tracks for artists
   getTracks(myArtists);
+
+  $('#logout').click(() => {
+    let audioPlayer = $('#audio-player')[0];
+    audioPlayer.pause();
+  });
 });
 
 // start playing music when all tracks are loaded
@@ -15,15 +21,30 @@ let startAudioPlayer = function() {
   let audioPlayer = $('#audio-player');
   audioPlayer.attr('autoplay', true);
   updateAudioPlayerSource(audioPlayer);
+  updateTrackInformation();
 
   audioPlayer.on('ended', () => {
     currentIndex++;
     updateAudioPlayerSource(audioPlayer);
+    updateTrackInformation();
+
+    $.ajax({
+      url:'player/nextSong'
+    });
   });
 };
 
 let updateAudioPlayerSource = function(audioPlayer) {
   audioPlayer.attr('src', mySongs[currentIndex]['preview']);
+};
+
+let updateTrackInformation = function() {
+  let title  = $('#player-title');
+  let artist = $('#player-artist');
+
+  // update track information
+  title.text(mySongs[currentIndex]['title']);
+  artist.text(mySongs[currentIndex]['artist']);
 };
 
 //=============================================================================

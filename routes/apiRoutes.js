@@ -9,14 +9,6 @@ router.get('/', (req, res) => {
   res.json({ success: true, message: 'get api/' });
 });
 
-// TODO: need to populate mongodb with list of artists
-// get a list of artists from database
-router.get('/artists', (req, res) => {
-  let myArtists = ['matchbox twenty', 'killers'];
-
-  res.send(myArtists);
-});
-
 // returns an object with an 'id' (which can be searched on Spotify) and 'name'
 router.get('/artistID/:artistName', (req, res) => {
   let artistName    = req.params.artistName;

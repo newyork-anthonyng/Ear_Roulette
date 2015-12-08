@@ -4,34 +4,20 @@ let app = angular.module('Roulette', []);
 
 app.controller('RouletteController', function($http, $interval, $timeout) {
 
-  this.currentlyPlaying = false;
   this.loggedIn = false;
-  this.preview = 'https://p.scdn.co/mp3-preview/251d88771e10dd8eb71fdfcf690429a85564945f';
-
-  this.currentSong = {
-    title:   '',
-    artist:  '',
-    image:   '',
-    preview: 'https://p.scdn.co/mp3-preview/251d88771e10dd8eb71fdfcf690429a85564945f'
-  };
 
   // likedSongs will be an array of Song objects, which have...
   // keys of "title" and "artist"
   this.likedSongs = [];
-
-  this.buttonName = function() {
-    return this.currentlyPlaying ? 'Pause' : 'Play';
-  };
-
-  this.playSong = function() {
-    this.currentlyPlaying = !this.currentlyPlaying;
-
-    // $http.get('/player/play');
+  this.currentSong = {
+    title: '',
+    artist: '',
+    image: '',
+    preview: ''
   };
 
   // update current song information
   this.getSong = function() {
-    // if(!this.currentlyPlaying) return false;
     let myUrl = '/player/currentSong';
 
     $http.get(myUrl)
@@ -40,9 +26,6 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
         this.currentSong['artist']  = response.data.artist;
         this.currentSong['image']   = response.data.image;
         this.currentSong['preview'] = response.data.preview;
-
-        console.log('inside of getSong');
-        console.log(this.currentSong['preview']);
       });
   };
 
@@ -94,13 +77,9 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
       });
   };
 
-  this.stopSong = function() {
-    this.currentlyPlaying = false;
-
-    $http.get('player/stop');
-  }
-
   this.login = function() {
+    console.log('login button clicked');
+
     let name = this.login_name;
     let password = this.login_password;
 
@@ -117,7 +96,6 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
     localStorage.setItem('user', undefined);
 
     this.loggedIn = false;
-    this.stopSong();
     this.likedSongs = [];
     this.currentSong = {
       title:   '',
@@ -173,13 +151,16 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
   };
 
   this.authenticateUser = function(data) {
+    console.log('inside authenticate user, before ajax call');
     let myUrl = '/user/authenticate';
 
     $http.post(myUrl, data)
       .then((response) => {
         let data = response.data;
+        console.log('inside authenticate user');
 
         if(data['success']) {
+          console.log('successful authentication');
           // if login was successful, then show the player and hide login page
           localStorage.setItem('token', data.token);
           localStorage.setItem('user', data.user.name);
@@ -198,9 +179,7 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
   }
 
   // Check for song title every second
-  let myPlayer = window.getElementById('audio-player');
   $interval(() => {
-    myPlayer;
     this.getSong();
   }, 1000);
 

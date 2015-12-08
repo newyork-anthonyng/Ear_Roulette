@@ -10,10 +10,6 @@ const config   = require('../config');
 
 app.set('secret', config.secret);
 
-router.get('/', (req, res) => {
-  res.json({ success: true, message: 'get user/' });
-});
-
 router.post('/new', (req, res) => {
   let name     = req.body.name;
   let password = req.body.password;
@@ -94,15 +90,6 @@ router.use((req, res, next) => {
       message: 'No token provided.'
     });
   }
-});
-
-// test route to show all users
-router.get('/all', (req, res) => {
-  User.find({}, (err, users) => {
-    if(err) throw err;
-
-    res.json({ success: true, users: users });
-  });
 });
 
 module.exports = router;

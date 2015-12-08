@@ -2,7 +2,6 @@
 
 const express = require('express');
 const router  = express.Router();
-const Player  = require('player');
 const User    = require('../models/user');
 
 // myTracks will hold all previewURLs
@@ -11,10 +10,6 @@ let myTracks            = [];
 let myTracksInformation = [];
 let player              = undefined;
 let currentTrack        = 0;
-
-router.get('/', (req, res) => {
-  res.json({ success: true, message: 'get player/' });
-});
 
 router.post('/like', (req, res) => {
   // create a new liked song
@@ -76,7 +71,7 @@ router.get('/updateTracks', (req, res) => {
     dataArray.push(data[track]);
   }
 
-  dataArray = shuffle(dataArray);
+  // dataArray = shuffle(dataArray);
 
   // go through each track and update myTracks with previewURL
   for(let i = 0, j = dataArray.length; i < j; i++) {
@@ -116,10 +111,15 @@ router.get('/destroy', (req, res) => {
 
 // return the current song information
 router.get('/currentSong', (req, res) => {
-  console.log(myTracksInformation[currentTrack]);
   res.send(myTracksInformation[currentTrack]);
 });
 
+// update the count of our song
+router.get('/nextSong', (req, res) => {
+  currentTrack++;
+
+  res.json({ success: true });
+});
 
 // create a new player with a song list
 // attach an error handler to it

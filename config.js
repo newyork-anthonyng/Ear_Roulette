@@ -1,4 +1,4 @@
 module.exports = {
-  secret:   process.env.SECRET,
+  secret:   "password",
   database: process.env.MONGOLAB_URI || 'mongodb://localhost/users'
 }
