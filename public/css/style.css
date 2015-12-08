@@ -1,14 +1,33 @@
-#login-form {
-  border:1px solid black;
+.login, .signup {
+  /*border:1px solid black;*/
+  margin:0 auto;
+  height:250px;
+  width:250px;
 }
 
-#player {
-  border:1px solid red;
+.favorite-song {
+  border:1px solid black;
+  border-radius:10px;
+  text-align:center;
+  height:80px;
+  margin:5px;
+}
+
+.trackInformation {
+  margin:0 auto;
+  height:250px;
+  width:250px;
+}
+
+ul {
+  list-style:none;
 }
 
 img {
-
   border-radius:10px;
-  height:300px;
-  width:300px;
+  height:200px;
+}
+
+h1 {
+  text-align:center;
 }
