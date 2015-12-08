@@ -127,18 +127,18 @@ router.get('/nextSong', (req, res) => {
 let createPlayer = function(songList) {
   if(player) player.stop();
 
-  player = new Player(songList[currentTrack]);
-  player.play();
-
-  player.on('error', (song) => {
-    console.log('Song ended');
-    player.stop();
-    currentTrack += 1;
-    // player = createPlayer(player, songList);
-    player = createPlayer(songList);
-  });
-
-  return player
+  // player = new Player(songList[currentTrack]);
+  // player.play();
+  //
+  // player.on('error', (song) => {
+  //   console.log('Song ended');
+  //   player.stop();
+  //   currentTrack += 1;
+  //   // player = createPlayer(player, songList);
+  //   player = createPlayer(songList);
+  // });
+  //
+  // return player
 };
 
 // get user's favorite songs

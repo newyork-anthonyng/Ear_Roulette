@@ -7,7 +7,6 @@ const logger      = require('morgan');
 const request     = require('request');
 const mongoose    = require('mongoose');
 
-const Player      = require('player');
 const jwt         = require('jsonwebtoken');
 const config      = require('./config');
 const User        = require('./models/user');
