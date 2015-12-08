@@ -75,15 +75,28 @@
             <h5 id="player-artist" ng-bind="roulette.currentSong['artist']"></h5>
           </div>
           <div class="row">
-            <img src="{{ roulette.currentSong['image'] }}"></img>
+            <h5 id="player-artist" ng-bind="roulette.currentSong['preview']"></h5>
           </div>
+
+          <!-- Song image -->
           <div class="row">
-            <button ng-click="roulette.playSong()"> {{ roulette.buttonName() }} </button>
-            <button ng-click="roulette.likeSong()">Like</button>
+            <img ng-src="{{ roulette.currentSong['image'] }}"></img>
+          </div>
+
+          <!-- Audio Player -->
+          <audio id="audio-player" controls>
+            <!-- <source ng-src="{{ roulette.preview }}" type="audio/mpeg"> -->
+            <!-- <source src="https://p.scdn.co/mp3-preview/251d88771e10dd8eb71fdfcf690429a85564945f" type="audio/mpeg"> -->
+          </audio>
+
+          <div class="row">
+            <button id="test">Test</button>
+            <!-- <button ng-click="roulette.playSong()"> {{ roulette.buttonName() }} </button> -->
+            <!-- <button ng-click="roulette.likeSong()">Like</button> -->
           </div>
         </div>
-        
-        <div class="container">
+
+        <!-- <div class="container">
           <div class="col-sm-4 col-sm-offset-8 favorite-songs">
             <ul>
               <li ng-repeat="track in roulette.likedSongs">
@@ -96,7 +109,7 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> -->
 
 
     </section>

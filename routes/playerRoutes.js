@@ -7,7 +7,7 @@ const User    = require('../models/user');
 
 // myTracks will hold all previewURLs
 let myTracks            = [];
-// myTracksInformation will hold 'title', 'artist' and 'image'
+// myTracksInformation will hold 'title', 'artist', 'preview' and 'image'
 let myTracksInformation = [];
 let player              = undefined;
 let currentTrack        = 0;
@@ -116,6 +116,7 @@ router.get('/destroy', (req, res) => {
 
 // return the current song information
 router.get('/currentSong', (req, res) => {
+  console.log(myTracksInformation[currentTrack]);
   res.send(myTracksInformation[currentTrack]);
 });
 

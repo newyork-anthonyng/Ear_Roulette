@@ -6,11 +6,13 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
 
   this.currentlyPlaying = false;
   this.loggedIn = false;
+  this.preview = 'https://p.scdn.co/mp3-preview/251d88771e10dd8eb71fdfcf690429a85564945f';
 
   this.currentSong = {
-    title:  '',
-    artist: '',
-    image:  ''
+    title:   '',
+    artist:  '',
+    image:   '',
+    preview: 'https://p.scdn.co/mp3-preview/251d88771e10dd8eb71fdfcf690429a85564945f'
   };
 
   // likedSongs will be an array of Song objects, which have...
@@ -24,28 +26,24 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
   this.playSong = function() {
     this.currentlyPlaying = !this.currentlyPlaying;
 
-    $http.get('/player/play');
+    // $http.get('/player/play');
   };
 
   // update current song information
   this.getSong = function() {
-    if(!this.currentlyPlaying) return false;
+    // if(!this.currentlyPlaying) return false;
     let myUrl = '/player/currentSong';
 
     $http.get(myUrl)
       .then((response) => {
-        let myTitle   = response.data.title;
-        let myArtist  = response.data.artist;
-        let myImage   = response.data.image;
+        this.currentSong['title']   = response.data.title;
+        this.currentSong['artist']  = response.data.artist;
+        this.currentSong['image']   = response.data.image;
+        this.currentSong['preview'] = response.data.preview;
 
-        this.updateCurrentSong(myTitle, myArtist, myImage);
+        console.log('inside of getSong');
+        console.log(this.currentSong['preview']);
       });
-  };
-
-  this.updateCurrentSong = function(title, artist, image) {
-    this.currentSong['title']   = title;
-    this.currentSong['artist']  = artist;
-    this.currentSong['image']   = image;
   };
 
   this.likeSong = function() {
@@ -122,9 +120,10 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
     this.stopSong();
     this.likedSongs = [];
     this.currentSong = {
-      title:  '',
-      artist: '',
-      image:  ''
+      title:   '',
+      artist:  '',
+      image:   '',
+      preview: ''
     };
 
     $http.get('player/destroy');
@@ -199,8 +198,11 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
   }
 
   // Check for song title every second
+  let myPlayer = window.getElementById('audio-player');
   $interval(() => {
+    myPlayer;
     this.getSong();
   }, 1000);
+
 
 });

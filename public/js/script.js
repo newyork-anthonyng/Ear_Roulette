@@ -2,10 +2,25 @@
 
 let myArtists = ['linkin park', 'shawn mendes'];
 let songsLoaded = false;
+let mySongs = [];
+let currentIndex = 0;
 
 $(function() {
   // load all tracks for artists
   getTracks(myArtists);
+
+  // get player
+  let audioPlayer = $('#audio-player');
+  audioPlayer.attr('autoplay', true);
+  $('#test').click(() => {
+    audioPlayer.attr('src', mySongs[0]['preview']);
+  });
+
+  audioPlayer.on('ended', () => {
+    console.log('song ended')
+    currentIndex++;
+    audioPlayer.attr('src', mySongs[currentIndex]['preview']);
+  });
 });
 
 //=============================================================================
@@ -33,6 +48,9 @@ let getTracks = function(artistNameArray) {
 
       // When all Track information is stored...
       $.when.apply($, deferredTrackId).done(() => {
+        // update tracks on client side
+        mySongs = myTracksArray;
+
         // update tracks on the server
         $.ajax({
           url: '/player/updateTracks',
