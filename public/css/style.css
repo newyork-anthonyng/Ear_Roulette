@@ -1,13 +1,10 @@
 .login, .signup {
-  /*border:1px solid black;*/
   margin:0 auto;
   height:250px;
   width:250px;
 }
 
 .favorite-song {
-  border:1px solid black;
-  border-radius:10px;
   text-align:center;
   height:80px;
   margin:5px;
@@ -30,4 +27,14 @@ img {
 
 h1 {
   text-align:center;
+}
+
+#heart {
+    animation:blink 2s infinite;
+}
+
+@keyframes blink{
+  /*to{opacity: .0;}*/
+  0% {opacity: 1;}
+  80% {opacity: 0;}
 }

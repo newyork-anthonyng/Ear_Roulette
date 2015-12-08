@@ -64,7 +64,7 @@
       </div>
 
       <div class="container">
-        <div class="track-information col-sm-6 col-sm-offset-3">
+        <div class="track-information col-sm-4">
           <div class="row">
             <h4 id="player-title"></h4>
           </div>
@@ -85,14 +85,15 @@
           </div>
         </div>
 
-        <div class="container">
-          <div class="col-sm-4 col-sm-offset-8 favorite-songs">
+        <div class="container col-sm-8">
+          <div class="favorite-songs">
             <ul>
               <li ng-repeat="track in roulette.likedSongs">
                 <div class="row favorite-song">
+                  <span id="heart">♥</span>
                   {{ track.title }}<br>
                   {{ track.artist }}<br>
-                  <button ng-click="roulette.deleteSong($index)">Delete</button>
+                  <button ng-click="roulette.deleteSong($index)">Delete</button><br>
                 </div>
               </li>
             </ul>
