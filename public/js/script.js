@@ -1,27 +1,30 @@
 'use strict'
 
 let myArtists = ['linkin park', 'shawn mendes'];
-let songsLoaded = false;
 let mySongs = [];
 let currentIndex = 0;
 
 $(function() {
   // load all tracks for artists
   getTracks(myArtists);
+});
 
-  // get player
+// start playing music when all tracks are loaded
+let startAudioPlayer = function() {
+  // create new audio player and start playing
   let audioPlayer = $('#audio-player');
   audioPlayer.attr('autoplay', true);
-  $('#test').click(() => {
-    audioPlayer.attr('src', mySongs[0]['preview']);
-  });
+  updateAudioPlayerSource(audioPlayer);
 
   audioPlayer.on('ended', () => {
-    console.log('song ended')
     currentIndex++;
-    audioPlayer.attr('src', mySongs[currentIndex]['preview']);
+    updateAudioPlayerSource(audioPlayer);
   });
-});
+};
+
+let updateAudioPlayerSource = function(audioPlayer) {
+  audioPlayer.attr('src', mySongs[currentIndex]['preview']);
+};
 
 //=============================================================================
 // API methods ================================================================
@@ -57,7 +60,7 @@ let getTracks = function(artistNameArray) {
           data: {'data': myTracksArray}
         }).done(() => {
           console.log('Ready to play');
-          songsLoaded = true;
+          startAudioPlayer();
         });
 
       }); // close $.when for getting Track information
