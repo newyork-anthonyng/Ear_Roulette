@@ -2,7 +2,8 @@
   "name": "ear_roulette",
   "version": "1.0.0",
   "engines": {
-    "node": "4.2.2"
+    "node": "=4.2.2",
+    "npm":  "=2.14.7"
   },
   "description": "### Description Ear Roulette is a jukebox for people with short attention spans. All of the tracks in the jukebox last for 30 seconds before the next one is played. You will never be bored of music again.",
   "main": "server.js",
