@@ -62,7 +62,7 @@ router.post('/dislike', (req, res) => {
 });
 
 // saves all tracks into array
-router.get('/updateTracks', (req, res) => {
+router.post('/updateTracks', (req, res) => {
   let data = req.query['data'];
   let dataArray = [];
 

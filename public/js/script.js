@@ -1,6 +1,6 @@
 'use strict'
 
-let myArtists = ['lil wayne', 'one republic'];
+let myArtists = ['one republic'];
 
 let mySongs = [];
 let currentIndex = 0;
@@ -78,7 +78,8 @@ let getTracks = function(artistNameArray) {
         // update tracks on the server
         $.ajax({
           url: '/player/updateTracks',
-          data: {'data': myTracksArray}
+          data: {'data': myTracksArray},
+          method: 'POST'
         }).done(() => {
           console.log('Ready to play');
           startAudioPlayer();
