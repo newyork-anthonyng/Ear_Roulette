@@ -45,7 +45,7 @@ router.get('/albums/:artistID', (req, res) => {
   let artistID = req.params.artistID;
 
   let myUrl = 'https://api.spotify.com/v1/artists/' +
-            artistID + '/albums?limit=10';
+            artistID + '/albums?limit=3';
 
   // hit spotify API
   request(myUrl, (error, response, body) => {
@@ -79,7 +79,7 @@ router.get('/tracks/:albumID', (req, res) => {
   let image   = req.query.image;
 
   let myURL = 'https://api.spotify.com/v1/albums/' +
-              albumID + '/tracks?limit=10';
+              albumID + '/tracks?limit=5';
 
   request(myURL, (error, response, body) => {
     if(!error && response.statusCode == 200) {

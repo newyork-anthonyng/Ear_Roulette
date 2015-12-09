@@ -66,36 +66,36 @@
       <div class="container">
         <div class="track-information col-sm-4">
           <div class="row">
-            <h4 id="player-title"></h4>
+            <h4 id="player-title" ng-model="roulette.songTitle"></h4>
           </div>
           <div class="row">
-            <h5 id="player-artist"></h5>
+            <h4 id="player-artist" ng-model="roulette.songArtist"></h4>
           </div>
 
           <!-- Song image -->
           <div class="row">
-            <img ng-src="{{ roulette.currentSong['image'] }}"></img>
+            <img id="album-art" src=""></img>
           </div>
 
           <!-- Audio Player -->
           <audio id="audio-player" controls></audio>
 
-          <div class="row">
-            <button ng-click="roulette.likeSong()">Like</button>
-          </div>
+          <!-- <div class="row">
+            <button id="like">Like</button>
+          </div> -->
         </div>
 
         <div class="container col-sm-8">
           <div class="favorite-songs">
             <ul>
-              <li ng-repeat="track in roulette.likedSongs">
+              <!-- <li ng-repeat="track in roulette.likedSongs">
                 <div class="row favorite-song">
                   <span id="heart">♥</span>
                   {{ track.title }}<br>
                   {{ track.artist }}<br>
                   <button ng-click="roulette.deleteSong($index)">Delete</button><br>
                 </div>
-              </li>
+              </li> -->
             </ul>
           </div>
         </div>

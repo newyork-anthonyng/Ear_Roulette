@@ -71,7 +71,7 @@ router.post('/updateTracks', (req, res) => {
     dataArray.push(data[track]);
   }
 
-  // dataArray = shuffle(dataArray);
+  dataArray = shuffle(dataArray);
 
   // go through each track and update myTracks with previewURL
   for(let i = 0, j = dataArray.length; i < j; i++) {

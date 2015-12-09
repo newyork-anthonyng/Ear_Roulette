@@ -32,9 +32,12 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
   this.likeSong = function() {
     let myUrl = '/player/like';
 
-    let title  = this.currentSong['title'];
-    let artist = this.currentSong['artist'];
+    let title  = this.songTitle;
+    let artist = this.songArtist;
     let user   = localStorage['user'];
+
+    console.log('inside of likeSong');
+    console.log(title, artist);
 
     // check if we already have song favorited
     for(let i = 0, j = this.likedSongs.length; i < j; i++) {
@@ -151,16 +154,13 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
   };
 
   this.authenticateUser = function(data) {
-    console.log('inside authenticate user, before ajax call');
     let myUrl = '/user/authenticate';
 
     $http.post(myUrl, data)
       .then((response) => {
         let data = response.data;
-        console.log('inside authenticate user');
 
         if(data['success']) {
-          console.log('successful authentication');
           // if login was successful, then show the player and hide login page
           localStorage.setItem('token', data.token);
           localStorage.setItem('user', data.user.name);
@@ -182,6 +182,4 @@ app.controller('RouletteController', function($http, $interval, $timeout) {
   $interval(() => {
     this.getSong();
   }, 1000);
-
-
 });
