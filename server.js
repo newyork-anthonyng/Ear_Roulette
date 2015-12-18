@@ -11,9 +11,8 @@ const jwt         = require('jsonwebtoken');
 const config      = require('./config');
 const User        = require('./models/user');
 
-const userRoutes   = require('./routes/userRoutes');
-const apiRoutes    = require('./routes/apiRoutes');
-const playerRoutes = require('./routes/playerRoutes');
+const userRoutes = require('./routes/userRoutes');
+const spotify    = require('./routes/spotify');
 
 // use Angular
 app.use('/scripts', express.static(__dirname + '/node_modules/angular'));
@@ -29,8 +28,7 @@ app.use(express.static('public'));
 
 // set up Routers
 app.use('/user', userRoutes);
-app.use('/api', apiRoutes);
-app.use('/player', playerRoutes);
+app.use('/api', spotify);
 
 app.get('/', (req, res) => {
   res.json({ success: true, message: 'get /' });
@@ -64,3 +62,5 @@ app.use((req, res, next) => {
 const server = app.listen(process.env.PORT || 3000, () => {
   console.log('Express server running...');
 });
+
+module.exports = app;
