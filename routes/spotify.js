@@ -4,104 +4,122 @@ const express    = require('express');
 const router     = express.Router();
 const request    = require('request');
 const bodyParser = require('body-parser');
+const Utility    = require('./_utility');
 
 router.get('/', (req, res) => {
   res.json({ success: true, message: 'get api/' });
 });
 
-// returns an object with an 'id' (which can be searched on Spotify) and 'name'
-router.get('/artistID/:artistName', (req, res) => {
-  let artistName    = req.params.artistName;
-  let formattedName = artistName.split(' ').join('+');
+// *** API Routes *** //
+router.get('/artist', findArtistId);  // requires 'artistName' in query
+router.get('/albums', findAlbums);    // requires 'artistId' in query
+router.get('/tracks', findTracks);    // requires 'albumId' in query
 
-  let myURL = 'https://api.spotify.com/v1/search?q=' +
-              formattedName + '&type=artist&limit=1';
+function findArtistId(req, res) {
+  // parse query string for artistName
+  let artistName = Utility.parseQueryString(req.originalUrl);
+
+  // check if artistName is provided
+  if(artistName['artistName'] == undefined) {
+    res.json({ SUCCESS: false, MESSAGE: 'Missing artist name' });
+    return false;
+  }
+
+  // format artist name to replace spaces with '+'
+  let formattedName = artistName['artistName'].split(' ').join('+');
+
+  let myURL = 'https://api.spotify.com/v1/search?q=' + formattedName +
+              '&type=artist&limit=1';
 
   request(myURL, (error, response, body) => {
     if(!error && response.statusCode == 200) {
-
       let jsonData = JSON.parse(body)['artists']['items'][0];
-      let artistID = undefined;
+      let artistID, artistName;
 
       // check if we received information from Spotify
       if(jsonData) {
         artistID = jsonData['id'];
+        artistName = jsonData['name'];
       } else {
-        console.log(artistName + '\'s id was not found.');
+        res.json({ SUCCESS: false, MESSAGE: 'No artist ID found' });
+        return false;
       }
 
       let data = {
-        id:   artistID,
-        name: artistName
+        SUCCESS:    true,
+        artistId:   artistID,
+        artistName  artistName
       };
 
-      res.send(data);
+      res.json(data);
     }
   });
 });
 
-// returns an array of objects, with keys of 'id', 'name' and 'image'
-router.get('/albums/:artistID', (req, res) => {
-  let artistID = req.params.artistID;
+function findAlbums(req, res) {
+  // parse query string for artistId
+  let artistID = Utility.parseQueryString(req.originalUrl);
 
-  let myUrl = 'https://api.spotify.com/v1/artists/' +
-            artistID + '/albums?limit=3';
+  // check if artistId is provided
+  if(artistId['artistId'] == undefined) {
+    res.json({ SUCCESS: false, MESSAGE: 'Missing artist ID' });
+    return false;
+  }
+  
+  let myUrl = 'https://api.spotify.com/v1/artists/' + artistID['artistId'] + 
+              '/albums?limit=3';
 
   // hit spotify API
   request(myUrl, (error, response, body) => {
     if(!error && response.statusCode == 200) {
-
-      // jsonData will hold an array of albums
       let jsonData = JSON.parse(body)['items'];
-
-      // myAlbums will hold an array of objects
-      // Object will hold 'id', 'name' and 'image'
       let myAlbums = [];
 
       for(let i = 0, j = jsonData.length; i < j; i++) {
         let newAlbum = {
-          id:    jsonData[i]['id'],
-          name:  jsonData[i]['name'],
-          image: jsonData[i]['images'][1]['url']
+          albumId:    jsonData[i]['id'],
+          albumName:  jsonData[i]['name'],
+          albumImage: jsonData[i]['images'][1]['url']
         };
 
         myAlbums.push(newAlbum);
       }
 
-      res.send(myAlbums);
+      res.json({ SUCCESS: true, albums: myAlbums });
     }
-  });
+
 });
 
-// returns an array of objects, with keys of 'id', 'title', 'artist' & 'preview'
-router.get('/tracks/:albumID', (req, res) => {
-  let albumID = req.params.albumID;
-  let image   = req.query.image;
+function findTracks(req, res) {
+  // parse query string for albumId
+  let albumId = Utility.parseQueryString(req.originalUrl);
 
-  let myURL = 'https://api.spotify.com/v1/albums/' +
-              albumID + '/tracks?limit=5';
+  // check if albumId is provided
+  if(albumId['albumId'] == undefined) {
+    res.json({ SUCCESS: false, MESSAGE: 'Missing album ID' });
+    return false;
+  }
+
+  let myURL = 'https://api.spotify.com/v1/albums/' + albumID['albumId'] + 
+              '/tracks?limit=5';
 
   request(myURL, (error, response, body) => {
     if(!error && response.statusCode == 200) {
       let jsonData = JSON.parse(body)['items'];
-
-      // myTracks will hold an array of objects
-      // Object will hold 'id', 'title', 'artist' and 'preview'
       let myTracks = [];
 
       for(let i = 0, j = jsonData.length; i < j; i++) {
         let newTrack = {
-          id: jsonData[i]['id'],
-          title: jsonData[i]['name'],
-          artist: jsonData[i]['artists'][0]['name'],
-          preview: jsonData[i]['preview_url'],
-          image: image
+          trackId:      jsonData[i]['id'],
+          trackTitle:   jsonData[i]['name'],
+          trackArtist:  jsonData[i]['artists'][0]['name'],
+          trackPreview: jsonData[i]['preview_url'],
         };
 
         myTracks.push(newTrack);
       }
 
-      res.send(myTracks);
+      res.send({ SUCCESS: true, tracks: myTracks });
     }
   });
 });
