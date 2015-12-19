@@ -32,31 +32,30 @@ app.get('/', (req, res) => {
 });
 
 // route middleware to verify token
-app.use((req, res, next) => {
-  return false; // for testing purposes. No authentication required
-
-  let token = req.headers['x-access-token'];
-
-  if(token) {
-    jwt.verify(token, app.get('secret'), (err, decoded) => {
-
-      if(err) {
-        return res.json({
-            SUCCESS: false,
-            MESSAGE: 'Failed to authenticate token'
-        });
-      } else {
-        req.decoded = decoded;
-        next();
-      }
-    });
-  } else {
-    return res.status(403).send({
-      SUCCESS: false,
-      MESSAGE: 'No token provided'
-    });
-  }
-});
+// app.use((req, res, next) => {
+//
+//   let token = req.headers['x-access-token'];
+//
+//   if(token) {
+//     jwt.verify(token, app.get('secret'), (err, decoded) => {
+//
+//       if(err) {
+//         return res.json({
+//             SUCCESS: false,
+//             MESSAGE: 'Failed to authenticate token'
+//         });
+//       } else {
+//         req.decoded = decoded;
+//         next();
+//       }
+//     });
+//   } else {
+//     return res.status(403).send({
+//       SUCCESS: false,
+//       MESSAGE: 'No token provided'
+//     });
+//   }
+// });
 
 const server = app.listen(process.env.PORT || 3000, () => {
   console.log('Express server running...');

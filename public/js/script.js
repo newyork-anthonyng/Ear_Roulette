@@ -77,37 +77,37 @@ let updateTrackInformation = function() {
   artist.text(mySongs[currentIndex]['artist']);
   albumArt.attr('src', mySongs[currentIndex]['image']);
 };
-
-let getFavoriteSongs = function() {
-  let userData = {
-    user: localStorage['user']
-  }
-
-  $.ajax({
-    url: '/player/favorites',
-    data: userData,
-    method: 'POST'
-  }).done((response) => {
-    console.log('inside of getFavoriteSongs');
-    console.log(response);
-
-    likedSongs = response;
-
-    // update the display
-    let favoriteSongs = $('.favorite-songs');
-    favoriteSongs.empty();
-
-    let songList = $('<ul>');
-    for(let i = 0, j = likedSongs.length; i < j; i++) {
-      let mySong = $('<span id="heart">♥</span>' +
-                      likedSongs[i]['title'] + '<br>' +
-                      likedSongs[i]['artist'] + '<br><button id="delete">Delete</button><br>');
-      songList.append(mySong);
-      }
-    favoriteSongs.append(songList);
-
-    });
-};
+//
+// let getFavoriteSongs = function() {
+//   let userData = {
+//     user: localStorage['user']
+//   }
+//
+//   $.ajax({
+//     url: '/player/favorites',
+//     data: userData,
+//     method: 'POST'
+//   }).done((response) => {
+//     console.log('inside of getFavoriteSongs');
+//     console.log(response);
+//
+//     likedSongs = response;
+//
+//     // update the display
+//     let favoriteSongs = $('.favorite-songs');
+//     favoriteSongs.empty();
+//
+//     let songList = $('<ul>');
+//     for(let i = 0, j = likedSongs.length; i < j; i++) {
+//       let mySong = $('<span id="heart">♥</span>' +
+//                       likedSongs[i]['title'] + '<br>' +
+//                       likedSongs[i]['artist'] + '<br><button id="delete">Delete</button><br>');
+//       songList.append(mySong);
+//       }
+//     favoriteSongs.append(songList);
+//
+//     });
+// };
 
 //=============================================================================
 // API methods ================================================================
@@ -159,10 +159,14 @@ let getArtistIdPromises = function(artistArray, compiledArray) {
   let deferreds = [];
 
   for(let i = 0, j = artistArray.length; i < j; i++) {
+    console.log('inside of for-loop');
+    console.log(artistArray[i]);
+    
     let newRequest = $.ajax({
-      url: 'api/artistID/' + artistArray[i]
+      url: 'spotify/artist?artistName=' + artistArray[i]
     }).done((data) => {
       compiledArray.push(data['id']);
+      console.log(data['id']);
     });
 
     deferreds.push(newRequest);
@@ -176,10 +180,11 @@ let getArtistIdPromises = function(artistArray, compiledArray) {
 // method will return an array of AJAX calls
 let getAlbumsPromises = function(artistIdArray, compiledArray) {
   let deferreds = [];
-
+  console.log('inside of getAlbumsPromises');
+  console.log(artistIdArray);
   for(let i = 0, j = artistIdArray.length; i < j; i++) {
     let newRequest = $.ajax({
-      url: 'api/albums/' + artistIdArray[i]
+      url: 'spotify/albums?artistId=' + artistIdArray[i]
     }).done((data) => {
       // data returns an array of Album objects
       for(let i = 0, j = data.length; i < j; i++) {
@@ -210,7 +215,7 @@ let getTracksPromises = function(albumIdArray, compiledArray) {
     };
 
     let newRequest = $.ajax({
-      url: 'api/tracks/' + albumIdArray[i]['id'],
+      url: 'spotify/tracks?albumId=' + albumIdArray[i]['id'],
       data: newData
     }).done((data) => {
       // data returns an array of Track objects

@@ -52,7 +52,7 @@ function findArtistId(req, res) {
         artistId:   artistID,
         artistName: artistName
       };
-
+      console.log(data);
       res.json(data);
     }
   });
@@ -60,7 +60,8 @@ function findArtistId(req, res) {
 
 function findAlbums(req, res) {
   // parse query string for artistId
-  let artistID = Utility.parseQueryString(req.originalUrl);
+  let artistId = Utility.parseQueryString(req.originalUrl);
+  console.log('inside of findAlbums');
 
   // check if artistId is provided
   if(artistId['artistId'] == undefined) {
@@ -68,7 +69,7 @@ function findAlbums(req, res) {
     return false;
   }
 
-  let myUrl = 'https://api.spotify.com/v1/artists/' + artistID['artistId'] +
+  let myUrl = 'https://api.spotify.com/v1/artists/' + artistId['artistId'] +
               '/albums?limit=3';
 
   request(myUrl, (error, response, body) => {
@@ -101,7 +102,7 @@ function findTracks(req, res) {
     return false;
   }
 
-  let myURL = 'https://api.spotify.com/v1/albums/' + albumID['albumId'] +
+  let myURL = 'https://api.spotify.com/v1/albums/' + albumId['albumId'] +
               '/tracks?limit=5';
 
   request(myURL, (error, response, body) => {

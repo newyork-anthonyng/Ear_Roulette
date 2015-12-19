@@ -11,7 +11,7 @@ describe('Spotify API', () => {
 
   it('should get artist ID on GET /spotify/artistId', (done) => {
     chai.request(server)
-      .get('/spotify/artistId?artistName=Killers')
+      .get('/spotify/artist?artistName=Killers')
       .end((err, res) => {
         res.should.have.a.status(200);
         res.should.be.json;
@@ -27,10 +27,10 @@ describe('Spotify API', () => {
   });
 
   it('should return failure when no artist name is provided to GET \
-      /spotify/artistId', (done) => {
+  /spotify/artistId', (done) => {
 
     chai.request(server)
-      .get('/spotify/artistId')
+      .get('/spotify/artist')
       .end((err, res) => {
         res.should.have.a.status(200);
         res.should.be.json;
@@ -47,7 +47,7 @@ describe('Spotify API', () => {
      /spotify/artistId', (done) => {
 
     chai.request(server)
-      .get('/spotify/artistId?artistName=jklmnop')
+      .get('/spotify/artist?artistName=jklmnop')
       .end((err, res) => {
         res.should.have.a.status(200);
         res.should.be.json;
@@ -120,7 +120,7 @@ describe('Spotify API', () => {
         res.body.tracks[0].should.have.a.property('trackPreview');
         res.body.tracks[0].trackPreview.should.be.eq(
             'https://p.scdn.co/mp3-preview/f204bd63c37d3cae41eb49f7287773\
-            4cd297aedf');
+4cd297aedf');
         done();
       });
   });
