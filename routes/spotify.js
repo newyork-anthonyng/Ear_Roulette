@@ -7,13 +7,14 @@ const bodyParser = require('body-parser');
 const Utility    = require('./_utility');
 
 router.get('/', (req, res) => {
-  res.json({ success: true, message: 'get api/' });
+  res.json({ SUCCESS: true });
 });
 
 // *** API Routes *** //
 router.get('/artist', findArtistId);  // requires 'artistName' in query
 router.get('/albums', findAlbums);    // requires 'artistId' in query
 router.get('/tracks', findTracks);    // requires 'albumId' in query
+
 
 function findArtistId(req, res) {
   // parse query string for artistName
@@ -34,11 +35,12 @@ function findArtistId(req, res) {
   request(myURL, (error, response, body) => {
     if(!error && response.statusCode == 200) {
       let jsonData = JSON.parse(body)['artists']['items'][0];
-      let artistID, artistName;
+      let artistID;
+      let artistName;
 
       // check if we received information from Spotify
       if(jsonData) {
-        artistID = jsonData['id'];
+        artistID =   jsonData['id'];
         artistName = jsonData['name'];
       } else {
         res.json({ SUCCESS: false, MESSAGE: 'No artist ID found' });
@@ -48,13 +50,13 @@ function findArtistId(req, res) {
       let data = {
         SUCCESS:    true,
         artistId:   artistID,
-        artistName  artistName
+        artistName: artistName
       };
 
       res.json(data);
     }
   });
-});
+};
 
 function findAlbums(req, res) {
   // parse query string for artistId
@@ -65,11 +67,10 @@ function findAlbums(req, res) {
     res.json({ SUCCESS: false, MESSAGE: 'Missing artist ID' });
     return false;
   }
-  
-  let myUrl = 'https://api.spotify.com/v1/artists/' + artistID['artistId'] + 
+
+  let myUrl = 'https://api.spotify.com/v1/artists/' + artistID['artistId'] +
               '/albums?limit=3';
 
-  // hit spotify API
   request(myUrl, (error, response, body) => {
     if(!error && response.statusCode == 200) {
       let jsonData = JSON.parse(body)['items'];
@@ -87,8 +88,8 @@ function findAlbums(req, res) {
 
       res.json({ SUCCESS: true, albums: myAlbums });
     }
-
-});
+  });
+};
 
 function findTracks(req, res) {
   // parse query string for albumId
@@ -100,7 +101,7 @@ function findTracks(req, res) {
     return false;
   }
 
-  let myURL = 'https://api.spotify.com/v1/albums/' + albumID['albumId'] + 
+  let myURL = 'https://api.spotify.com/v1/albums/' + albumID['albumId'] +
               '/tracks?limit=5';
 
   request(myURL, (error, response, body) => {
@@ -122,6 +123,6 @@ function findTracks(req, res) {
       res.send({ SUCCESS: true, tracks: myTracks });
     }
   });
-});
+};
 
 module.exports = router;

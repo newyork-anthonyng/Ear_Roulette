@@ -11,11 +11,8 @@ const jwt         = require('jsonwebtoken');
 const config      = require('./config');
 const User        = require('./models/user');
 
-const userRoutes = require('./routes/userRoutes');
-const spotify    = require('./routes/spotify');
-
-// use Angular
-app.use('/scripts', express.static(__dirname + '/node_modules/angular'));
+const userRoutes    = require('./routes/userRoutes');
+const spotifyRoutes = require('./routes/spotify');
 
 // configuration
 mongoose.connect(config.database);
@@ -28,14 +25,16 @@ app.use(express.static('public'));
 
 // set up Routers
 app.use('/user', userRoutes);
-app.use('/api', spotify);
+app.use('/spotify', spotifyRoutes);
 
 app.get('/', (req, res) => {
-  res.json({ success: true, message: 'get /' });
+  res.json({ SUCCESS: true });
 });
 
 // route middleware to verify token
 app.use((req, res, next) => {
+  return false; // for testing purposes. No authentication required
+
   let token = req.headers['x-access-token'];
 
   if(token) {
@@ -43,8 +42,8 @@ app.use((req, res, next) => {
 
       if(err) {
         return res.json({
-            success: false,
-            message: 'Failed to authenticate token'
+            SUCCESS: false,
+            MESSAGE: 'Failed to authenticate token'
         });
       } else {
         req.decoded = decoded;
@@ -53,8 +52,8 @@ app.use((req, res, next) => {
     });
   } else {
     return res.status(403).send({
-      success: false,
-      message: 'No token provided.'
+      SUCCESS: false,
+      MESSAGE: 'No token provided'
     });
   }
 });

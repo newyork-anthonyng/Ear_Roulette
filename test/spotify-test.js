@@ -1,26 +1,13 @@
 'use strict'
 
-const chai = require('chai');
-const should = chai.should();
+const chai     = require('chai');
+const should   = chai.should();
 const chaiHttp = require('chai-http');
-const server = require('../server');
+const server   = require('../server');
 
 chai.use(chaiHttp);
 
 describe('Spotify API', () => {
-
-  it('should get success on GET /', (done) => {
-    chai.request(server)
-    .get('/')
-    .end((err, res) => {
-      res.should.have.a.status(200);
-      res.should.be.json;
-      res.body.should.be.a('object');
-      res.body.should.have.a.property('SUCCESS');
-      res.body.SUCCESS.should.be.true;
-      done();
-    });
-  });
 
   it('should get artist ID on GET /spotify/artistId', (done) => {
     chai.request(server)
@@ -39,7 +26,9 @@ describe('Spotify API', () => {
       });
   });
 
-  it('should return failure when no artist name is provided to GET /spotify/artistId', (done) => {
+  it('should return failure when no artist name is provided to GET \
+      /spotify/artistId', (done) => {
+
     chai.request(server)
       .get('/spotify/artistId')
       .end((err, res) => {
@@ -54,7 +43,9 @@ describe('Spotify API', () => {
       });
   });
 
-  it('should return failure when no artist name is found to GET /spotify/artistId', (done) => {
+  it('should return failure when no artist name is found to GET\
+     /spotify/artistId', (done) => {
+
     chai.request(server)
       .get('/spotify/artistId?artistName=jklmnop')
       .end((err, res) => {
@@ -68,7 +59,6 @@ describe('Spotify API', () => {
         done();
       });
   });
-
 
   it('should return albums on GET /spotify/albums', (done) => {
     chai.request(server)
@@ -93,7 +83,9 @@ describe('Spotify API', () => {
       });
   });
 
-  it('should return failure when no artistId is provided to GET /spotify/albums', (done) => {
+  it('should return failure when no artistId is provided to GET\
+      /spotify/albums', (done) => {
+
     chai.request(server)
       .get('/spotify/albums/')
       .end((err, res) => {
@@ -126,12 +118,16 @@ describe('Spotify API', () => {
         res.body.tracks[0].should.have.a.property('trackArtist');
         res.body.tracks[0].trackArtist.should.be.eq('The Killers');
         res.body.tracks[0].should.have.a.property('trackPreview');
-        res.body.tracks[0].trackPreview.should.be.eq('https://p.scdn.co/mp3-preview/f204bd63c37d3cae41eb49f72877734cd297aedf');
+        res.body.tracks[0].trackPreview.should.be.eq(
+            'https://p.scdn.co/mp3-preview/f204bd63c37d3cae41eb49f7287773\
+            4cd297aedf');
         done();
       });
   });
 
-  it('should get failure when album ID is not provided on GET /spotify/tracks', (done) => {
+  it('should get failure when album ID is not provided on GET\
+      /spotify/tracks', (done) => {
+
     chai.request(server)
     .get('/spotify/tracks')
     .end((err, res) => {
