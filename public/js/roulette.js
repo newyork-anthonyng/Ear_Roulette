@@ -24,27 +24,29 @@ myApp.factory('spotifyFactory', function($http) {
   let trackArray      = [];
 
   factory.getTracks = function() {
-    console.log('getting tracks');
+
+    // get artist Id's
     let deferredArtistId = factory.getArtistIdPromises(artistNameArray, artistIdArray);
-
     $.when.apply($, deferredArtistId).done(() => {
-      console.log('retrieved all artist IDs');
 
+      // get album Id's
       let deferredAlbumId = factory.getAlbumsPromises(artistIdArray, albumIdArray);
-
       $.when.apply($, deferredAlbumId).done(() => {
-        console.log('retrieved all albums');
 
         // go through each album and get tracks
         let myAlbums = [];
         for(let i = 0, j = albumIdArray.length; i < j; i++) {
           myAlbums = myAlbums.concat(albumIdArray[i].albums);
         }
-        console.log(myAlbums);
+
+        // get track objects
         let deferredTrackId = factory.getTracksPromises(myAlbums, trackArray);
         $.when.apply($, deferredTrackId).done(() => {
           console.log('retrieved all tracks');
           console.log(trackArray);
+
+          // trackArray is an array of track objects
+          // trackTitle, trackArtist, trackPreview, albumImage
 
         });  // end of deferredTrackId
 
@@ -59,15 +61,23 @@ myApp.factory('spotifyFactory', function($http) {
     let deferreds = [];
 
     for(let i = 0, j = albumIdArray.length; i < j; i++) {
-      let myUrl = '/spotify/tracks?albumId=' + albumIdArray[i]['albumId'];
+      // need IIFE to keep track of which Album we are on to get Album Image
+      (function getTrackObjects(index) {
+        let myUrl = '/spotify/tracks?albumId=' + albumIdArray[index]['albumId'];
 
-      let newRequest = $.ajax({
-        url: myUrl
-      }).done((data) => {
-        compiledArray.push(data);
-      });
+        let newRequest = $.ajax({
+          url: myUrl
+        }).done((data) => {
+          // parse through each of the tracks in array
+          for(let i = 0, j = data.tracks.length; i < j; i++) {
+            let myTrack = data.tracks[i];
+            myTrack['albumImage'] = albumIdArray[index]['albumImage'];
+            compiledArray.push(myTrack);
+          }
+        });
 
-      deferreds.push(newRequest);
+        deferreds.push(newRequest);
+      })(i);
     }
 
     return deferreds;
