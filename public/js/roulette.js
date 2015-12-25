@@ -15,7 +15,6 @@ function RouletteController(spotifyFactory) {
   }
 }
 
-
 // *** factory *** //
 myApp.factory('spotifyFactory', function($http) {
   let factory = {};
@@ -25,23 +24,33 @@ myApp.factory('spotifyFactory', function($http) {
   let trackArray      = [];
 
   factory.getTracks = function() {
-    // get the artist Id's
+    console.log('getting tracks');
     let deferredArtistId = factory.getArtistIdPromises(artistNameArray, artistIdArray);
 
     $.when.apply($, deferredArtistId).done(() => {
       console.log('retrieved all artist IDs');
-      console.log(artistIdArray);
 
       let deferredAlbumId = factory.getAlbumsPromises(artistIdArray, albumIdArray);
 
       $.when.apply($, deferredAlbumId).done(() => {
         console.log('retrieved all albums');
-        console.log(albumIdArray);
 
-        
-      });
+        // go through each album and get tracks
+        let myAlbums = [];
+        for(let i = 0, j = albumIdArray.length; i < j; i++) {
+          myAlbums = myAlbums.concat(albumIdArray[i].albums);
+        }
+        console.log(myAlbums);
+        let deferredTrackId = factory.getTracksPromises(myAlbums, trackArray);
+        $.when.apply($, deferredTrackId).done(() => {
+          console.log('retrieved all tracks');
+          console.log(trackArray);
 
-    });
+        });  // end of deferredTrackId
+
+      });  // end of deferredAlbumId
+
+    });  // end of deferredArtistId
 
   };
 
