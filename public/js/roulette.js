@@ -5,7 +5,7 @@ var myApp = angular.module('Roulette', []);
 // *** controller *** //
 myApp.controller('RouletteController', RouletteController);
 
-function RouletteController(spotifyFactory) {
+function RouletteController($scope, spotifyFactory) {
   let self = this;
 
   self.trackTitle   = '';
@@ -19,15 +19,10 @@ function RouletteController(spotifyFactory) {
     if(spotifyFactory.tracksLoaded) {
       self.createPlayer();
     }
-  };
+  };    
 
   self.createPlayer = function() {
-    let currentSong = spotifyFactory.getCurrentSong();
-
-    self.trackTitle   = currentSong['trackTitle'];
-    self.trackArtist  = currentSong['trackArtist'];
-    self.trackImage   = currentSong['albumImage'];
-    self.trackPreview = currentSong['trackPreview'];
+    self.updateTrackInformation();
 
     let audioPlayer = $('<audio />', { controls: 'controls',
                                        autoPlay: 'autoPlay' });
@@ -42,6 +37,17 @@ function RouletteController(spotifyFactory) {
     $('.player').empty().append(audioPlayer);
   };
 
+  self.updateTrackInformation = function() {
+    let currentSong = spotifyFactory.getCurrentSong();
+
+    self.trackTitle   = currentSong['trackTitle'];
+    self.trackArtist  = currentSong['trackArtist'];
+    self.trackImage   = currentSong['albumImage'];
+    self.trackPreview = currentSong['trackPreview'];
+
+    $scope.$apply();
+  };
+
   // *** Get songs when application is loaded *** //
   function init() {
     spotifyFactory.getTracks();
@@ -51,7 +57,7 @@ function RouletteController(spotifyFactory) {
 // *** factory *** //
 myApp.factory('spotifyFactory', function($http) {
   let factory = {};
-  let artistNameArray = ['Killers', 'Maroon 5'];
+  let artistNameArray = ['One Direction', 'Killers', 'Macklemore'];
   let artistIdArray   = [];
   let albumIdArray    = [];
   let trackArray      = [];
@@ -87,7 +93,6 @@ myApp.factory('spotifyFactory', function($http) {
         let deferredTrackId = factory.getTracksPromises(myAlbums, trackArray);
         $.when.apply($, deferredTrackId).done(() => {
           tracksLoaded = true;
-          console.log(factory.shuffle(trackArray));
           return factory.shuffle(trackArray);
 
         });  // end of deferredTrackId
