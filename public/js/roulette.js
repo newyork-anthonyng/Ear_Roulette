@@ -7,11 +7,19 @@ myApp.controller('RouletteController', RouletteController);
 
 function RouletteController(spotifyFactory) {
   let self = this;
+  self.tracks = [];
 
   init();
 
+  self.startPlayer = function() {
+    if(spotifyFactory.tracksLoaded) {
+      $('.player').empty().append('Songs loaded');
+    }
+  };
+
+  // *** Get songs when application is loaded *** //
   function init() {
-    spotifyFactory.getTracks();
+    self.tracks = spotifyFactory.getTracks();
   }
 }
 
@@ -22,6 +30,11 @@ myApp.factory('spotifyFactory', function($http) {
   let artistIdArray   = [];
   let albumIdArray    = [];
   let trackArray      = [];
+  let tracksLoaded    = false;
+
+  factory.tracksLoaded = function() {
+    return tracksLoaded;
+  };
 
   factory.getTracks = function() {
 
@@ -42,11 +55,8 @@ myApp.factory('spotifyFactory', function($http) {
         // get track objects
         let deferredTrackId = factory.getTracksPromises(myAlbums, trackArray);
         $.when.apply($, deferredTrackId).done(() => {
-          console.log('retrieved all tracks');
-          console.log(trackArray);
-
-          // trackArray is an array of track objects
-          // trackTitle, trackArtist, trackPreview, albumImage
+          tracksLoaded = true;
+          return trackArray;
 
         });  // end of deferredTrackId
 
@@ -121,6 +131,26 @@ myApp.factory('spotifyFactory', function($http) {
     return deferreds;
   };
 
+  factory.shuffle = function(array) {
+    let currentIndex = array.length;
+    let temporaryValue;
+    let randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+
+    return array;
+  };
+
   return factory;
 });
 
@@ -138,18 +168,6 @@ myApp.factory('spotifyFactory', function($http) {
 //     preview: ''
 //   };
 //
-//   // update current song information
-//   this.getSong = function() {
-//     let myUrl = '/player/currentSong';
-//
-//     $http.get(myUrl)
-//       .then((response) => {
-//         this.currentSong['title']   = response.data.title;
-//         this.currentSong['artist']  = response.data.artist;
-//         this.currentSong['image']   = response.data.image;
-//         this.currentSong['preview'] = response.data.preview;
-//       });
-//   };
 //
 //   this.likeSong = function() {
 //     let myUrl = '/player/like';
@@ -299,9 +317,4 @@ myApp.factory('spotifyFactory', function($http) {
 //         }
 //       });
 //   }
-//
-//   // Check for song title every second
-//   $interval(() => {
-//     this.getSong();
-//   }, 1000);
 // });
