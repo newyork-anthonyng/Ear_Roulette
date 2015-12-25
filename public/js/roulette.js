@@ -7,19 +7,44 @@ myApp.controller('RouletteController', RouletteController);
 
 function RouletteController(spotifyFactory) {
   let self = this;
-  self.tracks = [];
+
+  self.trackTitle   = '';
+  self.trackArtist  = '';
+  self.trackImage   = '';
+  self.trackPreview = '';
 
   init();
 
   self.startPlayer = function() {
     if(spotifyFactory.tracksLoaded) {
-      $('.player').empty().append('Songs loaded');
+      self.createPlayer();
     }
+  };
+
+  self.createPlayer = function() {
+    let currentSong = spotifyFactory.getCurrentSong();
+
+    self.trackTitle   = currentSong['trackTitle'];
+    self.trackArtist  = currentSong['trackArtist'];
+    self.trackImage   = currentSong['albumImage'];
+    self.trackPreview = currentSong['trackPreview'];
+
+    let audioPlayer = $('<audio />', { controls: 'controls',
+                                       autoPlay: 'autoPlay' });
+
+    let source = $('<source />').attr('src', self.trackPreview)
+                 .appendTo(audioPlayer);
+
+    audioPlayer.on('ended', () => {
+      self.createPlayer();
+    });
+
+    $('.player').empty().append(audioPlayer);
   };
 
   // *** Get songs when application is loaded *** //
   function init() {
-    self.tracks = spotifyFactory.getTracks();
+    spotifyFactory.getTracks();
   }
 }
 
@@ -30,10 +55,16 @@ myApp.factory('spotifyFactory', function($http) {
   let artistIdArray   = [];
   let albumIdArray    = [];
   let trackArray      = [];
-  let tracksLoaded    = false;
+
+  let tracksLoaded = false;
+  let currentTrack = 0;
 
   factory.tracksLoaded = function() {
     return tracksLoaded;
+  };
+
+  factory.getCurrentSong = function() {
+    return trackArray[currentTrack++];
   };
 
   factory.getTracks = function() {
@@ -56,7 +87,8 @@ myApp.factory('spotifyFactory', function($http) {
         let deferredTrackId = factory.getTracksPromises(myAlbums, trackArray);
         $.when.apply($, deferredTrackId).done(() => {
           tracksLoaded = true;
-          return trackArray;
+          console.log(factory.shuffle(trackArray));
+          return factory.shuffle(trackArray);
 
         });  // end of deferredTrackId
 
