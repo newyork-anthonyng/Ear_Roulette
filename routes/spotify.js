@@ -52,7 +52,7 @@ function findArtistId(req, res) {
         artistId:   artistID,
         artistName: artistName
       };
-      console.log(data);
+      
       res.json(data);
     }
   });

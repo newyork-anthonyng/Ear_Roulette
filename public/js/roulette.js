@@ -1,5 +1,110 @@
 'use strict'
 
+var myApp = angular.module('Roulette', []);
+
+// *** controller *** //
+myApp.controller('RouletteController', RouletteController);
+
+function RouletteController(spotifyFactory) {
+  let self = this;
+
+  init();
+
+  function init() {
+    spotifyFactory.getTracks();
+  }
+}
+
+
+// *** factory *** //
+myApp.factory('spotifyFactory', function($http) {
+  let factory = {};
+  let artistNameArray = ['Killers', 'Maroon 5'];
+  let artistIdArray   = [];
+  let albumIdArray    = [];
+  let trackArray      = [];
+
+  factory.getTracks = function() {
+    // get the artist Id's
+    let deferredArtistId = factory.getArtistIdPromises(artistNameArray, artistIdArray);
+
+    $.when.apply($, deferredArtistId).done(() => {
+      console.log('retrieved all artist IDs');
+      console.log(artistIdArray);
+
+      let deferredAlbumId = factory.getAlbumsPromises(artistIdArray, albumIdArray);
+
+      $.when.apply($, deferredAlbumId).done(() => {
+        console.log('retrieved all albums');
+        console.log(albumIdArray);
+
+        
+      });
+
+    });
+
+  };
+
+  // *** take an array of Album Id objects, and return Tracks *** //
+  factory.getTracksPromises = function(albumIdArray, compiledArray) {
+    let deferreds = [];
+
+    for(let i = 0, j = albumIdArray.length; i < j; i++) {
+      let myUrl = '/spotify/tracks?albumId=' + albumIdArray[i]['albumId'];
+
+      let newRequest = $.ajax({
+        url: myUrl
+      }).done((data) => {
+        compiledArray.push(data);
+      });
+
+      deferreds.push(newRequest);
+    }
+
+    return deferreds;
+  }
+
+  // *** take an array of Artist Id objects, and return Album Ids *** //
+  factory.getAlbumsPromises = function(artistIdArray, compiledArray) {
+    let deferreds = [];
+
+    for(let i = 0, j = artistIdArray.length; i < j; i++) {
+      let myUrl = '/spotify/albums?artistId=' + artistIdArray[i]['artistId'];
+
+      let newRequest = $.ajax({
+        url: myUrl
+      }).done((data) => {
+        compiledArray.push(data);
+      });
+
+      deferreds.push(newRequest);
+    }
+
+    return deferreds;
+  }
+
+  // *** take an array of Artist Names, and return Artist Ids *** //
+  factory.getArtistIdPromises = function(artistNameArray, compiledArray) {
+    let deferreds = [];
+
+    for(let i = 0, j = artistNameArray.length; i < j; i++) {
+      let myUrl = '/spotify/artist?artistName=' + artistNameArray[i];
+
+      let newRequest = $.ajax({
+        url: myUrl
+      }).done((data) => {
+        compiledArray.push(data);
+      });
+
+      deferreds.push(newRequest);
+    }
+
+    return deferreds;
+  };
+
+  return factory;
+});
+
 // app.controller('RouletteController', function($http, $interval, $timeout) {
 //
 //   this.loggedIn = false;

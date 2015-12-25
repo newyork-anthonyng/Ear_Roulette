@@ -1,107 +1,18 @@
 <!DOCTYPE html>
 <html ng-app="Roulette">
   <head>
-    <meta charset="utf-8">
     <title>Ear Roulette</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
     <script src="./js/roulette.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href="./css/style.css" rel="stylesheet" type="text/css"></link>
   </head>
 
-  <body ng-controller="RouletteController as roulette">
+  <body ng-controller="RouletteController as vm">
 
     <div class="container">
       <h1>Ear Roulette</h1>
     </div>
-
-    <section ng-hide="roulette.loggedIn" id="login-form">
-      <div class="container">
-        <div class="login">
-          <br>
-          <div class="row">
-            <label class="col-sm-4">Name</label>
-            <input class="col-sm-8" type="type" id="login-name" ng-model="roulette.login_name"></input>
-          </div>
-          <br>
-          <div class="row">
-            <label class="col-sm-4">Password</label>
-            <input class="col-sm-8" type="password" id="login-password" ng-model="roulette.login_password"></input>
-          </div>
-          <br>
-          <div class="row">
-            <input class="col-sm-12" type="submit" value="Login" id="login" ng-click="roulette.login()"></input>
-          </div>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="signup">
-          <br>
-          <div class="row">
-            <label class="col-sm-4">Name</label>
-            <input class="col-sm-8" type="type" id="signup-name" ng-model="roulette.signup_name"></input>
-          </div>
-          <br>
-          <div class="row">
-            <label class="col-sm-4">Password</label>
-            <input class="col-sm-8" type="password" id="signup-password" ng-model="roulette.signup_password"></input>
-          </div>
-          <br>
-          <div class="row">
-            <input class="col-sm-12" type="submit" value="Sign up" id="signup" ng-click="roulette.signup()"></input>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section ng-show="roulette.loggedIn" id="player">
-      <div class="container col-sm-6 col-sm-offset-3">
-        <button id="logout" ng-click="roulette.logout()">Logout</button>
-      </div>
-
-      <div class="container">
-        <div class="track-information col-sm-4">
-          <div class="row">
-            <h4 id="player-title" ng-model="roulette.songTitle"></h4>
-          </div>
-          <div class="row">
-            <h4 id="player-artist" ng-model="roulette.songArtist"></h4>
-          </div>
-
-          <!-- Song image -->
-          <div class="row">
-            <img id="album-art" src=""></img>
-          </div>
-
-          <!-- Audio Player -->
-          <audio id="audio-player" controls></audio>
-
-          <!-- <div class="row">
-            <button id="like">Like</button>
-          </div> -->
-        </div>
-
-        <div class="container col-sm-8">
-          <div class="favorite-songs">
-            <ul>
-              <!-- <li ng-repeat="track in roulette.likedSongs">
-                <div class="row favorite-song">
-                  <span id="heart">♥</span>
-                  {{ track.title }}<br>
-                  {{ track.artist }}<br>
-                  <button ng-click="roulette.deleteSong($index)">Delete</button><br>
-                </div>
-              </li> -->
-            </ul>
-          </div>
-        </div>
-      </div>
-
-
-    </section>
-
-    <script src="./js/script.js"></script>
+    {{ vm.test }}
   </body>
 </html>
