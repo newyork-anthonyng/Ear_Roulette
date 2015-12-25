@@ -5,7 +5,7 @@ var myApp = angular.module('Roulette', []);
 // *** controller *** //
 myApp.controller('RouletteController', RouletteController);
 
-function RouletteController($scope, spotifyFactory) {
+function RouletteController($timeout, spotifyFactory) {
   let self = this;
 
   self.trackTitle   = '';
@@ -19,33 +19,30 @@ function RouletteController($scope, spotifyFactory) {
     if(spotifyFactory.tracksLoaded) {
       self.createPlayer();
     }
-  };    
-
-  self.createPlayer = function() {
-    self.updateTrackInformation();
-
-    let audioPlayer = $('<audio />', { controls: 'controls',
-                                       autoPlay: 'autoPlay' });
-
-    let source = $('<source />').attr('src', self.trackPreview)
-                 .appendTo(audioPlayer);
-
-    audioPlayer.on('ended', () => {
-      self.createPlayer();
-    });
-
-    $('.player').empty().append(audioPlayer);
   };
 
-  self.updateTrackInformation = function() {
-    let currentSong = spotifyFactory.getCurrentSong();
+  self.createPlayer = function() {
+    // use $timeout to force a $scope.$apply
+    $timeout(() => {
 
-    self.trackTitle   = currentSong['trackTitle'];
-    self.trackArtist  = currentSong['trackArtist'];
-    self.trackImage   = currentSong['albumImage'];
-    self.trackPreview = currentSong['trackPreview'];
+      let currentSong = spotifyFactory.getCurrentSong();
+      self.trackTitle   = currentSong['trackTitle'];
+      self.trackArtist  = currentSong['trackArtist'];
+      self.trackImage   = currentSong['albumImage'];
+      self.trackPreview = currentSong['trackPreview'];
 
-    $scope.$apply();
+      let audioPlayer = $('<audio />', { controls: 'controls',
+                                         autoPlay: 'autoPlay' });
+
+      let source = $('<source />').attr('src', self.trackPreview)
+                   .appendTo(audioPlayer);
+
+      audioPlayer.on('ended', () => {
+        self.createPlayer();
+      });
+
+      $('.player').empty().append(audioPlayer);
+    });
   };
 
   // *** Get songs when application is loaded *** //
@@ -57,7 +54,7 @@ function RouletteController($scope, spotifyFactory) {
 // *** factory *** //
 myApp.factory('spotifyFactory', function($http) {
   let factory = {};
-  let artistNameArray = ['One Direction', 'Killers', 'Macklemore'];
+  let artistNameArray = ['One Direction', 'Fall Out Boy', 'Michael Jackson'];
   let artistIdArray   = [];
   let albumIdArray    = [];
   let trackArray      = [];
