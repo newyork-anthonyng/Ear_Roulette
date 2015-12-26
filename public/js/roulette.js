@@ -1,6 +1,6 @@
 'use strict'
 
-var myApp = angular.module('Roulette', []);
+var myApp = angular.module('Roulette', ['ui.router']);
 
 // *** roulette controller *** //
 myApp.controller('RouletteController', RouletteController);
@@ -191,7 +191,7 @@ myApp.factory('spotifyFactory', function($http) {
 // *** User controller *** //
 myApp.controller('UserController', UserController);
 
-function UserController($http) {
+function UserController($http, UserService) {
   let self = this;
 
   self.signup = function() {
@@ -244,6 +244,8 @@ function UserController($http) {
         if(data['SUCCESS']) {
           localStorage.setItem('token', data.token);
           localStorage.setItem('user', data.user.name);
+
+          UserService.setLoggedIn();
         }
       })
       .error(function(data, status, headers, config) {
@@ -253,8 +255,55 @@ function UserController($http) {
         delete localStorage.user;
       });
   };
-
 };
+
+// *** UI Router *** //
+myApp.config(function($stateProvider, $urlRouterProvider) {
+  $stateProvider
+    .state('login', {
+      url: '/login',
+      template: '<h2>Login UIView</h2>',
+      authenticate: false
+    })
+    .state('home', {
+      url: '/home',
+      template: '<h2>Home UIView</h2>',
+      authenticate: true
+    });
+
+    $urlRouterProvider.otherwise('/login');
+});
+
+// *** authentication for UI Router *** //
+angular.module('Roulette').run(function($rootScope, $state, UserService) {
+  $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+    if(toState.authenticate && !UserService.getLoggedIn()) {
+      console.log('User is not logged in');
+      event.preventDefault();
+    }
+  });
+});
+
+// *** User Service *** //
+myApp.factory('UserService', function($state) {
+  let UserService = {};
+  let loggedIn = false;
+
+  UserService.getLoggedIn = function() {
+    return loggedIn;
+  };
+
+  UserService.setLoggedIn = function() {
+    loggedIn = true;
+    $state.go('home');
+  };
+
+  UserService.logout = function() {
+    loggedIn = false;
+  };
+
+  return UserService;
+});
 
 // app.controller('RouletteController', function($http, $interval, $timeout) {
 //
