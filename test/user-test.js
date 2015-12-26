@@ -45,6 +45,7 @@ describe('User API', () => {
       .post('/user/new')
       .send({ name: 'Hercules', password: 'Password' })
       .end((err, res) => {
+        // res.should.have.a.status(401);
         res.should.be.json;
         res.body.should.be.a('object');
         res.body.should.have.a.property('SUCCESS');
@@ -55,10 +56,23 @@ describe('User API', () => {
       });
   });
 
-  it('should authenticate user on POST /user/authenticate', (done) => {
+  it('should authenticate valid user on POST /user/authenticate', (done) => {
     chai.request(server)
       .post('/user/authenticate')
-      .send()
+      .send({  name: 'Hercules', password: 'Password' })
+      .end((err, res) => {
+        res.should.have.a.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.a.property('SUCCESS');
+        res.body.SUCCESS.should.be.true;
+        res.body.should.have.a.property('MESSAGE');
+        res.body.MESSAGE.should.be.eq('Enjoy your token.');
+        res.body.should.have.a.property('user');
+        res.body.should.have.a.property('token');
+        done();
+      });
   });
 
+  User.collection.drop();
 });

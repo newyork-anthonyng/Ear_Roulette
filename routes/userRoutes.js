@@ -48,8 +48,8 @@ function authenticateUser(req, res) {
     // user doesn't exist in our database
     if(!user) {
       res.status(401).send({
-        success: false,
-        message: 'Authentication failed. User not found.'
+        SUCCESS: false,
+        MESSAGE: 'Authentication failed. User not found.'
       });
     } else {
       // check if password matches
@@ -61,14 +61,14 @@ function authenticateUser(req, res) {
 
           res.json({
             user:    user,
-            success: true,
-            message: 'Enjoy your token.',
+            SUCCESS: true,
+            MESSAGE: 'Enjoy your token.',
             token:   token
           });
         } else {
           res.status(401).send({
-            success: false,
-            message: 'Authentication failed. Wrong password.'
+            SUCCESS: false,
+            MESSAGE: 'Authentication failed. Wrong password.'
           });
         }
       });  // end of user.comparePassword()
