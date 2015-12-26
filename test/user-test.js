@@ -33,7 +33,8 @@ describe('User API', () => {
       });
   });
 
-  it('should give error when same user is created on POST /user/new', (done) => {
+  it('should give error when same user is created on \
+    POST /user/new', (done) => {
     chai.request(server)
       .post('/user/new')
       .send({ name: 'Hercules', password: 'Password' })
@@ -49,7 +50,8 @@ describe('User API', () => {
       });
   });
 
-  it('should authenticate valid user on POST /user/authenticate', (done) => {
+  it('should authenticate valid user on \
+    POST /user/authenticate', (done) => {
     chai.request(server)
       .post('/user/authenticate')
       .send({  name: 'Hercules', password: 'Password' })
@@ -67,7 +69,8 @@ describe('User API', () => {
       });
   });
 
-  it('should give error when no user is found on POST /user/authenticate', (done) => {
+  it('should give error when no user is found on \
+    POST /user/authenticate', (done) => {
     chai.request(server)
       .post('/user/authenticate')
       .send({ name: 'Zeus', password: 'Password' })
@@ -83,7 +86,8 @@ describe('User API', () => {
       });
   });
 
-  it('should give error when invalid password on POST /user/authenticate', (done) => {
+  it('should give error when invalid password on \
+    POST /user/authenticate', (done) => {
     chai.request(server)
       .post('/user/authenticate')
       .send({ name: 'Hercules', password: 'WrongPassword' })
