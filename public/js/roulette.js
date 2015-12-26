@@ -214,12 +214,25 @@ function UserController($http) {
             password: data.password
           };
 
+          this.authenticateUser(userData);
           // clear out signup information
           self.newUser.name     = '';
           self.newUser.password = '';
-          this.authenticateUser(userData);
         }
       });
+  };
+
+  self.login = function() {
+
+    let userData = {
+      name:     self.user.name,
+      password: self.user.password
+    };
+
+    this.authenticateUser(userData);
+    // clear out login information
+    self.user.name     = '';
+    self.user.password = '';
   };
 
   self.authenticateUser = function(data) {
@@ -227,12 +240,14 @@ function UserController($http) {
 
     $http.post(myUrl, data)
       .success(function(data, status, headers, config) {
+        console.log(data);
         if(data['SUCCESS']) {
           localStorage.setItem('token', data.token);
           localStorage.setItem('user', data.user.name);
         }
       })
       .error(function(data, status, headers, config) {
+        console.log(data);
         // delete local storage
         delete localStorage.token;
         delete localStorage.user;
