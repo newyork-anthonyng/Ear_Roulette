@@ -13,13 +13,6 @@ chai.use(chaiHttp);
 
 describe('User API', () => {
 
-  // clean up test database
-  User.collection.drop();
-  // afterEach(function(done) {
-  //   User.collection.drop();
-  //   done();
-  // });
-
   it('should create a new user on POST /user/new', (done) => {
     chai.request(server)
       .post('/user/new')
@@ -45,7 +38,7 @@ describe('User API', () => {
       .post('/user/new')
       .send({ name: 'Hercules', password: 'Password' })
       .end((err, res) => {
-        // res.should.have.a.status(401);
+        res.should.have.a.status(401);
         res.should.be.json;
         res.body.should.be.a('object');
         res.body.should.have.a.property('SUCCESS');
@@ -74,5 +67,7 @@ describe('User API', () => {
       });
   });
 
-  User.collection.drop();
+  
+
+  User.collection.remove();
 });
