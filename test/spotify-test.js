@@ -1,5 +1,7 @@
 'use strict'
 
+process.env.NODE_ENV = 'test';
+
 const chai     = require('chai');
 const should   = chai.should();
 const chaiHttp = require('chai-http');
@@ -72,13 +74,8 @@ describe('Spotify API', () => {
         res.body.should.have.a.property('albums');
         res.body.albums.should.be.a('array');
         res.body.albums[0].should.have.a.property('albumId');
-        res.body.albums[0].albumId.should.be.eq('1m3pbwuYJS9OsXyM2jOSXE');
         res.body.albums[0].should.have.a.property('albumName');
-        res.body.albums[0].albumName.should.be.eq('Direct Hits');
         res.body.albums[0].should.have.a.property('albumImage');
-        res.body.albums[0].albumImage.should.be.eq(
-          'https://i.scdn.co/image/c3093c0c0cc69c8138e99e91cdec41f614d71eeb'
-        );
         done();
       });
   });

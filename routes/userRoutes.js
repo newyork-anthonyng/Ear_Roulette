@@ -26,7 +26,8 @@ function saveNewUser(req, res) {
 
   myUser.save((err) => {
     if(err) {
-      res.json({ SUCCESS: false, MESSAGE: 'User not saved' });
+      res.status(401).send({ SUCCESS: false, MESSAGE: 'User not saved' });
+      return;
     } else {
       res.json({
         SUCCESS:  true,
@@ -36,7 +37,7 @@ function saveNewUser(req, res) {
       });
     }
   });
-});
+};
 
 function authenticateUser(req, res) {
   User.findOne({
@@ -73,7 +74,7 @@ function authenticateUser(req, res) {
       });  // end of user.comparePassword()
     }  // end of if(!user)
   });  // end of User.findOne()
-});
+};
 
 // route middleware to verify token
 // router.use((req, res, next) => {
