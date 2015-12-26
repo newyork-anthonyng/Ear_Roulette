@@ -52,7 +52,7 @@ function findArtistId(req, res) {
         artistId:   artistID,
         artistName: artistName
       };
-      
+
       res.json(data);
     }
   });
@@ -61,7 +61,6 @@ function findArtistId(req, res) {
 function findAlbums(req, res) {
   // parse query string for artistId
   let artistId = Utility.parseQueryString(req.originalUrl);
-  console.log('inside of findAlbums');
 
   // check if artistId is provided
   if(artistId['artistId'] == undefined) {
