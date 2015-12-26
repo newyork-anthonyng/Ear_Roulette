@@ -8,16 +8,15 @@ let userSchema = new Schema({
   name:     { type: String, required: true, unique: true },
   password: { type: String, required: true },
 
-  // Array will be an array of Objects with key of "title" and "artist"
+  // holds an array of Objects with key of "title" and "artist"
   favorites: { type: Array, default: [] }
 });
 
-// must use "function()..." syntax over "() =>..."
-// to keep the scoping of "this"
+// must use "function()" instead of "() =>" to keep the scope of "this"
 userSchema.pre('save', function(next) {
   let user = this;
 
-  // Generate salt and hash only when password has been updated
+  // only hash password when it has changed
   if(!user.isModified('password')) return next();
 
   // Salt the password
@@ -30,11 +29,11 @@ userSchema.pre('save', function(next) {
       user.password = hash;
       next();
     });
-  });
+  }); // end of bcrypt.genSalt()
 });
 
 userSchema.methods.comparePassword = function(password, cb) {
-  // check if password, once encrypted matches, to the second argument
+  // check if password, once encrypted, matches to the second argument
   bcrypt.compare(password, this.password, (err, isMatch) => {
     if(err) return cb(err);
 
