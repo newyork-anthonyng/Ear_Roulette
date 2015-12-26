@@ -2,7 +2,7 @@
 
 const express  = require('express');
 const app      = express();
-const router   = express();
+const router   = express.Router();
 const User     = require('../models/user');
 const mongoose = require('mongoose');
 const jwt      = require('jsonwebtoken');
@@ -10,7 +10,12 @@ const config   = require('../config');
 
 app.set('secret', config.secret);
 
-router.post('/new', (req, res) => {
+// *** API Routes *** //
+router.post('/new', saveNewUser);
+router.post('/authenticate', authenticateUser);
+
+
+function saveNewUser(req, res) {
   let name     = req.body.name;
   let password = req.body.password;
 
@@ -21,16 +26,19 @@ router.post('/new', (req, res) => {
 
   myUser.save((err) => {
     if(err) {
-      console.log('User not saved.');
-      res.json({ success: false });
+      res.json({ SUCCESS: false, MESSAGE: 'User not saved' });
     } else {
-      console.log('User saved successfully');
-      res.json({ success: true, name: name, password: password });
+      res.json({
+        SUCCESS:  true,
+        MESSAGE:  'User saved successfully',
+        name:     name,
+        password: password
+      });
     }
   });
 });
 
-router.post('/authenticate', (req, res) => {
+function authenticateUser(req, res) {
   User.findOne({
     name: req.body.name
   }, (err, user) => {
@@ -38,7 +46,7 @@ router.post('/authenticate', (req, res) => {
 
     // user doesn't exist in our database
     if(!user) {
-      res.json({
+      res.status(401).send({
         success: false,
         message: 'Authentication failed. User not found.'
       });
@@ -57,39 +65,39 @@ router.post('/authenticate', (req, res) => {
             token:   token
           });
         } else {
-          res.json({
+          res.status(401).send({
             success: false,
             message: 'Authentication failed. Wrong password.'
           });
         }
-      });
-    }
-  });
+      });  // end of user.comparePassword()
+    }  // end of if(!user)
+  });  // end of User.findOne()
 });
 
 // route middleware to verify token
-router.use((req, res, next) => {
-  let token = req.headers['x-access-token'];
-
-  if(token) {
-    jwt.verify(token, app.get('secret'), (err, decoded) => {
-
-      if(err) {
-        return res.json({
-            success: false,
-            message: 'Failed to authenticate token'
-        });
-      } else {
-        req.decoded = decoded;
-        next();
-      }
-    });
-  } else {
-    return res.status(403).send({
-      success: false,
-      message: 'No token provided.'
-    });
-  }
-});
+// router.use((req, res, next) => {
+//   let token = req.headers['x-access-token'];
+//
+//   if(token) {
+//     jwt.verify(token, app.get('secret'), (err, decoded) => {
+//
+//       if(err) {
+//         return res.json({
+//             success: false,
+//             message: 'Failed to authenticate token'
+//         });
+//       } else {
+//         req.decoded = decoded;
+//         next();
+//       }
+//     });
+//   } else {
+//     return res.status(403).send({
+//       success: false,
+//       message: 'No token provided.'
+//     });
+//   }
+// });
 
 module.exports = router;
