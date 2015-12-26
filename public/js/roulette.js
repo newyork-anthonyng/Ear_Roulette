@@ -262,12 +262,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('login', {
       url: '/login',
-      template: '<h2>Login UIView</h2>',
+      templateUrl: '../partial/login.html',
       authenticate: false
     })
     .state('home', {
       url: '/home',
-      template: '<h2>Home UIView</h2>',
+      templateUrl: '../partial/home.html',
       authenticate: true
     });
 
