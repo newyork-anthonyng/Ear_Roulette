@@ -14,11 +14,37 @@
       <h1>Ear Roulette</h1>
     </div>
 
-    <button ng-click="vm.startPlayer()">Play</button>
+    <!-- Login and Signup -->
+    <div ng-controller="UserController as vm">
+      <h1>Signup</h1>
+      <form ng-submit="vm.signup()">
+        <label>Username</label>
+        <input type="text" ng-model="vm.newUser.name" /><br />
+        <label>Password</label>
+        <input type="password" ng-model="vm.newUser.password" /><br />
+        <button>Sign Up</button>
+      </form>
 
-    <img src="{{ vm.trackImage }}"></img>
-    <h3>{{ vm.trackTitle }} by {{ vm.trackArtist }}</h3>
-    <div class="player"></div>
+      <br /><br />
+
+      <h1>Login</h1>
+      <form ng-submit="vm.login()">
+        <label>Username</label>
+        <input type="text" ng-model="vm.user.name" /><br />
+        <label>Password</label>
+        <input type="password" ng-model="vm.user.password" /><br />
+        <button>Login</button>
+      </form>
+    </div>
+
+    <br /><br />
+    <div ng-controller="RouletteController as vm">
+      <button ng-click="vm.startPlayer()">Play</button>
+
+      <img src="{{ vm.trackImage }}"></img>
+      <h3>{{ vm.trackTitle }} by {{ vm.trackArtist }}</h3>
+      <div class="player"></div>
+    </div>
 
   </body>
 </html>
