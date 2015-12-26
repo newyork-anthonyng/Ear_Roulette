@@ -67,7 +67,21 @@ describe('User API', () => {
       });
   });
 
-  
+  it('should give error when no user is found on POST /user/authenticate', (done) => {
+    chai.request(server)
+      .post('/user/authenticate')
+      .send({ name: 'Zeus', password: 'Password' })
+      .end((err, res) => {
+        res.should.have.a.status(401);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.a.property('SUCCESS');
+        res.body.SUCCESS.should.be.false;
+        res.body.should.have.a.property('MESSAGE');
+        res.body.MESSAGE.should.be.eq('Authentication failed. User not found.');
+        done();
+      });
+  });
 
   User.collection.remove();
 });
