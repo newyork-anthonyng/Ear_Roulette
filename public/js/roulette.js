@@ -2,7 +2,7 @@
 
 var myApp = angular.module('Roulette', []);
 
-// *** controller *** //
+// *** roulette controller *** //
 myApp.controller('RouletteController', RouletteController);
 
 function RouletteController($timeout, spotifyFactory) {
@@ -54,7 +54,7 @@ function RouletteController($timeout, spotifyFactory) {
 // *** factory *** //
 myApp.factory('spotifyFactory', function($http) {
   let factory = {};
-  let artistNameArray = ['One Direction', 'Fall Out Boy', 'Michael Jackson'];
+  let artistNameArray = ['One Direction', 'Fall Out Boy'];
   let artistIdArray   = [];
   let albumIdArray    = [];
   let trackArray      = [];
@@ -187,6 +187,59 @@ myApp.factory('spotifyFactory', function($http) {
 
   return factory;
 });
+
+// *** User controller *** //
+myApp.controller('UserController', UserController);
+
+function UserController($http) {
+  let self = this;
+
+  self.signup = function() {
+
+    let data = {
+      name:     self.newUser.name,
+      password: self.newUser.password
+    };
+
+    let myUrl = '/user/new';
+
+    $http.post(myUrl, data)
+      .then((response) => {
+        // authenticate new user if it was created successfully
+        if(response.data.SUCCESS) {
+          let data = response.data;
+
+          let userData = {
+            name: data.name,
+            password: data.password
+          };
+
+          // clear out signup information
+          self.newUser.name     = '';
+          self.newUser.password = '';
+          this.authenticateUser(userData);
+        }
+      });
+  };
+
+  self.authenticateUser = function(data) {
+    let myUrl = '/user/authenticate';
+
+    $http.post(myUrl, data)
+      .success(function(data, status, headers, config) {
+        if(data['SUCCESS']) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', data.user.name);
+        }
+      })
+      .error(function(data, status, headers, config) {
+        // delete local storage
+        delete localStorage.token;
+        delete localStorage.user;
+      });
+  };
+
+};
 
 // app.controller('RouletteController', function($http, $interval, $timeout) {
 //
