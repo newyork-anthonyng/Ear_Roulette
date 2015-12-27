@@ -6,27 +6,41 @@
     <div class="col s6">
       <div class="container z-depth-3">
           <img src="{{ vm.trackImage }}"></img>
-          <h4>{{ vm.trackTitle }}</h4>
-          <h6>{{ vm.trackArtist }}</h6>
-          <button class="btn-floating btn-large waves-effect waves-light purple accent-2"
+          <div class="card red">
+            <button class="btn-floating btn-large waves-effect waves-light purple accent-2 right"
             ng-click="vm.likeSong()">
-            <i class="material-icons">favorite</i>
-          </button>
+              <i class="material-icons">favorite</i>
+            </button>
+
+            <h4 class="white-text">{{ vm.trackTitle }}</h4>
+            <h6 class="white-text">{{ vm.trackArtist }}</h6>
+          </div>
+
         <div class="player"></div>
       </div>
     </div>
 
     <div class="col s6">
-      <h2>Favorites</h2>
+      <div class="card red lighten-4">
+        <h4>Liked Songs</h4>
+      </div>
+
       <ul>
-        <li ng-repeat="favorite in vm.favoriteTracks">
-          {{ favorite.trackTitle }} by {{ favorite.trackArtist }}
-          <button class="btn-floating btn-large waves-effect waves-light purple accent-2"
-          ng-click="vm.dislikeSong($index)">
-            <i class="material-icons">delete</i>
-          </button>
+        <div class="row">
+          <li ng-repeat="favorite in vm.favoriteTracks">
+            <div class="card white">
+              <button class="btn-floating btn-large waves-effect waves-light purple accent-2 right"
+              ng-click="vm.dislikeSong($index)">
+                <i class="material-icons">delete</i>
+              </button>
+
+              <p class="liked-title">{{ favorite.trackTitle }}</p>
+              <p class="liked-artist">{{ favorite.trackArtist }}</p>
+            </div>
         </li>
+        </div>
       </ul>
+
     </div>
   </div>
 </div>
