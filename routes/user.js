@@ -12,10 +12,10 @@ const Utility  = require('./_utility');
 app.set('secret', config.secret);
 
 // *** API Routes *** //
-router.get('/favorites', getFavoriteSongs);     // requires 'username' in query
 router.post('/new', saveNewUser);
 router.post('/authenticate', authenticateUser);
 router.post('/like', likeSong);
+router.get('/favorites', getFavoriteSongs);     // requires 'username' in query
 
 function saveNewUser(req, res) {
   let name     = req.body.name;
