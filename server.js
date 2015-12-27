@@ -11,7 +11,7 @@ const jwt         = require('jsonwebtoken');
 const config      = require('./config');
 const User        = require('./models/user');
 
-const userRoutes    = require('./routes/userRoutes');
+const userRoutes    = require('./routes/user');
 const spotifyRoutes = require('./routes/spotify');
 
 // configuration
