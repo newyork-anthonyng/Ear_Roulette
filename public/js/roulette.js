@@ -54,6 +54,16 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
       trackArtist: self.trackArtist
     };
 
+    // check if song is already part of our favorite songs
+    for(let i = 0, j = self.favoriteTracks.length; i < j; i++) {
+      let currentSong = self.favoriteTracks[i];
+
+      let titleMatches  = currentSong.trackTitle === self.trackTitle;
+      let artistMatches = currentSong.trackArtist === self.trackArtist;
+
+      if(titleMatches && artistMatches) return;
+    }
+
     let myUrl = '/user/like';
 
     $http.post(myUrl, data)
