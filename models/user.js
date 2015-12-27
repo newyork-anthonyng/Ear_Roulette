@@ -8,7 +8,7 @@ let userSchema = new Schema({
   name:     { type: String, required: true, unique: true },
   password: { type: String, required: true },
 
-  // holds an array of Objects with key of "title" and "artist"
+  // holds an array of Objects with key of "trackTitle" and "trackArtist"
   favorites: { type: Array, default: [] }
 });
 
