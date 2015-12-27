@@ -164,5 +164,22 @@ describe('User API', () => {
       });
   });
 
+  it('should return all favorite songs on POST /user/dislike', (done) => {
+    chai.request(server)
+      .post('/user/dislike')
+      .send({ trackTitle: 'Mr. Brightside', trackArtist: 'The Killers' })
+      .end((err, res) => {
+        res.should.have.a.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.a.property('SUCCESS');
+        res.body.SUCCESS.should.be.false;
+        res.body.should.have.a.property('tracks');
+        res.body.tracks.should.be.a('array');
+        res.body.tracks.length.should.be.eq(0);
+        done();
+      });
+  });
+
   User.collection.remove();
 });
