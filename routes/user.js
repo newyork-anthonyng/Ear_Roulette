@@ -12,10 +12,10 @@ const Utility  = require('./_utility');
 app.set('secret', config.secret);
 
 // *** API Routes *** //
+router.get('/favorites', getFavoriteSongs);     // requires 'username' in query
 router.post('/new', saveNewUser);
 router.post('/authenticate', authenticateUser);
 router.post('/like', likeSong);
-router.get('/favorites', getFavoriteSongs);
 
 function saveNewUser(req, res) {
   let name     = req.body.name;
@@ -94,10 +94,10 @@ function likeSong(req, res) {
       if(err) throw err;
 
       res.json({
-        SUCCESS: true,
-        MESSAGE: 'Song saved',
-        username: username,
-        trackTitle: trackTitle,
+        SUCCESS:     true,
+        MESSAGE:     'Song saved',
+        username:    username,
+        trackTitle:  trackTitle,
         trackArtist: trackArtist
       });
     }
@@ -105,6 +105,24 @@ function likeSong(req, res) {
 };
 
 function getFavoriteSongs(req, res) {
+  // parse query string for username
+  let username = Utility.parseQueryString(req.originalUrl)['username'];
+
+  // check if username is provided
+  if(username == undefined) {
+    res.json({ SUCCESS: false, MESSAGE: 'Missing username' });
+    return;
+  }
+
+  User.findOne({ name: username }, (err, user) => {
+    if(err) throw err;
+
+    res.json({
+      SUCCESS: true,
+      tracks:  user.favorites
+    });
+    return;
+  });
 
 };
 
