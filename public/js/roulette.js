@@ -12,12 +12,14 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
   self.trackArtist  = '';
   self.trackImage   = '';
   self.trackPreview = '';
+  self.favoriteTracks = [];
 
   init();
 
   self.startPlayer = function() {
     if(spotifyFactory.tracksLoaded) {
       self.createPlayer();
+      self.getFavoriteSongs();
     }
   };
 
@@ -46,7 +48,7 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
   };
 
   self.likeSong = function() {
-    let username    = UserService.getCurrentUser();
+    let username = UserService.getCurrentUser();
 
     let data = {
       trackTitle:  self.trackTitle,
@@ -58,9 +60,18 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
 
     $http.post(myUrl, data)
       .then((response) => {
-        if(response.data.SUCCESS) {
-          console.log('Successfully liked a song');
-        };
+        if(response.data.SUCCESS) self.getFavoriteSongs();
+      });
+  };
+
+  self.getFavoriteSongs = function() {
+    let username = UserService.getCurrentUser();
+
+    let myUrl = '/user/favorites?username=' + username;
+
+    $http.get(myUrl)
+      .then((response) => {
+        self.favoriteTracks = response['data']['tracks'];
       });
   };
 
@@ -296,7 +307,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 angular.module('Roulette').run(function($rootScope, $state, UserService) {
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
     if(toState.authenticate && !UserService.getLoggedIn()) {
-      console.log('User is not logged in');
+      $state.transitionTo('login');
       event.preventDefault();
     }
   });
