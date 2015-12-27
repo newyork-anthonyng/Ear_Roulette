@@ -15,7 +15,9 @@ app.set('secret', config.secret);
 router.post('/new', saveNewUser);
 router.post('/authenticate', authenticateUser);
 router.post('/like', likeSong);
+router.post('/dislike', dislikeSong);
 router.get('/favorites', getFavoriteSongs);     // requires 'username' in query
+
 
 function saveNewUser(req, res) {
   let name     = req.body.name;
@@ -84,7 +86,7 @@ function likeSong(req, res) {
   let username    = req.body.username;
 
   let mySong = {
-    trackTitle: trackTitle,
+    trackTitle:  trackTitle,
     trackArtist: trackArtist
   };
 
@@ -104,6 +106,29 @@ function likeSong(req, res) {
   );
 };
 
+function dislikeSong(req, res) {
+  let trackTitle  = req.body.trackTitle;
+  let trackArtist = req.body.trackArtist;
+  let username    = req.body.username;
+
+  let mySong = {
+    trackTitle:  trackTitle,
+    trackArtist: trackArtist
+  };
+
+  // find song by its title and artist, and remove it
+  User.findOneAndUpdate(
+    { name: username },
+    { $pull: {favorites: { $and: [ { trackTitle: trackTitle },
+                         { trackArtist: trackArtist } ] }} }, (err, user) => {
+
+      if(err) throw err;
+    }
+  );  // end of User.findOneAndUpdate()
+
+  sendFavoriteSongs(username, res);
+};
+
 function getFavoriteSongs(req, res) {
   // parse query string for username
   let username = Utility.parseQueryString(req.originalUrl)['username'];
@@ -114,16 +139,21 @@ function getFavoriteSongs(req, res) {
     return;
   }
 
+  sendFavoriteSongs(username, res);
+};
+
+
+function sendFavoriteSongs(username, response) {
   User.findOne({ name: username }, (err, user) => {
     if(err) throw err;
 
-    res.json({
+    response.json({
       SUCCESS: true,
       tracks:  user.favorites
     });
+
     return;
   });
-
 };
 
 module.exports = router;
