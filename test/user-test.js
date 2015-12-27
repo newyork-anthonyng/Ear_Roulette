@@ -131,7 +131,7 @@ describe('User API', () => {
 
   it('should get all favorites songs on GET /user/favorites', (done) => {
     chai.request(server)
-      .get('/user/favorites')
+      .get('/user/favorites?username=Hercules')
       .end((err, res) => {
         res.should.have.a.status(200);
         res.should.be.json;
@@ -144,6 +144,22 @@ describe('User API', () => {
         res.body.tracks[0].trackTitle.should.be.eq('Mr. Brightside');
         res.body.tracks[0].should.have.a.property('trackArtist');
         res.body.tracks[0].trackArtist.should.be.eq('The Killers');
+        done();
+      });
+  });
+
+  it('should return failure when no username is provided to \
+    GET /user/favorites', (done) => {
+    chai.request(server)
+      .get('/user/favorites')
+      .end((err, res) => {
+        res.should.have.a.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.a.property('SUCCESS');
+        res.body.SUCCESS.should.be.false;
+        res.body.should.have.a.property('MESSAGE');
+        res.body.MESSAGE.should.be.eq('Missing username');
         done();
       });
   });
