@@ -129,5 +129,24 @@ describe('User API', () => {
       });
   });
 
+  it('should get all favorites songs on GET /user/favorites', (done) => {
+    chai.request(server)
+      .get('/user/favorites')
+      .end((err, res) => {
+        res.should.have.a.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        res.body.should.have.a.property('SUCCESS');
+        res.body.SUCCESS.should.be.true;
+        res.body.should.have.a.property('tracks');
+        res.body.tracks.should.be.a('array');
+        res.body.tracks[0].should.have.a.property('trackTitle');
+        res.body.tracks[0].trackTitle.should.be.eq('Mr. Brightside');
+        res.body.tracks[0].should.have.a.property('trackArtist');
+        res.body.tracks[0].trackArtist.should.be.eq('The Killers');
+        done();
+      });
+  });
+
   User.collection.remove();
 });
