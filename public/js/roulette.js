@@ -48,15 +48,30 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
   };
 
   self.likeSong = function() {
-    let username = UserService.getCurrentUser();
-
     let data = {
+      username:    UserService.getCurrentUser(),
       trackTitle:  self.trackTitle,
-      trackArtist: self.trackArtist,
-      username:    UserService.getCurrentUser()
+      trackArtist: self.trackArtist
     };
 
     let myUrl = '/user/like';
+
+    $http.post(myUrl, data)
+      .then((response) => {
+        if(response.data.SUCCESS) self.getFavoriteSongs();
+      });
+  };
+
+  self.dislikeSong = function(index) {
+    let mySong = self.favoriteTracks[index];
+
+    let data = {
+      username:    UserService.getCurrentUser(),
+      trackTitle:  mySong['trackTitle'],
+      trackArtist: mySong['trackArtist']
+    };
+
+    let myUrl = '/user/dislike';
 
     $http.post(myUrl, data)
       .then((response) => {
