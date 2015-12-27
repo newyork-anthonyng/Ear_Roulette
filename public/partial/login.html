@@ -1,21 +1,55 @@
-<div ng-controller="UserController as vm">
-  <h1>Signup</h1>
-  <form ng-submit="vm.signup()">
-    <label>Username</label>
-    <input type="text" ng-model="vm.newUser.name" /><br />
-    <label>Password</label>
-    <input type="password" ng-model="vm.newUser.password" /><br />
-    <button>Sign Up</button>
+<div class="container" ng-controller="UserController as vm">
+  <form class="col s12" ng-submit="vm.login()">
+    <h3 class="center-align">Login</h3>
+
+    <div class="row">
+      <div class="input-field col s6 offset-s3">
+        <input type="text" ng-model="vm.user.name" /><br />
+        <label>Username</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field col s6 offset-s3">
+        <input type="password" ng-model="vm.user.password" /><br />
+        <label>Password</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col offset-s5">
+        <button class="waves-effect waves-light btn-large red">
+          Login
+        </button>
+      </div>
+    </div>
   </form>
 
-  <br /><br />
+  <br>
 
-  <h1>Login</h1>
-  <form ng-submit="vm.login()">
-    <label>Username</label>
-    <input type="text" ng-model="vm.user.name" /><br />
-    <label>Password</label>
-    <input type="password" ng-model="vm.user.password" /><br />
-    <button>Login</button>
+  <form class="col s12" ng-submit="vm.signup()">
+    <h3 class="center-align">Signup</h3>
+
+    <div class="row">
+      <div class="input-field col s6 offset-s3">
+        <input type="text" ng-model="vm.newUser.name" /><br />
+        <label>Username</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="input-field col s6 offset-s3">
+        <input type="password" ng-model="vm.newUser.password" /><br />
+        <label>Password</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col offset-s5">
+        <button class="waves-effect waves-light btn-large center-align red">
+          Sign Up
+        </button>
+      </div>
+    </div>
   </form>
 </div>
