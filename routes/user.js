@@ -13,7 +13,7 @@ app.set('secret', config.secret);
 // *** API Routes *** //
 router.post('/new', saveNewUser);
 router.post('/authenticate', authenticateUser);
-
+router.post('/like', likeSong);
 
 function saveNewUser(req, res) {
   let name     = req.body.name;
@@ -74,6 +74,32 @@ function authenticateUser(req, res) {
       });  // end of user.comparePassword()
     }  // end of if(!user)
   });  // end of User.findOne()
+};
+
+function likeSong(req, res) {
+  let trackTitle  = req.body.trackTitle;
+  let trackArtist = req.body.trackArtist;
+  let username    = req.body.username;
+
+  let mySong = {
+    trackTitle: trackTitle,
+    trackArtist: trackArtist
+  };
+
+  User.findOneAndUpdate(
+    { name: username },
+    { $push: { favorites: mySong } }, (err, user) => {
+      if(err) throw err;
+
+      res.json({
+        SUCCESS: true,
+        MESSAGE: 'Song saved',
+        username: username,
+        trackTitle: trackTitle,
+        trackArtist: trackArtist
+      });
+    }
+  );
 };
 
 module.exports = router;
