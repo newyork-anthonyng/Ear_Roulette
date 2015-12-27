@@ -12,6 +12,7 @@
   <ul>
     <li ng-repeat="favorite in vm.favoriteTracks">
       {{ favorite.trackTitle }} by {{ favorite.trackArtist }}
+      <button ng-click="vm.dislikeSong($index)">Dislike</button>
     </li>
   </ul>
 </div>
