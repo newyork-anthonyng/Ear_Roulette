@@ -33,8 +33,7 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
       self.trackImage   = currentSong['albumImage'];
       self.trackPreview = currentSong['trackPreview'];
 
-      let audioPlayer = $('<audio />', { controls: 'controls',
-                                         autoPlay: 'autoPlay' });
+      let audioPlayer = $('<audio />', { autoPlay: 'autoPlay' });
 
       let source = $('<source />').attr('src', self.trackPreview)
                    .appendTo(audioPlayer);
