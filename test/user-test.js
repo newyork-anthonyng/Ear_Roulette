@@ -105,27 +105,26 @@ describe('User API', () => {
 
   it('should save a song on POST /user/like', (done) => {
     chai.request(server)
-      .post('/user/authenticate')
+      .post('/user/like')
       .send({
-        name: 'Hercules',
-        track: {
-          trackTitle:  'Mr. Brightside',
-          trackArtist: 'The Killers'
-        }
+        username:    'Hercules',
+        trackTitle:  'Mr. Brightside',
+        trackArtist: 'The Killers'
       })
       .end((err, res) => {
         res.should.have.a.status(200);
         res.should.be.json;
         res.body.should.be.a('object');
         res.body.should.have.a.property('SUCCESS');
+        res.body.SUCCESS.should.be.true;
         res.body.should.have.a.property('MESSAGE');
-        res.body.should.have.a.property('user');
-        res.body.user.should.be.eq('Hercules');
-        res.body.should.have.a.property('track');
-        res.body.track.should.have.a.property('trackTitle');
-        res.body.track.trackTitle.should.be.eq('Mr. Brightside');
-        res.body.track.should.have.a.property('trackArtist');
-        res.body.track.trackArtist.should.be.eq('The Killers');
+        res.body.MESSAGE.should.be.eq('Song saved');
+        res.body.should.have.a.property('username');
+        res.body.username.should.be.eq('Hercules');
+        res.body.should.have.a.property('trackTitle');
+        res.body.trackTitle.should.be.eq('Mr. Brightside');
+        res.body.should.have.a.property('trackArtist');
+        res.body.trackArtist.should.be.eq('The Killers');
         done();
       });
   });
