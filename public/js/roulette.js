@@ -5,7 +5,7 @@ var myApp = angular.module('Roulette', ['ui.router']);
 // *** roulette controller *** //
 myApp.controller('RouletteController', RouletteController);
 
-function RouletteController($timeout, spotifyFactory) {
+function RouletteController($http, $timeout, spotifyFactory, UserService) {
   let self = this;
 
   self.trackTitle   = '';
@@ -43,6 +43,25 @@ function RouletteController($timeout, spotifyFactory) {
 
       $('.player').empty().append(audioPlayer);
     });
+  };
+
+  self.likeSong = function() {
+    let username    = UserService.getCurrentUser();
+
+    let data = {
+      trackTitle:  self.trackTitle,
+      trackArtist: self.trackArtist,
+      username:    UserService.getCurrentUser()
+    };
+
+    let myUrl = '/user/like';
+
+    $http.post(myUrl, data)
+      .then((response) => {
+        if(response.data.SUCCESS) {
+          console.log('Successfully liked a song');
+        };
+      });
   };
 
   // *** Get songs when application is loaded *** //
@@ -240,7 +259,6 @@ function UserController($http, UserService) {
 
     $http.post(myUrl, data)
       .success(function(data, status, headers, config) {
-        console.log(data);
         if(data['SUCCESS']) {
           localStorage.setItem('token', data.token);
           localStorage.setItem('user', data.user.name);
@@ -249,12 +267,12 @@ function UserController($http, UserService) {
         }
       })
       .error(function(data, status, headers, config) {
-        console.log(data);
         // delete local storage
         delete localStorage.token;
         delete localStorage.user;
       });
   };
+
 };
 
 // *** UI Router *** //
@@ -300,6 +318,10 @@ myApp.factory('UserService', function($state) {
 
   UserService.logout = function() {
     loggedIn = false;
+  };
+
+  UserService.getCurrentUser = function() {
+    return localStorage.user;
   };
 
   return UserService;
