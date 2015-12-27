@@ -7,6 +7,7 @@ const User     = require('../models/user');
 const mongoose = require('mongoose');
 const jwt      = require('jsonwebtoken');
 const config   = require('../config');
+const Utility  = require('./_utility');
 
 app.set('secret', config.secret);
 
@@ -14,6 +15,7 @@ app.set('secret', config.secret);
 router.post('/new', saveNewUser);
 router.post('/authenticate', authenticateUser);
 router.post('/like', likeSong);
+router.get('/favorites', getFavoriteSongs);
 
 function saveNewUser(req, res) {
   let name     = req.body.name;
@@ -100,6 +102,10 @@ function likeSong(req, res) {
       });
     }
   );
+};
+
+function getFavoriteSongs(req, res) {
+
 };
 
 module.exports = router;
