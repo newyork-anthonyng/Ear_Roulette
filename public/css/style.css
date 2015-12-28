@@ -1,6 +1,9 @@
-/*.row {
-  border:1px solid black;
-}*/
+#liked-header {
+  padding-left:1rem;
+  padding-top:0.5rem;
+  padding-bottom:0.5rem;
+  font-size:2rem;
+}
 
 .liked-title {
   font-size:1.5rem;
@@ -35,4 +38,8 @@
 .playing-artist {
   font-size:1.25rem;
   margin-top:0.5rem;
+}
+
+#playing-container {
+  margin-top:1.25rem;
 }

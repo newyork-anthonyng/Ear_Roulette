@@ -1,10 +1,8 @@
 <div ng-controller="RouletteController as vm">
-  <button ng-click="vm.startPlayer()">Play</button>
 
   <div class="row">
-    <!-- Audio Player -->
     <div class="col s6">
-      <div class="container z-depth-3">
+      <div class="container z-depth-3" id="playing-container">
           <img src="{{ vm.trackImage }}"></img>
           <div class="card red playing-card">
             <button class="btn-floating btn-large waves-effect waves-light purple accent-2 right"
@@ -21,7 +19,7 @@
 
     <div class="col s6">
       <div class="card red lighten-4">
-        <h4>Liked Songs</h4>
+        <h4 id="liked-header">Liked Songs</h4>
       </div>
 
       <ul>
@@ -42,4 +40,6 @@
 
     </div>
   </div>
+
+  <button ng-click="vm.startPlayer()">Play</button>
 </div>
