@@ -6,14 +6,14 @@
     <div class="col s6">
       <div class="container z-depth-3">
           <img src="{{ vm.trackImage }}"></img>
-          <div class="card red">
+          <div class="card red playing-card">
             <button class="btn-floating btn-large waves-effect waves-light purple accent-2 right"
             ng-click="vm.likeSong()">
               <i class="material-icons">favorite</i>
             </button>
 
-            <h4 class="white-text">{{ vm.trackTitle }}</h4>
-            <h6 class="white-text">{{ vm.trackArtist }}</h6>
+            <p class="white-text playing-title">{{ vm.trackTitle }}</p>
+            <p class="white-text playing-artist">{{ vm.trackArtist }}</p>
             <div class="player"></div>
           </div>
       </div>
@@ -27,7 +27,7 @@
       <ul>
         <div class="row">
           <li ng-repeat="favorite in vm.favoriteTracks">
-            <div class="card white">
+            <div class="card white liked-card">
               <button class="btn-floating btn-large waves-effect waves-light purple accent-2 right"
               ng-click="vm.dislikeSong($index)">
                 <i class="material-icons">delete</i>

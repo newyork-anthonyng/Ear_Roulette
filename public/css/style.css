@@ -1,40 +1,38 @@
-.login, .signup {
-  margin:0 auto;
-  height:250px;
-  width:250px;
+/*.row {
+  border:1px solid black;
+}*/
+
+.liked-title {
+  font-size:1.5rem;
+  margin-top:0.5rem;
+  margin-bottom:0;
 }
 
-.favorite-song {
-  text-align:center;
-  height:80px;
-  margin:5px;
+.liked-artist {
+  font-size:1.15rem;
+  margin-top:0;
+  padding-bottom:0.25rem;
 }
 
-.trackInformation {
-  margin:0 auto;
-  height:250px;
-  width:250px;
+.liked-card {
+  padding-bottom:0;
+  padding-top:0.1rem;
+  padding-left:0.75rem;
 }
 
-ul {
-  list-style:none;
+.playing-card {
+  padding-top:0.5rem;
+  padding-left:0.5rem;
+  padding-bottom:1.5rem;
+  margin-top:-0.5rem;
 }
 
-img {
-  border-radius:10px;
-  height:200px;
+.playing-title {
+  font-size:2rem;
+  margin:0;
 }
 
-h1 {
-  text-align:center;
-}
-
-#heart {
-    animation:blink 2s infinite;
-}
-
-@keyframes blink{
-  /*to{opacity: .0;}*/
-  0% {opacity: 1;}
-  80% {opacity: 0;}
+.playing-artist {
+  font-size:1.25rem;
+  margin-top:0.5rem;
 }
