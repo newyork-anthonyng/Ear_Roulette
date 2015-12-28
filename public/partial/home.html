@@ -6,8 +6,8 @@
           <img src="{{ vm.trackImage }}"></img>
           <div class="card red playing-card">
             <button class="btn-floating btn-large waves-effect waves-light purple accent-2 right"
-            ng-click="vm.likeSong()">
-              <i class="material-icons">favorite</i>
+            ng-click="vm.likeSong()" id="playing-like">
+              <i class="material-icons" id="playing-heart">favorite</i>
             </button>
 
             <p class="white-text playing-title">{{ vm.trackTitle }}</p>
@@ -27,7 +27,7 @@
           <div class="row">
             <li ng-repeat="favorite in vm.favoriteTracks">
               <div class="card white liked-card">
-                <button class="btn-floating btn-large waves-effect waves-light purple accent-2 right"
+                <button class="btn-floating btn-large waves-effect waves-light purple accent-2 right liked-delete"
                 ng-click="vm.dislikeSong($index)">
                   <i class="material-icons">delete</i>
                 </button>

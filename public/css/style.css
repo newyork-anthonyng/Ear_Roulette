@@ -23,6 +23,10 @@
   padding-left:0.75rem;
 }
 
+.liked-delete {
+  margin:0.5rem;
+}
+
 .playing-card {
   padding-top:0.5rem;
   padding-left:0.5rem;
@@ -42,4 +46,16 @@
 
 #playing-container {
   margin-top:1.25rem;
+}
+
+#playing-like {
+  width:7rem;
+  height:7rem;
+  margin-right:1rem;
+  margin-top:0.5rem;
+}
+
+#playing-heart {
+  font-size:3.6rem;
+  margin-top:1.5rem;
 }
