@@ -18,26 +18,27 @@
     </div>
 
     <div class="col s6">
-      <div class="card red lighten-4">
-        <h4 id="liked-header">Liked Songs</h4>
-      </div>
-
-      <ul>
-        <div class="row">
-          <li ng-repeat="favorite in vm.favoriteTracks">
-            <div class="card white liked-card">
-              <button class="btn-floating btn-large waves-effect waves-light purple accent-2 right"
-              ng-click="vm.dislikeSong($index)">
-                <i class="material-icons">delete</i>
-              </button>
-
-              <p class="liked-title">{{ favorite.trackTitle }}</p>
-              <p class="liked-artist">{{ favorite.trackArtist }}</p>
-            </div>
-        </li>
+      <div class="container">
+        <div class="card red lighten-4">
+          <h4 id="liked-header">Liked Songs</h4>
         </div>
-      </ul>
 
+        <ul>
+          <div class="row">
+            <li ng-repeat="favorite in vm.favoriteTracks">
+              <div class="card white liked-card">
+                <button class="btn-floating btn-large waves-effect waves-light purple accent-2 right"
+                ng-click="vm.dislikeSong($index)">
+                  <i class="material-icons">delete</i>
+                </button>
+
+                <p class="liked-title">{{ favorite.trackTitle }}</p>
+                <p class="liked-artist">{{ favorite.trackArtist }}</p>
+              </div>
+          </li>
+          </div>
+        </ul>
+      </div>
     </div>
   </div>
 
