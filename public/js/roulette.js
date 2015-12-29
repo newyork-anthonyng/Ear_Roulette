@@ -15,6 +15,7 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
   self.favoriteTracks = [];
 
   self.playing = false;
+
   init();
 
   self.startPlayer = function() {
@@ -22,7 +23,6 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
       self.createPlayer();
       self.getFavoriteSongs();
 
-      // show player
       self.playing = true;
     }
   };
@@ -31,7 +31,7 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
     // use $timeout to force a $scope.$apply
     $timeout(() => {
 
-      let currentSong = spotifyFactory.getCurrentSong();
+      let currentSong   = spotifyFactory.getCurrentSong();
       self.trackTitle   = currentSong['trackTitle'];
       self.trackArtist  = currentSong['trackArtist'];
       self.trackImage   = currentSong['albumImage'];
@@ -105,18 +105,18 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
 
   // *** Get songs when application is loaded *** //
   function init() {
-    // spotifyFactory.getTracks();
+    spotifyFactory.getTracks();
   }
 }
 
 // *** factory *** //
 myApp.factory('spotifyFactory', function($http) {
   let factory = {};
-  let artistNameArray = ['Adele'//, 'One Direction', 'Fall Out Boy', 'Eminem',
-                        //  'Young the Giant', 'Killers', 'Pink', 'Jay Z',
-                        //  'Kanye West', 'Linkin Park', 'Shawn Mendes',
-                        //  'Ed Sheeran', 'All American Rejects', 'Good Charlotte',
-                        //  'NSync', 'OneRepublic', 'Arctic Monkeys', 'Backstreet Boys'
+  let artistNameArray = ['Adele', 'One Direction', 'Fall Out Boy', 'Eminem',
+                         'Young the Giant', 'Killers', 'Pink', 'Jay Z',
+                         'Kanye West', 'Linkin Park', 'Shawn Mendes',
+                         'Ed Sheeran', 'All American Rejects', 'Good Charlotte',
+                         'NSync', 'OneRepublic', 'Arctic Monkeys', 'Backstreet Boys'
                         ];
   let artistIdArray   = [];
   let albumIdArray    = [];
