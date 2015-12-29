@@ -289,6 +289,10 @@ function UserController($http, UserService) {
     self.user.password = '';
   };
 
+  self.logout = function() {
+    UserService.logout();
+  };
+
   self.authenticateUser = function(data) {
     let myUrl = '/user/authenticate';
 
@@ -302,9 +306,7 @@ function UserController($http, UserService) {
         }
       })
       .error(function(data, status, headers, config) {
-        // delete local storage
-        delete localStorage.token;
-        delete localStorage.user;
+        UserService.emptyLocalStorage();
       });
   };
 
@@ -353,10 +355,17 @@ myApp.factory('UserService', function($state) {
 
   UserService.logout = function() {
     loggedIn = false;
+    UserService.emptyLocalStorage();
+    $state.go('login');
   };
 
   UserService.getCurrentUser = function() {
     return localStorage.user;
+  };
+
+  UserService.emptyLocalStorage = function() {
+    delete localStorage.token;
+    delete localStorage.user;
   };
 
   return UserService;
