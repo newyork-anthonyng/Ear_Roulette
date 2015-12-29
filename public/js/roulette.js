@@ -108,7 +108,11 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
 // *** factory *** //
 myApp.factory('spotifyFactory', function($http) {
   let factory = {};
-  let artistNameArray = ['One Direction', 'Fall Out Boy'];
+  let artistNameArray = ['One Direction', 'Fall Out Boy', 'Adele', 'Eminem',
+                         'Young the Giant', 'Killers', 'Pink', 'Jay Z',
+                         'Kanye West', 'Linkin Park', 'Shawn Mendes',
+                         'Ed Sheeran', 'All American Rejects', 'Good Charlotte'
+                        ];
   let artistIdArray   = [];
   let albumIdArray    = [];
   let trackArray      = [];
