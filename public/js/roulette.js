@@ -105,7 +105,7 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
 
   // *** Get songs when application is loaded *** //
   function init() {
-    spotifyFactory.getTracks();
+    // spotifyFactory.getTracks();
   }
 }
 
