@@ -13,7 +13,7 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
   self.trackImage   = '';
   self.trackPreview = '';
   self.favoriteTracks = [];
-  
+
   self.playing = false;
   init();
 
@@ -115,7 +115,8 @@ myApp.factory('spotifyFactory', function($http) {
   let artistNameArray = ['One Direction', 'Fall Out Boy', 'Adele', 'Eminem',
                          'Young the Giant', 'Killers', 'Pink', 'Jay Z',
                          'Kanye West', 'Linkin Park', 'Shawn Mendes',
-                         'Ed Sheeran', 'All American Rejects', 'Good Charlotte'
+                         'Ed Sheeran', 'All American Rejects', 'Good Charlotte',
+                         'NSync', 'OneRepublic', 'Arctic Monkeys', 'Backstreet Boys'
                         ];
   let artistIdArray   = [];
   let albumIdArray    = [];
