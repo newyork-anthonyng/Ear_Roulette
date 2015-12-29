@@ -38,7 +38,7 @@
                 ng-click="vm.dislikeSong($index)">
                   <i class="material-icons">delete</i>
                 </button>
-                <a ng-href="https://www.youtube.com/results?search_query={{ favorite.trackTitle }} {{ favorite.trackArtist }}" target="_blank">Youtube Link</a>
+                <a class="btn-floating btn-large waves-effect waves-light purple accent-2 right liked-youtube" ng-href="https://www.youtube.com/results?search_query={{ favorite.trackTitle }} {{ favorite.trackArtist }}" target="_blank">Youtube</a>
 
                 <p class="liked-title">{{ favorite.trackTitle }}</p>
                 <p class="liked-artist">{{ favorite.trackArtist }}</p>

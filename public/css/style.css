@@ -23,8 +23,12 @@
   padding-left:0.75rem;
 }
 
-.liked-delete {
+.liked-delete, .liked-youtube {
   margin:0.5rem;
+}
+
+.liked-youtube {
+  font-size:0.75rem;
 }
 
 .playing-card {
