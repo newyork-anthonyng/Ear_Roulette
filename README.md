@@ -14,7 +14,7 @@ Ear Roulette is a jukebox for people with short attention spans. All of the trac
   * User will be able to delete their saved songs
 
 ## Wireframes
-![User Main](./public/Wireframe/Ear_Roulette_Wireframe.png)
+![User Main](./public/assets/Ear_Roulette_Wireframe.png)
 
 ## Technologies Used
 This application will be built using the MEAN stack. It will use the Spotify API to get all of the music track information.
