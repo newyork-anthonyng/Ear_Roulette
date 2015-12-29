@@ -6,49 +6,57 @@
 </nav>
 
 <div ng-controller="RouletteController as vm">
+  <div ng-show="vm.playing">
+    <div class="row">
+      <div class="col s6">
+        <div class="container z-depth-3" id="playing-container">
+            <img src="{{ vm.trackImage }}"></img>
+            <div class="card red playing-card">
+              <button class="btn-floating btn-large waves-effect waves-light
+                            purple accent-2 right"
+              ng-click="vm.likeSong()" id="playing-like">
+                <i class="material-icons" id="playing-heart">favorite</i>
+              </button>
 
-  <div class="row">
-    <div class="col s6">
-      <div class="container z-depth-3" id="playing-container">
-          <img src="{{ vm.trackImage }}"></img>
-          <div class="card red playing-card">
-            <button class="btn-floating btn-large waves-effect waves-light purple accent-2 right"
-            ng-click="vm.likeSong()" id="playing-like">
-              <i class="material-icons" id="playing-heart">favorite</i>
-            </button>
-
-            <p class="white-text playing-title">{{ vm.trackTitle }}</p>
-            <p class="white-text playing-artist">{{ vm.trackArtist }}</p>
-            <div class="player"></div>
-          </div>
-      </div>
-    </div>
-
-    <div class="col s6">
-      <div class="container">
-        <div class="card red lighten-4">
-          <h4 id="liked-header">Liked Songs</h4>
+              <p class="white-text playing-title">{{ vm.trackTitle }}</p>
+              <p class="white-text playing-artist">{{ vm.trackArtist }}</p>
+              <div class="player"></div>
+            </div>
         </div>
+      </div>
 
-        <ul>
-          <div class="row">
-            <li ng-repeat="favorite in vm.favoriteTracks">
-              <div class="card white liked-card">
-                <button class="btn-floating btn-large waves-effect waves-light purple accent-2 right liked-delete"
-                ng-click="vm.dislikeSong($index)">
-                  <i class="material-icons">delete</i>
-                </button>
-                <a class="btn-floating btn-large waves-effect waves-light purple accent-2 right liked-youtube" ng-href="https://www.youtube.com/results?search_query={{ favorite.trackTitle }} {{ favorite.trackArtist }}" target="_blank">Youtube</a>
-
-                <p class="liked-title">{{ favorite.trackTitle }}</p>
-                <p class="liked-artist">{{ favorite.trackArtist }}</p>
-              </div>
-          </li>
+      <div class="col s6">
+        <div class="container">
+          <div class="card red lighten-4">
+            <h4 id="liked-header">Liked Songs</h4>
           </div>
-        </ul>
+
+          <ul>
+            <div class="row">
+              <li ng-repeat="favorite in vm.favoriteTracks">
+                <div class="card white liked-card">
+                  <button class="btn-floating btn-large waves-effect
+                                waves-light purple accent-2 right liked-delete"
+                  ng-click="vm.dislikeSong($index)">
+                    <i class="material-icons">delete</i>
+                  </button>
+                  <a class="btn-floating btn-large waves-effect waves-light
+                           purple accent-2 right liked-youtube"
+                     ng-href="https://www.youtube.com/results?search_query={{ favorite.trackTitle }} {{ favorite.trackArtist }}"
+                     target="_blank">Youtube</a>
+
+                  <p class="liked-title">{{ favorite.trackTitle }}</p>
+                  <p class="liked-artist">{{ favorite.trackArtist }}</p>
+                </div>
+            </li>
+            </div>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 
-  <button ng-click="vm.startPlayer()">Play</button>
+  <button class="btn-floating btn-large waves-effect waves-light purple accent-2
+                play-button" ng-click="vm.startPlayer()" ng-hide="vm.playing">
+                Play</button>
 </div>

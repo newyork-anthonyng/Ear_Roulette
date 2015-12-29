@@ -13,13 +13,17 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
   self.trackImage   = '';
   self.trackPreview = '';
   self.favoriteTracks = [];
-
+  
+  self.playing = false;
   init();
 
   self.startPlayer = function() {
     if(spotifyFactory.tracksLoaded) {
       self.createPlayer();
       self.getFavoriteSongs();
+
+      // show player
+      self.playing = true;
     }
   };
 
