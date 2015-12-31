@@ -5,7 +5,7 @@ var myApp = angular.module('Roulette', ['ui.router']);
 // *** roulette controller *** //
 myApp.controller('RouletteController', RouletteController);
 
-function RouletteController($http, $timeout, spotifyFactory, UserService) {
+function RouletteController($http, $timeout, $interval, spotifyFactory, UserService) {
   let self = this;
 
   self.trackTitle   = '';
@@ -15,15 +15,22 @@ function RouletteController($http, $timeout, spotifyFactory, UserService) {
   self.favoriteTracks = [];
 
   self.playing = false;
+  self.tracksLoaded = false;
 
   init();
 
+  // check if tracks are loaded
+  var myPromise = $interval(function() {
+    if(spotifyFactory.tracksLoaded()) self.tracksLoaded = true;
+  }, 1000);
+
   self.startPlayer = function() {
-    if(spotifyFactory.tracksLoaded) {
+    if(spotifyFactory.tracksLoaded()) {
       self.createPlayer();
       self.getFavoriteSongs();
 
       self.playing = true;
+      $interval.cancel(myPromise);
     }
   };
 
