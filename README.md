@@ -1,6 +1,8 @@
 ## Ear Roulette
 
-## [Link to App hosted on Heroku](https://tranquil-beach-1904.herokuapp.com/)
+## [Link to App hosted on Heroku](http://ear-roulette.herokuapp.com/)
+To try out the application, signup for a new username, or use **USERNAME**: test and **PASSWORD**: test.
+
 ### Description
 Ear Roulette is a jukebox for people with short attention spans. All of the tracks in the jukebox last for 30 seconds before the next one is played. You will never be bored of music again.
 
