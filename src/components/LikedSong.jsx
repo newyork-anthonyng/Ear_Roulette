@@ -5,8 +5,13 @@ const LikedSong = React.createClass({
 		return 'youtube.com/' + title + '_' + artist;
 	},
 
+	deleteSong: function() {
+		const { title, artist } = this.props;
+		this.props.deleteSong(title, artist);
+	},
+
 	render: function() {
-		const { title, artist, deleteSong } = this.props;
+		const { title, artist } = this.props;
 
 		return (
 			<div className="liked-song">
@@ -19,7 +24,7 @@ const LikedSong = React.createClass({
 				<span className="link">
 					{this.createLink(title, artist)}
 				</span>
-				<button ref="deleteSong" onClick={deleteSong}>
+				<button ref="deleteSong" onClick={this.deleteSong}>
 					Delete
 				</button>
 			</div>

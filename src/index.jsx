@@ -1,20 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { LikedSong } from './components/LikedSong';
+import { LikedSongList } from './components/LikedSongList';
 
 const App = React.createClass({
 	render: function() {
-		const likedSongProps = {
-			title: 'Call Me Maybe',
-			artist: 'Carly Rae Jepsen',
-			link: 'youtube.com/call_me_maybe',
-			deleteSong: () => console.log('song deleted')
+		const likedSongListProps = {
+			deleteSong: () => console.log('delete song clicked'),
+			likedSongs: [
+				{
+					title: 'Call Me Maybe',
+					artist: 'Carly Rae Jepsen'
+				},
+				{
+					title: 'Baby',
+					artist: 'Justin Bieber'
+				}
+			]
 		};
 
 		return (
 			<div>
 				Hello World
-				<LikedSong {...likedSongProps} />
+				<LikedSongList {...likedSongListProps} />
 			</div>
 		);
 	}

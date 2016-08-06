@@ -30,14 +30,18 @@ describe('LikedSong', () => {
 
 	it('invokes callback when delete button is clicked', () => {
 		let nextInvoked = false;
-		const deleteSong = () => nextInvoked = true;
+		const title = 'Baby';
+		const artist = 'Justin Bieber';
+		const deleteSong = (title, artist) => (nextInvoked = title + ' by ' + artist);
 		const component = renderIntoDocument(
 			<LikedSong
+				title={title}
+				artist={artist}
 				deleteSong={deleteSong}
 			/>
 		);
 		Simulate.click(ReactDOM.findDOMNode(component.refs.deleteSong));
 
-		expect(nextInvoked).to.equal(true);
+		expect(nextInvoked).to.equal('Baby by Justin Bieber');
 	});
 });
