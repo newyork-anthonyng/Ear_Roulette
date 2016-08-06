@@ -2,7 +2,7 @@ import React from 'react';
 
 const LikedSong = React.createClass({
 	createLink: function(title, artist) {
-		return 'youtube.com/' + title + '_' + 'artist';
+		return 'youtube.com/' + title + '_' + artist;
 	},
 
 	render: function() {
@@ -19,7 +19,7 @@ const LikedSong = React.createClass({
 				<span className="link">
 					{this.createLink(title, artist)}
 				</span>
-				<button onClick={deleteSong}>
+				<button ref="deleteSong" onClick={deleteSong}>
 					Delete
 				</button>
 			</div>
