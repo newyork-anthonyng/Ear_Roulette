@@ -1,6 +1,16 @@
 import React from 'react';
 
 const NowPlaying = React.createClass({
+	propTypes: {
+		playSong: React.PropTypes.func.isRequired,
+		pauseSong: React.PropTypes.func.isRequired,
+		likeSong: React.PropTypes.func.isRequired,
+		artist: React.PropTypes.string.isRequired,
+		title: React.PropTypes.string.isRequired,
+		src: React.PropTypes.string.isRequired,
+		isPlaying: React.PropTypes.bool.isRequired
+	},
+
 	handlePlayClick: function() {
 		this.props.playSong();
 	},

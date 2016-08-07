@@ -1,6 +1,10 @@
 import React from 'react';
 
 const ArtistInput = React.createClass({
+	propTypes: {
+		addArtist: React.PropTypes.func.isRequired
+	},
+
 	getInitialState: function() {
 		return {
 			artist: ''

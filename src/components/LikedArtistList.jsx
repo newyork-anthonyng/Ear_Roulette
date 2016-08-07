@@ -2,6 +2,11 @@ import React from 'react';
 import { LikedArtist } from './LikedArtist';
 
 const LikedArtistList = React.createClass({
+	propTypes: {
+		likedArtists: React.PropTypes.array.isRequired,
+		deleteArtist: React.PropTypes.func.isRequired
+	},
+
 	render: function() {
 		const { likedArtists, deleteArtist } = this.props;
 

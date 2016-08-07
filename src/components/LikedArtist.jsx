@@ -1,6 +1,11 @@
 import React from 'react';
 
 const LikedArtist = React.createClass({
+	propTypes: {
+		artist: React.PropTypes.string.isRequired,
+		deleteArtist: React.PropTypes.func.isRequired
+	},
+
 	deleteArtist: function() {
 		this.props.deleteArtist(this.props.artist);
 	},

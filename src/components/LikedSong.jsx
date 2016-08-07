@@ -1,6 +1,12 @@
 import React from 'react';
 
 const LikedSong = React.createClass({
+	propTypes: {
+		title: React.PropTypes.string.isRequired,
+		artist: React.PropTypes.string.isRequired,
+		deleteSong: React.PropTypes.func.isRequired
+	},
+
 	createLink: function(title, artist) {
 		return 'youtube.com/' + title + '_' + artist;
 	},
