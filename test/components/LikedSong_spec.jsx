@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {
 	renderIntoDocument,
 	scryRenderedDOMComponentsWithClass,
+	scryRenderedDOMComponentsWithTag,
 	Simulate
 } from 'react-addons-test-utils';
 import { LikedSong } from '../../src/components/LikedSong';
@@ -22,17 +22,19 @@ describe('LikedSong', () => {
 		const artistText = scryRenderedDOMComponentsWithClass(component, 'artist')[0].textContent;
 		const titleText = scryRenderedDOMComponentsWithClass(component, 'title')[0].textContent;
 		const linkText = scryRenderedDOMComponentsWithClass(component, 'link')[0].textContent;
+		const deleteButton = scryRenderedDOMComponentsWithTag(component, 'button');
 
 		expect(artistText).to.contain('Justin Bieber');
 		expect(titleText).to.contain('Baby');
 		expect(linkText).to.contain('youtube.com/Baby_Justin Bieber');
+		expect(deleteButton.length).to.equal(1);
 	});
 
 	it('invokes callback when delete button is clicked', () => {
-		let nextInvoked = false;
+		let deleteInvoked = false;
 		const title = 'Baby';
 		const artist = 'Justin Bieber';
-		const deleteSong = (title, artist) => (nextInvoked = title + ' by ' + artist);
+		const deleteSong = (title, artist) => (deleteInvoked = title + ' by ' + artist);
 		const component = renderIntoDocument(
 			<LikedSong
 				title={title}
@@ -40,8 +42,8 @@ describe('LikedSong', () => {
 				deleteSong={deleteSong}
 			/>
 		);
-		Simulate.click(ReactDOM.findDOMNode(component.refs.deleteSong));
+		Simulate.click(component.refs.deleteSong);
 
-		expect(nextInvoked).to.equal('Baby by Justin Bieber');
+		expect(deleteInvoked).to.equal('Baby by Justin Bieber');
 	});
 });

@@ -31,8 +31,8 @@ describe('LikedSongList', () => {
 	});
 
 	it('passes callback that is called with artist and title props', () => {
-		let nextInvoked = false;
-		const deleteSong = (title, artist) => (nextInvoked = title + ' by ' + artist);
+		let deleteInvoked = false;
+		const deleteSong = (title, artist) => (deleteInvoked = title + ' by ' + artist);
 		const likedSongs = [
 			{
 				title: 'Baby',
@@ -48,6 +48,6 @@ describe('LikedSongList', () => {
 		const deleteButton = findRenderedDOMComponentWithTag(component, 'button');
 		Simulate.click(deleteButton);
 
-		expect(nextInvoked).to.equal('Baby by Justin Bieber');
+		expect(deleteInvoked).to.equal('Baby by Justin Bieber');
 	});
 });
