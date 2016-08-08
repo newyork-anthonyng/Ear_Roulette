@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js \"test/**/*@(.js|.jsx)\"",
-    "test:watch": "mocha --compilers js:babel-core/register --require ./test/test_helper.js \"test/**/*.@(jsx)\" --watch --watch-extensions jsx"
+    "test:watch": "mocha --compilers js:babel-core/register --require ./test/frontend/test_helper.js \"test/frontend/**/*.@(jsx)\" --watch --watch-extensions jsx"
   },
   "repository": {
     "type": "git",

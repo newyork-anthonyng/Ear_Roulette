@@ -4,7 +4,7 @@ import {
 	findRenderedDOMComponentWithTag,
 	Simulate
 } from 'react-addons-test-utils';
-import { ArtistInput } from '../../src/components/ArtistInput';
+import { ArtistInput } from '../../../src/components/ArtistInput';
 import { expect } from 'chai';
 
 describe('ArtistInput', () => {

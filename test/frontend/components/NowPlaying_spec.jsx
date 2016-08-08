@@ -7,7 +7,7 @@ import {
 	scryRenderedDOMComponentsWithTag,
 	Simulate
 } from 'react-addons-test-utils';
-import { NowPlaying } from '../../src/components/NowPlaying';
+import { NowPlaying } from '../../../src/components/NowPlaying';
 import { expect } from 'chai';
 
 describe('NowPlaying', () => {

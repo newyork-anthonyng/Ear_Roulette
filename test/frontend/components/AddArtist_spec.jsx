@@ -6,10 +6,10 @@ import {
 	findRenderedDOMComponentWithTag,
 	Simulate
 } from 'react-addons-test-utils';
-import { AddArtist } from '../../src/components/AddArtist';
-import { ArtistInput } from '../../src/components/ArtistInput';
-import { LikedArtistList } from '../../src/components/LikedArtistList';
-import { LikedArtist } from '../../src/components/LikedArtist';
+import { AddArtist } from '../../../src/components/AddArtist';
+import { ArtistInput } from '../../../src/components/ArtistInput';
+import { LikedArtistList } from '../../../src/components/LikedArtistList';
+import { LikedArtist } from '../../../src/components/LikedArtist';
 import { expect } from 'chai';
 
 describe('AddArtist', () => {

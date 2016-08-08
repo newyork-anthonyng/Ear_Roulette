@@ -4,7 +4,7 @@ import {
 	scryRenderedDOMComponentsWithClass,
 	Simulate
 } from 'react-addons-test-utils';
-import { LikedArtist } from '../../src/components/LikedArtist';
+import { LikedArtist } from '../../../src/components/LikedArtist';
 import { expect } from 'chai';
 
 describe('LikedArtist', () => {

@@ -5,8 +5,8 @@ import {
 	findRenderedDOMComponentWithTag,
 	Simulate
 } from 'react-addons-test-utils';
-import { LikedSongList } from '../../src/components/LikedSongList';
-import { LikedSong } from '../../src/components/LikedSong';
+import { LikedSongList } from '../../../src/components/LikedSongList';
+import { LikedSong } from '../../../src/components/LikedSong';
 import { expect } from 'chai';
 
 describe('LikedSongList', () => {

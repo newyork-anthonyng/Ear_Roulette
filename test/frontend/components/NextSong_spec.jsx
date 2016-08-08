@@ -3,7 +3,7 @@ import {
 	renderIntoDocument,
 	scryRenderedDOMComponentsWithClass
 } from 'react-addons-test-utils';
-import { NextSong } from '../../src/components/NextSong';
+import { NextSong } from '../../../src/components/NextSong';
 import { expect } from 'chai';
 
 describe('NextSong', () => {
