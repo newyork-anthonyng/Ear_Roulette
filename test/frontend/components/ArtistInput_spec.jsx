@@ -37,4 +37,20 @@ describe('ArtistInput', () => {
 
 		expect(addArtistInvoked).to.equal('Justin Bieber');
 	});
+
+	it('empties input field after adding an artist', () => {
+		const component = renderIntoDocument(
+			<ArtistInput
+				addArtist={() => {}}
+			/>
+		);
+		const inputEle = findRenderedDOMComponentWithTag(component, 'input');
+		const buttonEle = findRenderedDOMComponentWithTag(component, 'button');
+
+		inputEle.value = 'Justin Bieber';
+		Simulate.change(inputEle);
+		Simulate.click(buttonEle);
+
+		expect(inputEle.textContent).to.equal('');
+	});
 });

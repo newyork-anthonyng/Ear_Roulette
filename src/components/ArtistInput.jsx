@@ -19,6 +19,9 @@ const ArtistInput = React.createClass({
 
 	handleAddClick: function() {
 		this.props.addArtist(this.state.artist);
+		this.setState({
+			artist: ''
+		});
 	},
 
 	render: function() {
