@@ -16,7 +16,7 @@ const LikedArtistList = React.createClass({
 					{likedArtists.map((likedArtist, index) => (
 						<li key={index}>
 							<LikedArtist
-								{...likedArtist}
+								artist={likedArtist}
 								deleteArtist={deleteArtist} />
 						</li>
 					))}

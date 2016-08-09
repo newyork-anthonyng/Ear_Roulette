@@ -7,6 +7,7 @@ import reducer from './reducers/index';
 import { NowPlayingContainer } from './containers/NowPlayingContainer';
 import { NextSongContainer } from './containers/NextSongContainer';
 import { LikedSongListContainer } from './containers/LikedSongListContainer';
+import { AddArtistContainer } from './containers/AddArtistContainer';
 
 const store = createStore(reducer);
 store.dispatch({
@@ -33,6 +34,8 @@ const App = React.createClass({
 				<br />
 				<NextSongContainer />
 				<LikedSongListContainer />
+				<br />
+				<AddArtistContainer />
 			</div>
 		);
 	}

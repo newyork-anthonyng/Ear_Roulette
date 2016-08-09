@@ -15,12 +15,8 @@ import { expect } from 'chai';
 describe('AddArtist', () => {
 	it('renders an ArtistInput and LikedArtistList component', () => {
 		const likedArtists = [
-			{
-				artist: 'Justin Bieber'
-			},
-			{
-				artist: 'Metallica'
-			}
+			'Justin Bieber',
+			'Metallica'
 		];
 		const component = renderIntoDocument(
 			<AddArtist likedArtists={likedArtists} />
@@ -34,12 +30,8 @@ describe('AddArtist', () => {
 
 	it('renders a LikedArtist component for each artist', () => {
 		const likedArtists = [
-			{
-				artist: 'Justin Bieber'
-			},
-			{
-				artist: 'Metallica'
-			}
+			'Justin Bieber',
+			'Metallica'
 		];
 		const component = renderIntoDocument(
 			<AddArtist likedArtists={likedArtists} />
@@ -53,12 +45,8 @@ describe('AddArtist', () => {
 		let deleteArtistInvoked = false;
 		const deleteArtist = (artist) => { deleteArtistInvoked = artist };
 		const likedArtists = [
-			{
-				artist: 'Justin Bieber'
-			},
-			{
-				artist: 'Metallica'
-			}
+			'Justin Bieber',
+			'Metallica'
 		];
 		const component = renderIntoDocument(
 			<AddArtist

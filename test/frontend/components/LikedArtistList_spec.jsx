@@ -12,12 +12,8 @@ import { expect } from 'chai';
 describe('LikedArtistList', () => {
 	it('renders a LikedArtist component for each artist', () => {
 		const likedArtists = [
-			{
-				artist: 'Justin Bieber'
-			},
-			{
-				artist: 'Metallica'
-			}
+			'Justin Bieber',
+			'Metallica'
 		];
 		const component = renderIntoDocument(
 			<LikedArtistList
@@ -32,12 +28,8 @@ describe('LikedArtistList', () => {
 		let deleteArtistInvoked = false;
 		const deleteArtist = (artist) => { deleteArtistInvoked = artist };
 		const likedArtists = [
-			{
-				artist: 'Justin Bieber'
-			},
-			{
-				artist: 'Metallica'
-			}
+			'Justin Bieber',
+			'Metallica'
 		];
 		const component = renderIntoDocument(
 			<LikedArtistList
