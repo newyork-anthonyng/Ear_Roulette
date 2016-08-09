@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux';
 import {
 ADD_SONGS,
 NEXT_SONG,
@@ -15,60 +16,65 @@ const initialState = {
 	likedArtists: []
 };
 
-export default function(state = initialState, action) {
-	let newSongs, newLikedSongs, newLikedArtists;
-
+function isPlaying(state = false, action) {
 	switch(action.type) {
-		case ADD_SONGS:
-			newSongs = [
-				...state['songs'],
-				...action.songs
-			];
-
-			return Object.assign({}, state, {
-				songs: newSongs
-			});
-		case NEXT_SONG:
-			newSongs = state['songs'].slice(1);
-			return Object.assign({}, state, {
-				songs: newSongs
-			});
-		case LIKE_SONG:
-			newLikedSongs =  [
-				...state['likedSongs'],
-				action.song
-			];
-			return Object.assign({}, state, {
-				likedSongs: newLikedSongs
-			});
-		case UNLIKE_SONG:
-			newLikedSongs = state['likedSongs'].filter(song => {
-				const sameSong = (song.title === action.song.title) && (song.artist === action.song.artist);
-				return !sameSong;
-			});
-			return Object.assign({}, state, {
-				likedSongs: newLikedSongs
-			});
-		case ADD_ARTIST:
-			newLikedArtists = [
-				...state['likedArtists'],
-				action.artist
-			];
-			return Object.assign({}, state, {
-				likedArtists: newLikedArtists
-			});
-		case REMOVE_ARTIST:
-			newLikedArtists = state['likedArtists'].filter(artist => {
-				return artist !== action.artist;
-			});
-			return Object.assign({}, state, {
-				likedArtists: newLikedArtists
-			});
 		case TOGGLE_PLAYING:
-			return Object.assign({}, state, {
-				isPlaying: !state['isPlaying']
-			});
+			return !state;
 		default:
 			return state;
 	};
-};
+}
+
+function songs(state = [], action) {
+	switch(action.type) {
+		case ADD_SONGS:
+			return [
+				...state,
+				...action.songs
+			];
+		case NEXT_SONG:
+			return state.slice(1);
+		default:
+			return state;
+	}
+}
+
+function likedSongs(state = [], action) {
+	switch(action.type) {
+		case LIKE_SONG:
+			return [
+				...state,
+				action.song
+			];
+		case UNLIKE_SONG:
+			return state.filter(song => {
+				const sameSong = (song.title === action.song.title) && (song.artist === action.song.artist);
+				return !sameSong;
+			});
+		default:
+			return state;
+	}
+}
+
+function likedArtists(state = [], action) {
+	switch(action.type) {
+		case ADD_ARTIST:
+			return [
+				...state,
+				action.artist
+			];
+		case REMOVE_ARTIST:
+			return state.filter(artist => {
+				return artist !== action.artist;
+			});
+		default:
+			return state;
+	}
+}
+
+export default combineReducers({
+	isPlaying,
+	songs,
+	likedSongs,
+	likedArtists
+});
