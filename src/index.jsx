@@ -1,34 +1,46 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LikedSong } from './components/LikedSong';
-import { LikedSongList } from './components/LikedSongList';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+
+import reducer from './reducers/index';
+import { NowPlayingContainer } from './containers/NowPlayingContainer';
+import { NextSongContainer } from './containers/NextSongContainer';
+import { LikedSongListContainer } from './containers/LikedSongListContainer';
+
+const store = createStore(reducer);
+store.dispatch({
+	type: 'ADD_SONGS',
+	songs: [
+		{
+			title: 'Baby',
+			artist: 'Justin Bieber',
+			src: 'abc'
+		},
+		{
+			title: 'St. Anger',
+			artist: 'Metallica',
+			src: 'def'
+		}
+	]
+});
 
 const App = React.createClass({
 	render: function() {
-		const likedSongListProps = {
-			deleteSong: () => console.log('delete song clicked'),
-			likedSongs: [
-				{
-					title: 'Call Me Maybe',
-					artist: 'Carly Rae Jepsen'
-				},
-				{
-					title: 'Baby',
-					artist: 'Justin Bieber'
-				}
-			]
-		};
-
 		return (
 			<div>
-				Hello World
-				<LikedSongList {...likedSongListProps} />
+				<NowPlayingContainer />
+				<br />
+				<NextSongContainer />
+				<LikedSongListContainer />
 			</div>
 		);
 	}
 });
 
 ReactDOM.render(
-	<App />,
+	<Provider store={store}>
+		<App />
+	</Provider>,
 	document.getElementById('app')
 );

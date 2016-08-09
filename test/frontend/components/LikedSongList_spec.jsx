@@ -32,7 +32,7 @@ describe('LikedSongList', () => {
 
 	it('passes callback that is called with artist and title props', () => {
 		let deleteInvoked = false;
-		const deleteSong = (title, artist) => (deleteInvoked = title + ' by ' + artist);
+		const deleteSong = ({ title, artist }) => (deleteInvoked = title + ' by ' + artist);
 		const likedSongs = [
 			{
 				title: 'Baby',

@@ -34,7 +34,7 @@ describe('LikedSong', () => {
 		let deleteInvoked = false;
 		const title = 'Baby';
 		const artist = 'Justin Bieber';
-		const deleteSong = (title, artist) => (deleteInvoked = title + ' by ' + artist);
+		const deleteSong = ({ title, artist }) => (deleteInvoked = title + ' by ' + artist);
 		const component = renderIntoDocument(
 			<LikedSong
 				title={title}

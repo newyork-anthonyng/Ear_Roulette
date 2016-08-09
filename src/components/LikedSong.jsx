@@ -13,7 +13,12 @@ const LikedSong = React.createClass({
 
 	deleteSong: function() {
 		const { title, artist } = this.props;
-		this.props.deleteSong(title, artist);
+		const song = {
+			title: this.props.title,
+			artist: this.props.artist
+		};
+
+		this.props.deleteSong(song);
 	},
 
 	render: function() {
