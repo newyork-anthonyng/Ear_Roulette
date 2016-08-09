@@ -84,14 +84,45 @@ describe('NowPlaying', () => {
 
 	it('invokes callback when like button is clicked', () => {
 		let likeInvoked = false;
-		const likeSong = () => { likeInvoked = true };
+		const likeSong = ({ title, artist }) => { likeInvoked = title + ': ' + artist };
 		const component = renderIntoDocument(
 			<NowPlaying
+				title={'Baby'}
+				artist={'Justin Bieber'}
 				likeSong={likeSong}
 			/>
 		);
 		Simulate.click(component.refs.likeSong);
 
-		expect(likeInvoked).to.equal(true);
+		expect(likeInvoked).to.equal('Baby: Justin Bieber');
+	});
+
+	it('should show unlike button when song is liked', () => {
+		const component = renderIntoDocument(
+			<NowPlaying
+				isLiked={true}
+			/>
+		);
+		const unlikeButtonEle = component.refs.unlikeSong;
+		expect(unlikeButtonEle).to.be.ok;
+		expect(unlikeButtonEle.textContent).to.equal('Unlike');
+	});
+
+	it('invokes callback when unlike button is clicked', () => {
+		let unlikeSongInvoked = false;
+		const unlikeSong = ({ title, artist }) => { unlikeSongInvoked = title + ': ' + artist };
+		const title = 'Baby';
+		const artist = 'Justin Bieber';
+		const component = renderIntoDocument(
+			<NowPlaying
+				title={title}
+				artist={artist}
+				unlikeSong={unlikeSong}
+				isLiked={true}
+			/>
+		);
+		Simulate.click(component.refs.unlikeSong);
+
+		expect(unlikeSongInvoked).to.equal('Baby: Justin Bieber');
 	});
 });

@@ -5,10 +5,12 @@ const NowPlaying = React.createClass({
 		playSong: React.PropTypes.func.isRequired,
 		pauseSong: React.PropTypes.func.isRequired,
 		likeSong: React.PropTypes.func.isRequired,
+		unlikeSong: React.PropTypes.func.isRequired,
 		artist: React.PropTypes.string.isRequired,
 		title: React.PropTypes.string.isRequired,
 		src: React.PropTypes.string.isRequired,
-		isPlaying: React.PropTypes.bool.isRequired
+		isPlaying: React.PropTypes.bool.isRequired,
+		isLiked: React.PropTypes.bool.isRequired
 	},
 
 	handlePlayClick: function() {
@@ -20,11 +22,23 @@ const NowPlaying = React.createClass({
 	},
 
 	handleLikeClick: function() {
-		this.props.likeSong();
+		const song = {
+			title: this.props.title,
+			artist: this.props.artist
+		};
+		this.props.likeSong(song);
+	},
+
+	handleUnlikeClick: function() {
+		const song = {
+			title: this.props.title,
+			artist: this.props.artist
+		};
+		this.props.unlikeSong(song);
 	},
 
 	render: function() {
-		const { artist, title, src, isPlaying } = this.props;
+		const { artist, title, src, isPlaying, isLiked } = this.props;
 		const style = {
 			backgroundImage: {src}
 		};
@@ -45,9 +59,14 @@ const NowPlaying = React.createClass({
 						Play
 					</button>
 				}
+				{isLiked ?
+				<button ref='unlikeSong' onClick={this.handleUnlikeClick}>
+					Unlike
+				</button>:
 				<button ref='likeSong' onClick={this.handleLikeClick}>
 					Like
 				</button>
+				}
 			</div>
 		);
 	}
