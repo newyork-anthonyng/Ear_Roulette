@@ -12,7 +12,8 @@ const mapStateToProps = (state) => {
 	return {
 		artist: state.songs[0]['artist'],
 		title: state.songs[0]['title'],
-		src: state.songs[0]['src'],
+		image: state.songs[0]['image'],
+		preview: state.songs[0]['preview'],
 		isPlaying: state.isPlaying,
 		isLiked: state.likedSongs.filter(song => {
 			return song.title === state.songs[0]['title'] && song.artist === state.songs[0]['artist'];

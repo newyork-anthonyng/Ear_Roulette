@@ -11,22 +11,27 @@ import { NowPlaying } from '../../../src/components/NowPlaying';
 import { expect } from 'chai';
 
 describe('NowPlaying', () => {
-	it('renders title, artist, background image, play button and like button', () => {
+	it('renders title, artist, album art, play button and like button', () => {
 		const title = 'Baby';
 		const artist = 'Justin Bieber';
+		const image = 'foo-image';
 		const component = renderIntoDocument(
 			<NowPlaying
 				title={title}
 				artist={artist}
+				image={image}
 			/>
 		);
 
 		const titleText = scryRenderedDOMComponentsWithClass(component, 'title')[0].textContent;
 		const artistText = scryRenderedDOMComponentsWithClass(component, 'artist')[0].textContent;
+		const albumArt = scryRenderedDOMComponentsWithTag(component, 'img');
 		const buttonEle = scryRenderedDOMComponentsWithTag(component, 'button');
 
 		expect(titleText).to.equal('Baby');
 		expect(artistText).to.equal('Justin Bieber');
+		expect(albumArt.length).to.equal(1);
+		expect(albumArt[0].src).to.equal('foo-image');
 		expect(buttonEle.length).to.equal(2);
 	});
 

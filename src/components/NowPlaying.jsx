@@ -8,7 +8,8 @@ const NowPlaying = React.createClass({
 		unlikeSong: React.PropTypes.func.isRequired,
 		artist: React.PropTypes.string.isRequired,
 		title: React.PropTypes.string.isRequired,
-		src: React.PropTypes.string.isRequired,
+		image: React.PropTypes.string.isRequired,
+		preview: React.PropTypes.string.isRequired,
 		isPlaying: React.PropTypes.bool.isRequired,
 		isLiked: React.PropTypes.bool.isRequired
 	},
@@ -38,13 +39,11 @@ const NowPlaying = React.createClass({
 	},
 
 	render: function() {
-		const { artist, title, src, isPlaying, isLiked } = this.props;
-		const style = {
-			backgroundImage: {src}
-		};
+		const { artist, title, image, isPlaying, isLiked } = this.props;
 
 		return (
-			<div className='now-playing' style={style}>
+			<div className='now-playing'>
+				<img src={image} alt={title + ': ' + artist}/>
 				<span className='title'>
 					{title}
 				</span>
