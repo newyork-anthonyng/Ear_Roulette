@@ -14,12 +14,20 @@ const NowPlaying = React.createClass({
 		isLiked: React.PropTypes.bool.isRequired
 	},
 
+	componentDidMount: function() {
+		this.audio.addEventListener('ended', ()  => {
+			console.log('%c song ended', 'background-color: lightpink;');
+		});
+	},
+
 	handlePlayClick: function() {
 		this.props.playSong();
+		this.audio.play();
 	},
 
 	handlePauseClick: function() {
 		this.props.pauseSong();
+		this.audio.pause();
 	},
 
 	handleLikeClick: function() {
@@ -39,7 +47,7 @@ const NowPlaying = React.createClass({
 	},
 
 	render: function() {
-		const { artist, title, image, isPlaying, isLiked } = this.props;
+		const { artist, title, image, preview, isPlaying, isLiked } = this.props;
 
 		return (
 			<div className='now-playing'>
@@ -66,6 +74,10 @@ const NowPlaying = React.createClass({
 					Like
 				</button>
 				}
+				<audio
+					ref={(ref) => this.audio = ref}
+					src={preview}
+				/>
 			</div>
 		);
 	}

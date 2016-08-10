@@ -11,15 +11,17 @@ import { NowPlaying } from '../../../src/components/NowPlaying';
 import { expect } from 'chai';
 
 describe('NowPlaying', () => {
-	it('renders title, artist, album art, play button and like button', () => {
+	it('renders title, artist, album art, play and like button, and audio', () => {
 		const title = 'Baby';
 		const artist = 'Justin Bieber';
 		const image = 'foo-image';
+		const preview = 'foo-preview';
 		const component = renderIntoDocument(
 			<NowPlaying
 				title={title}
 				artist={artist}
 				image={image}
+				preview={preview}
 			/>
 		);
 
@@ -27,12 +29,15 @@ describe('NowPlaying', () => {
 		const artistText = scryRenderedDOMComponentsWithClass(component, 'artist')[0].textContent;
 		const albumArt = scryRenderedDOMComponentsWithTag(component, 'img');
 		const buttonEle = scryRenderedDOMComponentsWithTag(component, 'button');
+		const audioEle = scryRenderedDOMComponentsWithTag(component, 'audio');
 
 		expect(titleText).to.equal('Baby');
 		expect(artistText).to.equal('Justin Bieber');
 		expect(albumArt.length).to.equal(1);
 		expect(albumArt[0].src).to.equal('foo-image');
 		expect(buttonEle.length).to.equal(2);
+		expect(audioEle.length).to.equal(1);
+		expect(audioEle[0].src).to.equal('foo-preview');
 	});
 
 	it('renders play button when paused, and pause button when playing', () => {
