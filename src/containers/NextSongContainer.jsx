@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import { NextSong } from '../components/NextSong';
 
 const mapStateToProps = (state) => {
+	const nextSong = state.songs[1];
+
 	return {
-		title: state.songs[1]['title'],
-		artist: state.songs[1]['artist']
+		title: nextSong ? nextSong['title'] : '',
+		artist: nextSong ? nextSong['artist']: ''
 	};
 };
 

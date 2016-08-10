@@ -6,6 +6,7 @@ const NowPlaying = React.createClass({
 		pauseSong: React.PropTypes.func.isRequired,
 		likeSong: React.PropTypes.func.isRequired,
 		unlikeSong: React.PropTypes.func.isRequired,
+		nextSong: React.PropTypes.func.isRequired,
 		artist: React.PropTypes.string.isRequired,
 		title: React.PropTypes.string.isRequired,
 		image: React.PropTypes.string.isRequired,
@@ -15,8 +16,12 @@ const NowPlaying = React.createClass({
 	},
 
 	componentDidMount: function() {
+		if(!this.audio) return;
+
 		this.audio.addEventListener('ended', ()  => {
 			console.log('%c song ended', 'background-color: lightpink;');
+			this.props.nextSong();
+			if(this.audio) this.audio.play();
 		});
 	},
 
@@ -74,10 +79,13 @@ const NowPlaying = React.createClass({
 					Like
 				</button>
 				}
+				{preview !== '' ?
 				<audio
 					ref={(ref) => this.audio = ref}
 					src={preview}
-				/>
+				/>:
+				null
+				}
 			</div>
 		);
 	}
