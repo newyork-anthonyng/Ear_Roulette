@@ -1,3 +1,4 @@
+export const LOAD_DATA = 'LOAD_DATA';
 export const ADD_SONGS = 'ADD_SONGS';
 export const NEXT_SONG = 'NEXT_SONG';
 export const LIKE_SONG = 'LIKE_SONG';
@@ -5,6 +6,13 @@ export const UNLIKE_SONG = 'UNLIKE_SONG';
 export const ADD_ARTIST = 'ADD_ARTIST';
 export const REMOVE_ARTIST = 'REMOVE_ARTIST';
 export const TOGGLE_PLAYING = 'TOGGLE_PLAYING';
+
+export function loadData(data) {
+	return {
+		type: LOAD_DATA,
+		data: data
+	};
+};
 
 export function addSongs(songs) {
 	return {

@@ -1,10 +1,13 @@
 import {
+	LOAD_DATA,
 	LIKE_SONG,
 	UNLIKE_SONG
 } from '../actions';
 
 export default function(state = [], action) {
 	switch(action.type) {
+		case LOAD_DATA:
+			return action.data.likedSongs;
 		case LIKE_SONG:
 			return [
 				...state,
