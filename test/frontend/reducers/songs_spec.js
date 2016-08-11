@@ -89,6 +89,27 @@ describe('songs', () => {
 				]
 			});
 		});
+
+		it('should return original state if nothing was loaded', () => {
+			const initialState = {
+				isPlaying: false,
+				songs: [],
+				likedSongs: [],
+				likedArtists: ['Adele']
+			};
+			const action = {
+				action: LOAD_DATA,
+				data: ''
+			};
+			const nextState = reducer(initialState, action);
+
+			expect(nextState).to.deep.equal({
+				isPlaying: false,
+				songs: [],
+				likedSongs: [],
+				likedArtists: ['Adele']
+			});
+		});
 	});
 
 	describe('#ADD_SONGS', () => {

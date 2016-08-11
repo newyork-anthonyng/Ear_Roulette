@@ -47,7 +47,9 @@ describe('Utility', () => {
 	describe('#loadSongs', () => {
 		beforeEach(() => {
 			const expectedValue = {
-				data: 'foobar'
+				data: {
+					songs: 'foobar'
+				}
 			};
 			sinon.stub(axios, 'get', () => ({
 				then: (fn) => { fn(expectedValue) }

@@ -15,7 +15,7 @@ const Utility = (function() {
 	const loadSongs = (callback) => {
 		axios.get('/get_songs')
 			.then((response) => {
-				callback(response.data);
+				callback(response.data.songs);
 			});
 	};
 
