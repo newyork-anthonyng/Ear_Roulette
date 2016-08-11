@@ -1,3 +1,4 @@
+import axios from 'axios';
 const STORAGE_KEY = 'ear_roulette';
 
 const Utility = (function() {
@@ -11,9 +12,17 @@ const Utility = (function() {
 		return JSON.parse(dataJSON);
 	};
 
+	const loadSongs = (callback) => {
+		axios.get('/get_songs')
+			.then((response) => {
+				callback(response.data);
+			});
+	};
+
 	return {
 		saveToLocalStorage: saveToLocalStorage,
-		loadFromLocalStorage: loadFromLocalStorage
+		loadFromLocalStorage: loadFromLocalStorage,
+		loadSongs: loadSongs
 	};
 })();
 

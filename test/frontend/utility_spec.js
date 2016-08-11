@@ -1,6 +1,7 @@
 import { Utility } from '../../src/utility';
 import { expect } from 'chai';
 import sinon from 'sinon';
+import axios from 'axios';
 
 describe('Utility', () => {
 	describe('#saveToLocalStorage', () => {
@@ -40,6 +41,36 @@ describe('Utility', () => {
 
 			expect(typeof data).to.equal('object');
 			expect(data['foo']).to.equal('bar');
+		});
+	});
+
+	describe('#loadSongs', () => {
+		beforeEach(() => {
+			const expectedValue = {
+				data: 'foobar'
+			};
+			sinon.stub(axios, 'get', () => ({
+				then: (fn) => { fn(expectedValue) }
+			}));
+		});
+
+		afterEach(() => {
+			axios.get.restore();
+		});
+
+		it('should make a request to /get_songs', () => {
+			Utility.loadSongs(() => {});
+
+			expect(axios.get.calledOnce).to.equal(true);
+			expect(axios.get.getCall(0).args[0]).to.equal('/get_songs');
+		});
+
+		it('should run callback with data', () => {
+			const callback = sinon.spy();
+			Utility.loadSongs(callback);
+
+			expect(callback.calledOnce).to.equal(true);
+			expect(callback.getCall(0).args[0]).to.equal('foobar');
 		});
 	});
 });
