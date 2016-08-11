@@ -8,6 +8,7 @@ import { NowPlayingContainer } from './containers/NowPlayingContainer';
 import { NextSongContainer } from './containers/NextSongContainer';
 import { LikedSongListContainer } from './containers/LikedSongListContainer';
 import { AddArtistContainer } from './containers/AddArtistContainer';
+import { Utility } from './utility';
 
 const store = createStore(reducer);
 store.dispatch({
@@ -29,6 +30,11 @@ store.dispatch({
 });
 
 const App = React.createClass({
+	componentDidMount: function() {
+		console.log('App.jsx did mount');
+		Utility.loadSongs(console.log);
+	},
+
 	render: function() {
 		return (
 			<div>
