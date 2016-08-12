@@ -21,10 +21,10 @@ app.get('/get_songs', (req, res) => {
 				preview: 'https://p.scdn.co/mp3-preview/4d80119d75592741b76faf04fe294b2e02cb88ee'
 			},
 			{
-				title: 'My Shot',
+				title: 'Guns and Ships',
 				artist: 'Original Broadway Cast of Hamilton',
 				image: 'https://i.scdn.co/image/cab99e12568f975eacaf11dac9493d7c07e51e4e',
-				preview: 'https://p.scdn.co/mp3-preview/4d80119d75592741b76faf04fe294b2e02cb88ee'
+				preview: 'https://p.scdn.co/mp3-preview/06062a76220ae6d7df233663fe24d49d45d6dee0'
 			},
 			{
 				title: 'My Shot',
@@ -33,10 +33,22 @@ app.get('/get_songs', (req, res) => {
 				preview: 'https://p.scdn.co/mp3-preview/4d80119d75592741b76faf04fe294b2e02cb88ee'
 			},
 			{
+				title: 'Guns and Ships',
+				artist: 'Original Broadway Cast of Hamilton',
+				image: 'https://i.scdn.co/image/cab99e12568f975eacaf11dac9493d7c07e51e4e',
+				preview: 'https://p.scdn.co/mp3-preview/06062a76220ae6d7df233663fe24d49d45d6dee0'
+			},
+			{
 				title: 'My Shot',
 				artist: 'Original Broadway Cast of Hamilton',
 				image: 'https://i.scdn.co/image/cab99e12568f975eacaf11dac9493d7c07e51e4e',
 				preview: 'https://p.scdn.co/mp3-preview/4d80119d75592741b76faf04fe294b2e02cb88ee'
+			},
+			{
+				title: 'Guns and Ships',
+				artist: 'Original Broadway Cast of Hamilton',
+				image: 'https://i.scdn.co/image/cab99e12568f975eacaf11dac9493d7c07e51e4e',
+				preview: 'https://p.scdn.co/mp3-preview/06062a76220ae6d7df233663fe24d49d45d6dee0'
 			},
 			{
 				title: 'My Shot',
