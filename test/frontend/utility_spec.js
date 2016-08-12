@@ -7,7 +7,10 @@ describe('Utility', () => {
 	describe('#saveToLocalStorage', () => {
 		beforeEach(() => {
 			window.localStorage = {
-				setItem: sinon.spy()
+				setItem: sinon.spy(),
+				getItem: function() {
+					return '{"foo":"bar"}';
+				}
 			};
 		});
 
@@ -20,6 +23,15 @@ describe('Utility', () => {
 			expect(window.localStorage.setItem.callCount).to.equal(1);
 			expect(window.localStorage.setItem.getCall(0).args[0]).to.equal('ear_roulette');
 			expect(window.localStorage.setItem.getCall(0).args[1]).to.equal('{"foo":"bar"}');
+		});
+
+		it('should merge existing data with updated values that are passed in', () => {
+			const argument = {
+				xoo: 'yoo'
+			};
+			Utility.saveToLocalStorage(argument);
+
+			expect(window.localStorage.setItem.getCall(0).args[1]).to.equal('{"foo":"bar","xoo":"yoo"}');
 		});
 	});
 

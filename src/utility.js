@@ -3,7 +3,10 @@ const STORAGE_KEY = 'ear_roulette';
 
 const Utility = (function() {
 	const saveToLocalStorage = (data) => {
-		const dataJSON = JSON.stringify(data);
+		let existingData = loadFromLocalStorage();
+		const newData = Object.assign({}, existingData, data);
+		const dataJSON = JSON.stringify(newData);
+
 		window.localStorage.setItem(STORAGE_KEY, dataJSON);
 	};
 
