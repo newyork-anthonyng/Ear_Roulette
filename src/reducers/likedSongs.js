@@ -7,7 +7,7 @@ import {
 export default function(state = [], action) {
 	switch(action.type) {
 		case LOAD_DATA:
-			return action.data.likedSongs;
+			return action.data.likedSongs || state;
 		case LIKE_SONG:
 			return [
 				...state,

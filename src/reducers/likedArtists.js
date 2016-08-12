@@ -7,7 +7,7 @@ import {
 export default function(state = [], action) {
 	switch(action.type) {
 		case LOAD_DATA:
-			return action.data.likedArtists;
+			return action.data.likedArtists || state;
 		case ADD_ARTIST:
 			return [
 				...state,

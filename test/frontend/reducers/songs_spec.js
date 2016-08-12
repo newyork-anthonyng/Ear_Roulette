@@ -99,7 +99,7 @@ describe('songs', () => {
 			};
 			const action = {
 				action: LOAD_DATA,
-				data: ''
+				data: undefined
 			};
 			const nextState = reducer(initialState, action);
 

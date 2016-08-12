@@ -7,7 +7,7 @@ import {
 export default function(state = [], action) {
 	switch(action.type) {
 		case LOAD_DATA:
-			return action.data.songs;
+			return action.data.songs || state;
 		case ADD_SONGS:
 			return [
 				...state,
