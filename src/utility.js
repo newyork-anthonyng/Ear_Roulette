@@ -9,7 +9,7 @@ const Utility = (function() {
 
 	const loadFromLocalStorage = () => {
 		const dataJSON = window.localStorage.getItem(STORAGE_KEY);
-		return JSON.parse(dataJSON);
+		return JSON.parse(dataJSON) || {};
 	};
 
 	const loadSongs = (callback) => {
