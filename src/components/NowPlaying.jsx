@@ -15,16 +15,6 @@ const NowPlaying = React.createClass({
 		isLiked: React.PropTypes.bool.isRequired
 	},
 
-	componentDidMount: function() {
-		if(!this.audio) return;
-
-		this.audio.addEventListener('ended', ()  => {
-			console.log('%c song ended', 'background-color: lightpink;');
-			this.props.nextSong();
-			if(this.audio) this.audio.play();
-		});
-	},
-
 	handlePlayClick: function() {
 		this.props.playSong();
 		this.audio.play();
@@ -49,6 +39,22 @@ const NowPlaying = React.createClass({
 			artist: this.props.artist
 		};
 		this.props.unlikeSong(song);
+	},
+
+	handleSongLoaded: function() {
+		if(this.props.isPlaying) {
+			this.handlePlayClick();
+		}
+	},
+
+	handleSongEnd: function() {
+		this.props.nextSong();
+	},
+
+	componentWillReceiveProps: function(nextProps) {
+		if(nextProps.preview === '') {
+			this.props.pauseSong();
+		}
 	},
 
 	render: function() {
@@ -81,6 +87,8 @@ const NowPlaying = React.createClass({
 				}
 				{preview !== '' ?
 				<audio
+					onCanPlay={this.handleSongLoaded}
+					onEnded={this.handleSongEnd}
 					ref={(ref) => this.audio = ref}
 					src={preview}
 				/>:
