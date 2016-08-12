@@ -1,1 +1,4 @@
 /node_modules
+dist/*.hot-update.js
+dist/*.hot-update.json
+dist/bundle.js
