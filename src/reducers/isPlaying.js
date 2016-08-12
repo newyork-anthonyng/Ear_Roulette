@@ -5,7 +5,11 @@ import {
 export default function(state = false, action) {
 	switch(action.type) {
 		case TOGGLE_PLAYING:
-			return !state;
+			if(action.isPlaying !== undefined) {
+				return action.isPlaying;
+			} else {
+				return !state;
+			}
 		default:
 			return state;
 	};

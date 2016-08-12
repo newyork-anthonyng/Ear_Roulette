@@ -26,10 +26,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		playSong: () => {
-			dispatch(togglePlaying());
+			dispatch(togglePlaying(true));
 		},
 		pauseSong: () => {
-			dispatch(togglePlaying());
+			dispatch(togglePlaying(false));
 		},
 		likeSong: (song) => {
 			dispatch(likeSong(song));

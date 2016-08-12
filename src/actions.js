@@ -55,8 +55,9 @@ export function removeArtist(artist) {
 	};
 };
 
-export function togglePlaying() {
+export function togglePlaying(isPlaying) {
 	return {
-		type: TOGGLE_PLAYING
+		type: TOGGLE_PLAYING,
+		isPlaying: isPlaying
 	};
 };

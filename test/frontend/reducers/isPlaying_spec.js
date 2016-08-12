@@ -33,5 +33,37 @@ describe('isPlaying', () => {
 				likedArtists: []
 			});
 		});
+
+		it('should handle boolean values if passed in', () => {
+			const initialState = {
+				isPlaying: false,
+				songs: [],
+				likedSongs: [],
+				likedArtists: []
+			};
+			let action = {
+				type: TOGGLE_PLAYING,
+				isPlaying: false
+			};
+			let nextState = reducer(initialState, action);
+			expect(nextState).to.deep.equal({
+				isPlaying: false,
+				songs: [],
+				likedSongs: [],
+				likedArtists: []
+			});
+
+			action = {
+				type: TOGGLE_PLAYING,
+				isPlaying: true
+			};
+			nextState = reducer(initialState, action);
+			expect(nextState).to.deep.equal({
+				isPlaying: true,
+				songs: [],
+				likedSongs: [],
+				likedArtists: []
+			});
+		});
 	});
 });
