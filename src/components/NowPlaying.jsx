@@ -31,6 +31,7 @@ const NowPlaying = React.createClass({
 			artist: this.props.artist
 		};
 		this.props.likeSong(song);
+		this.props.updateStorage();
 	},
 
 	handleUnlikeClick: function() {
@@ -39,6 +40,7 @@ const NowPlaying = React.createClass({
 			artist: this.props.artist
 		};
 		this.props.unlikeSong(song);
+		this.props.updateStorage();
 	},
 
 	handleSongLoaded: function() {

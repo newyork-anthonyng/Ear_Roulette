@@ -28,13 +28,26 @@ const App = React.createClass({
 		});
 	},
 
+	updateStorage: function() {
+		const { likedSongs, likedArtists } = store.getState();
+		const updatedInfo = {
+			likedSongs: likedSongs,
+			likedArtists: likedArtists
+		};
+		Utility.saveToLocalStorage(updatedInfo);
+	},
+
 	render: function() {
 		return (
 			<div>
-				<NowPlayingContainer />
+				<NowPlayingContainer
+					updateStorage={this.updateStorage}
+				/>
 				<br />
 				<NextSongContainer />
-				<LikedSongListContainer />
+				<LikedSongListContainer
+					updateStorage={this.updateStorage}
+				/>
 				<br />
 				<AddArtistContainer />
 			</div>

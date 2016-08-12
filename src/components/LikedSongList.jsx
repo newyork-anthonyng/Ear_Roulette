@@ -17,7 +17,9 @@ const LikedSongList = React.createClass({
 						<li key={index}>
 							<LikedSong
 								{...likedSong}
-								deleteSong={deleteSong} />
+								deleteSong={deleteSong}
+								updateStorage={this.props.updateStorage}
+							/>
 						</li>
 					))}
 				</ul>
