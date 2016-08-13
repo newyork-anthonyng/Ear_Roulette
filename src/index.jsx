@@ -1,53 +1,48 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
 import reducer from './reducers/index';
+import { updateStorage } from './reducers/updateStorageMiddleware';
 import { NowPlayingContainer } from './containers/NowPlayingContainer';
 import { NextSongContainer } from './containers/NextSongContainer';
 import { LikedSongListContainer } from './containers/LikedSongListContainer';
 import { AddArtistContainer } from './containers/AddArtistContainer';
 import { Utility } from './utility';
+import {
+	LOAD_DATA,
+	ADD_SONGS
+} from './actions'
 
-const store = createStore(reducer);
+const store = createStore(
+	reducer,
+	applyMiddleware(updateStorage)
+);
 
 const App = React.createClass({
 	componentDidMount: function() {
 		const data = Utility.loadFromLocalStorage();
 		store.dispatch({
-			type: 'LOAD_DATA',
+			type: LOAD_DATA,
 			data: data
 		});
 
 		Utility.loadSongs((songs) => {
 			store.dispatch({
-				type: 'ADD_SONGS',
+				type: ADD_SONGS,
 				songs: songs
 			});
 		});
 	},
 
-	updateStorage: function() {
-		const { likedSongs, likedArtists } = store.getState();
-		const updatedInfo = {
-			likedSongs: likedSongs,
-			likedArtists: likedArtists
-		};
-		Utility.saveToLocalStorage(updatedInfo);
-	},
-
 	render: function() {
 		return (
 			<div>
-				<NowPlayingContainer
-					updateStorage={this.updateStorage}
-				/>
+				<NowPlayingContainer />
 				<br />
 				<NextSongContainer />
-				<LikedSongListContainer
-					updateStorage={this.updateStorage}
-				/>
+				<LikedSongListContainer />
 				<br />
 				<AddArtistContainer />
 			</div>

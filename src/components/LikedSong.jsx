@@ -19,7 +19,6 @@ const LikedSong = React.createClass({
 		};
 
 		this.props.deleteSong(song);
-		this.props.updateStorage();
 	},
 
 	render: function() {

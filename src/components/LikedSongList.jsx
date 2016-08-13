@@ -18,7 +18,6 @@ const LikedSongList = React.createClass({
 							<LikedSong
 								{...likedSong}
 								deleteSong={deleteSong}
-								updateStorage={this.props.updateStorage}
 							/>
 						</li>
 					))}
