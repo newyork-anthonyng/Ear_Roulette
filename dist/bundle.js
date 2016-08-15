@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "9347ae34b1d04d5421a1"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "275ab2a295f7af6c3879"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -610,52 +610,58 @@
 
 	var _index2 = _interopRequireDefault(_index);
 
-	var _NowPlayingContainer = __webpack_require__(224);
+	var _updateStorageMiddleware = __webpack_require__(224);
 
-	var _NextSongContainer = __webpack_require__(226);
+	var _NowPlayingContainer = __webpack_require__(248);
 
-	var _LikedSongListContainer = __webpack_require__(228);
+	var _NextSongContainer = __webpack_require__(250);
 
-	var _AddArtistContainer = __webpack_require__(231);
+	var _LikedSongListContainer = __webpack_require__(252);
 
-	var _utility = __webpack_require__(236);
+	var _AddArtistContainer = __webpack_require__(255);
+
+	var _utility = __webpack_require__(225);
+
+	var _actions = __webpack_require__(217);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var store = (0, _redux.createStore)(_index2.default);
-	store.dispatch({
-		type: 'ADD_SONGS',
-		songs: [{
-			title: 'Suspicious Minds',
-			artist: 'Elvis Presley',
-			image: 'https://i.scdn.co/image/d2e2148023e8a87b7a2f8d2abdfa936154e470b8',
-			preview: 'https://p.scdn.co/mp3-preview/3742af306537513a4f446d7c8f9cdb1cea6e36d1'
-		}, {
-			title: 'St. Anger',
-			artist: 'Metallica',
-			image: 'https://i.scdn.co/image/502bc1e1726e2594cd0045473e10d9166fa79dd8',
-			preview: 'https://p.scdn.co/mp3-preview/6d00206e32194d15df329d4770e4fa1f2ced3f57'
-		}]
-	});
+	var store = (0, _redux.createStore)(_index2.default, (0, _redux.applyMiddleware)(_updateStorageMiddleware.updateStorage));
 
 	var App = _react2.default.createClass({
 		displayName: 'App',
 
 		componentDidMount: function componentDidMount() {
-			console.log('App.jsx did mount');
-			_utility.Utility.loadSongs(console.log);
+			var data = _utility.Utility.loadFromLocalStorage();
+			store.dispatch({
+				type: _actions.LOAD_DATA,
+				data: data
+			});
+
+			_utility.Utility.loadSongs(function (songs) {
+				store.dispatch({
+					type: _actions.ADD_SONGS,
+					songs: songs
+				});
+			});
 		},
 
 		render: function render() {
 			return _react2.default.createElement(
 				'div',
-				null,
-				_react2.default.createElement(_NowPlayingContainer.NowPlayingContainer, null),
-				_react2.default.createElement('br', null),
-				_react2.default.createElement(_NextSongContainer.NextSongContainer, null),
-				_react2.default.createElement(_LikedSongListContainer.LikedSongListContainer, null),
-				_react2.default.createElement('br', null),
-				_react2.default.createElement(_AddArtistContainer.AddArtistContainer, null)
+				{ className: 'row' },
+				_react2.default.createElement(
+					'div',
+					{ className: 'column-two' },
+					_react2.default.createElement(_NowPlayingContainer.NowPlayingContainer, null)
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'column-two' },
+					_react2.default.createElement(_NextSongContainer.NextSongContainer, null),
+					_react2.default.createElement(_LikedSongListContainer.LikedSongListContainer, null),
+					_react2.default.createElement(_AddArtistContainer.AddArtistContainer, null)
+				)
 			);
 		}
 	});
@@ -24269,7 +24275,11 @@
 
 		switch (action.type) {
 			case _actions.TOGGLE_PLAYING:
-				return !state;
+				if (action.isPlaying !== undefined) {
+					return action.isPlaying;
+				} else {
+					return !state;
+				}
 			default:
 				return state;
 		};
@@ -24356,9 +24366,10 @@
 		};
 	};
 
-	function togglePlaying() {
+	function togglePlaying(isPlaying) {
 		return {
-			type: TOGGLE_PLAYING
+			type: TOGGLE_PLAYING,
+			isPlaying: isPlaying
 		};
 	};
 
@@ -24510,7 +24521,7 @@
 
 		switch (action.type) {
 			case _actions.LOAD_DATA:
-				return action.data.songs;
+				return action.data.songs || state;
 			case _actions.ADD_SONGS:
 				return [].concat(_toConsumableArray(state), _toConsumableArray(action.songs));
 			case _actions.NEXT_SONG:
@@ -24545,7 +24556,7 @@
 
 		switch (action.type) {
 			case _actions.LOAD_DATA:
-				return action.data.likedSongs;
+				return action.data.likedSongs || state;
 			case _actions.LIKE_SONG:
 				return [].concat(_toConsumableArray(state), [action.song]);
 			case _actions.UNLIKE_SONG:
@@ -24583,7 +24594,7 @@
 
 		switch (action.type) {
 			case _actions.LOAD_DATA:
-				return action.data.likedArtists;
+				return action.data.likedArtists || state;
 			case _actions.ADD_ARTIST:
 				return [].concat(_toConsumableArray(state), [action.artist]);
 			case _actions.REMOVE_ARTIST:
@@ -24613,58 +24624,41 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.NowPlayingContainer = undefined;
-
-	var _react = __webpack_require__(82);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(201);
+	exports.updateStorage = undefined;
 
 	var _actions = __webpack_require__(217);
 
-	var _NowPlaying = __webpack_require__(225);
+	var _utility = __webpack_require__(225);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var updateStorage = function updateStorage(store) {
+		return function (next) {
+			return function (action) {
+				var result = next(action);
 
-	var mapStateToProps = function mapStateToProps(state) {
-		var currentSong = state.songs[0];
+				var updateActions = [_actions.LIKE_SONG, _actions.UNLIKE_SONG, _actions.ADD_ARTIST, _actions.REMOVE_ARTIST];
+				var shouldUpdate = updateActions.includes(action.type);
 
-		return {
-			artist: currentSong ? currentSong['artist'] : '',
-			title: currentSong ? currentSong['title'] : '',
-			image: currentSong ? currentSong['image'] : '',
-			preview: currentSong ? currentSong['preview'] : '',
-			isPlaying: state.isPlaying,
-			isLiked: currentSong ? state.likedSongs.filter(function (song) {
-				return song.title === currentSong['title'] && song.artist === currentSong['artist'];
-			}).length >= 1 : false
+				if (shouldUpdate) {
+					var _store$getState = store.getState();
+
+					var likedSongs = _store$getState.likedSongs;
+					var likedArtists = _store$getState.likedArtists;
+
+					var updatedInfo = {
+						likedSongs: likedSongs,
+						likedArtists: likedArtists
+					};
+
+					_utility.Utility.saveToLocalStorage(updatedInfo);
+				}
+				return result;
+			};
 		};
 	};
 
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-		return {
-			playSong: function playSong() {
-				dispatch((0, _actions.togglePlaying)());
-			},
-			pauseSong: function pauseSong() {
-				dispatch((0, _actions.togglePlaying)());
-			},
-			likeSong: function likeSong(song) {
-				dispatch((0, _actions.likeSong)(song));
-			},
-			unlikeSong: function unlikeSong(song) {
-				dispatch((0, _actions.unlikeSong)(song));
-			},
-			nextSong: function nextSong() {
-				dispatch((0, _actions.nextSong)());
-			}
-		};
-	};
+	exports.updateStorage = updateStorage;
 
-	var NowPlayingContainer = exports.NowPlayingContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_NowPlaying.NowPlaying);
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "NowPlayingContainer.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "updateStorageMiddleware.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
 
 /***/ },
@@ -24678,710 +24672,9 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.NowPlaying = undefined;
-
-	var _react = __webpack_require__(82);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var NowPlaying = _react2.default.createClass({
-		displayName: 'NowPlaying',
-
-		propTypes: {
-			playSong: _react2.default.PropTypes.func.isRequired,
-			pauseSong: _react2.default.PropTypes.func.isRequired,
-			likeSong: _react2.default.PropTypes.func.isRequired,
-			unlikeSong: _react2.default.PropTypes.func.isRequired,
-			nextSong: _react2.default.PropTypes.func.isRequired,
-			artist: _react2.default.PropTypes.string.isRequired,
-			title: _react2.default.PropTypes.string.isRequired,
-			image: _react2.default.PropTypes.string.isRequired,
-			preview: _react2.default.PropTypes.string.isRequired,
-			isPlaying: _react2.default.PropTypes.bool.isRequired,
-			isLiked: _react2.default.PropTypes.bool.isRequired
-		},
-
-		componentDidMount: function componentDidMount() {
-			var _this = this;
-
-			if (!this.audio) return;
-
-			this.audio.addEventListener('ended', function () {
-				console.log('%c song ended', 'background-color: lightpink;');
-				_this.props.nextSong();
-				if (_this.audio) _this.audio.play();
-			});
-		},
-
-		handlePlayClick: function handlePlayClick() {
-			this.props.playSong();
-			this.audio.play();
-		},
-
-		handlePauseClick: function handlePauseClick() {
-			this.props.pauseSong();
-			this.audio.pause();
-		},
-
-		handleLikeClick: function handleLikeClick() {
-			var song = {
-				title: this.props.title,
-				artist: this.props.artist
-			};
-			this.props.likeSong(song);
-		},
-
-		handleUnlikeClick: function handleUnlikeClick() {
-			var song = {
-				title: this.props.title,
-				artist: this.props.artist
-			};
-			this.props.unlikeSong(song);
-		},
-
-		render: function render() {
-			var _this2 = this;
-
-			var _props = this.props;
-			var artist = _props.artist;
-			var title = _props.title;
-			var image = _props.image;
-			var preview = _props.preview;
-			var isPlaying = _props.isPlaying;
-			var isLiked = _props.isLiked;
-
-
-			return _react2.default.createElement(
-				'div',
-				{ className: 'now-playing' },
-				_react2.default.createElement('img', { src: image, alt: title + ': ' + artist }),
-				_react2.default.createElement(
-					'span',
-					{ className: 'title' },
-					title
-				),
-				_react2.default.createElement(
-					'span',
-					{ className: 'artist' },
-					artist
-				),
-				isPlaying ? _react2.default.createElement(
-					'button',
-					{ ref: 'pauseSong', onClick: this.handlePauseClick },
-					'Pause'
-				) : _react2.default.createElement(
-					'button',
-					{ ref: 'playSong', onClick: this.handlePlayClick },
-					'Play'
-				),
-				isLiked ? _react2.default.createElement(
-					'button',
-					{ ref: 'unlikeSong', onClick: this.handleUnlikeClick },
-					'Unlike'
-				) : _react2.default.createElement(
-					'button',
-					{ ref: 'likeSong', onClick: this.handleLikeClick },
-					'Like'
-				),
-				preview !== '' ? _react2.default.createElement('audio', {
-					ref: function ref(_ref) {
-						return _this2.audio = _ref;
-					},
-					src: preview
-				}) : null
-			);
-		}
-	});
-
-	exports.NowPlaying = NowPlaying;
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "NowPlaying.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
-
-/***/ },
-/* 226 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.NextSongContainer = undefined;
-
-	var _react = __webpack_require__(82);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(201);
-
-	var _NextSong = __webpack_require__(227);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapStateToProps = function mapStateToProps(state) {
-		var nextSong = state.songs[1];
-
-		return {
-			title: nextSong ? nextSong['title'] : '',
-			artist: nextSong ? nextSong['artist'] : ''
-		};
-	};
-
-	var NextSongContainer = exports.NextSongContainer = (0, _reactRedux.connect)(mapStateToProps)(_NextSong.NextSong);
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "NextSongContainer.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
-
-/***/ },
-/* 227 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.NextSong = undefined;
-
-	var _react = __webpack_require__(82);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var NextSong = _react2.default.createClass({
-		displayName: 'NextSong',
-
-		propTypes: {
-			title: _react2.default.PropTypes.string,
-			artist: _react2.default.PropTypes.string
-		},
-
-		render: function render() {
-			var _props = this.props;
-			var title = _props.title;
-			var artist = _props.artist;
-
-
-			return _react2.default.createElement(
-				'div',
-				{ className: 'next-song' },
-				_react2.default.createElement(
-					'span',
-					{ className: 'title' },
-					title
-				),
-				_react2.default.createElement(
-					'span',
-					{ className: 'artist' },
-					artist
-				)
-			);
-		}
-	});
-
-	exports.NextSong = NextSong;
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "NextSong.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
-
-/***/ },
-/* 228 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.LikedSongListContainer = undefined;
-
-	var _react = __webpack_require__(82);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(201);
-
-	var _actions = __webpack_require__(217);
-
-	var _LikedSongList = __webpack_require__(229);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapStateToProps = function mapStateToProps(state) {
-		return {
-			likedSongs: state.likedSongs
-		};
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-		return {
-			deleteSong: function deleteSong(song) {
-				dispatch((0, _actions.unlikeSong)(song));
-			}
-		};
-	};
-
-	var LikedSongListContainer = exports.LikedSongListContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LikedSongList.LikedSongList);
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "LikedSongListContainer.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
-
-/***/ },
-/* 229 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.LikedSongList = undefined;
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _react = __webpack_require__(82);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _LikedSong = __webpack_require__(230);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var LikedSongList = _react2.default.createClass({
-		displayName: 'LikedSongList',
-
-		propTypes: {
-			likedSongs: _react2.default.PropTypes.array.isRequired,
-			deleteSong: _react2.default.PropTypes.func.isRequired
-		},
-
-		render: function render() {
-			var _props = this.props;
-			var likedSongs = _props.likedSongs;
-			var deleteSong = _props.deleteSong;
-
-
-			return _react2.default.createElement(
-				'div',
-				{ className: 'liked-song-list' },
-				_react2.default.createElement(
-					'ul',
-					null,
-					likedSongs.map(function (likedSong, index) {
-						return _react2.default.createElement(
-							'li',
-							{ key: index },
-							_react2.default.createElement(_LikedSong.LikedSong, _extends({}, likedSong, {
-								deleteSong: deleteSong }))
-						);
-					})
-				)
-			);
-		}
-	});
-
-	exports.LikedSongList = LikedSongList;
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "LikedSongList.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
-
-/***/ },
-/* 230 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.LikedSong = undefined;
-
-	var _react = __webpack_require__(82);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var LikedSong = _react2.default.createClass({
-		displayName: 'LikedSong',
-
-		propTypes: {
-			title: _react2.default.PropTypes.string.isRequired,
-			artist: _react2.default.PropTypes.string.isRequired,
-			deleteSong: _react2.default.PropTypes.func.isRequired
-		},
-
-		createLink: function createLink(title, artist) {
-			return 'youtube.com/' + title + '_' + artist;
-		},
-
-		deleteSong: function deleteSong() {
-			var _props = this.props;
-			var title = _props.title;
-			var artist = _props.artist;
-
-			var song = {
-				title: this.props.title,
-				artist: this.props.artist
-			};
-
-			this.props.deleteSong(song);
-		},
-
-		render: function render() {
-			var _props2 = this.props;
-			var title = _props2.title;
-			var artist = _props2.artist;
-
-
-			return _react2.default.createElement(
-				'div',
-				{ className: 'liked-song' },
-				_react2.default.createElement(
-					'span',
-					{ className: 'title' },
-					title
-				),
-				_react2.default.createElement(
-					'span',
-					{ className: 'artist' },
-					artist
-				),
-				_react2.default.createElement(
-					'span',
-					{ className: 'link' },
-					this.createLink(title, artist)
-				),
-				_react2.default.createElement(
-					'button',
-					{ ref: 'deleteSong', onClick: this.deleteSong },
-					'Delete'
-				)
-			);
-		}
-	});
-
-	exports.LikedSong = LikedSong;
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "LikedSong.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
-
-/***/ },
-/* 231 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.AddArtistContainer = undefined;
-
-	var _react = __webpack_require__(82);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(201);
-
-	var _AddArtist = __webpack_require__(232);
-
-	var _actions = __webpack_require__(217);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapStateToProps = function mapStateToProps(state) {
-		return {
-			likedArtists: state.likedArtists
-		};
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-		return {
-			deleteArtist: function deleteArtist(artist) {
-				dispatch((0, _actions.removeArtist)(artist));
-			},
-			addArtist: function addArtist(artist) {
-				dispatch((0, _actions.addArtist)(artist));
-			}
-		};
-	};
-
-	var AddArtistContainer = exports.AddArtistContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_AddArtist.AddArtist);
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "AddArtistContainer.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
-
-/***/ },
-/* 232 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.AddArtist = undefined;
-
-	var _react = __webpack_require__(82);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _ArtistInput = __webpack_require__(233);
-
-	var _LikedArtistList = __webpack_require__(234);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var AddArtist = _react2.default.createClass({
-		displayName: 'AddArtist',
-
-		propTypes: {
-			likedArtists: _react2.default.PropTypes.array.isRequired,
-			deleteArtist: _react2.default.PropTypes.func.isRequired,
-			addArtist: _react2.default.PropTypes.func.isRequired
-		},
-
-		render: function render() {
-			var _props = this.props;
-			var likedArtists = _props.likedArtists;
-			var deleteArtist = _props.deleteArtist;
-			var addArtist = _props.addArtist;
-
-
-			return _react2.default.createElement(
-				'div',
-				{ className: 'add-artist' },
-				_react2.default.createElement(_ArtistInput.ArtistInput, { addArtist: addArtist }),
-				_react2.default.createElement(_LikedArtistList.LikedArtistList, {
-					likedArtists: likedArtists,
-					deleteArtist: deleteArtist
-				})
-			);
-		}
-	});
-
-	exports.AddArtist = AddArtist;
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "AddArtist.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
-
-/***/ },
-/* 233 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.ArtistInput = undefined;
-
-	var _react = __webpack_require__(82);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var ArtistInput = _react2.default.createClass({
-		displayName: 'ArtistInput',
-
-		propTypes: {
-			addArtist: _react2.default.PropTypes.func.isRequired
-		},
-
-		getInitialState: function getInitialState() {
-			return {
-				artist: ''
-			};
-		},
-
-		handleChange: function handleChange(e) {
-			this.setState({
-				artist: e.target.value
-			});
-		},
-
-		handleAddClick: function handleAddClick() {
-			this.props.addArtist(this.state.artist);
-			this.setState({
-				artist: ''
-			});
-		},
-
-		render: function render() {
-			return _react2.default.createElement(
-				'div',
-				{ className: 'artist-input' },
-				_react2.default.createElement('input', {
-					type: 'text',
-					value: this.state.artist,
-					onChange: this.handleChange
-				}),
-				_react2.default.createElement(
-					'button',
-					{ ref: 'addArtist', onClick: this.handleAddClick },
-					'Add Artist'
-				)
-			);
-		}
-	});
-
-	exports.ArtistInput = ArtistInput;
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ArtistInput.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
-
-/***/ },
-/* 234 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.LikedArtistList = undefined;
-
-	var _react = __webpack_require__(82);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _LikedArtist = __webpack_require__(235);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var LikedArtistList = _react2.default.createClass({
-		displayName: 'LikedArtistList',
-
-		propTypes: {
-			likedArtists: _react2.default.PropTypes.array.isRequired,
-			deleteArtist: _react2.default.PropTypes.func.isRequired
-		},
-
-		render: function render() {
-			var _props = this.props;
-			var likedArtists = _props.likedArtists;
-			var deleteArtist = _props.deleteArtist;
-
-
-			return _react2.default.createElement(
-				'div',
-				{ className: 'liked-artist-list' },
-				_react2.default.createElement(
-					'ul',
-					null,
-					likedArtists.map(function (likedArtist, index) {
-						return _react2.default.createElement(
-							'li',
-							{ key: index },
-							_react2.default.createElement(_LikedArtist.LikedArtist, {
-								artist: likedArtist,
-								deleteArtist: deleteArtist })
-						);
-					})
-				)
-			);
-		}
-	});
-
-	exports.LikedArtistList = LikedArtistList;
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "LikedArtistList.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
-
-/***/ },
-/* 235 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.LikedArtist = undefined;
-
-	var _react = __webpack_require__(82);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var LikedArtist = _react2.default.createClass({
-		displayName: 'LikedArtist',
-
-		propTypes: {
-			artist: _react2.default.PropTypes.string.isRequired,
-			deleteArtist: _react2.default.PropTypes.func.isRequired
-		},
-
-		deleteArtist: function deleteArtist() {
-			this.props.deleteArtist(this.props.artist);
-		},
-
-		render: function render() {
-			var artist = this.props.artist;
-
-
-			return _react2.default.createElement(
-				'div',
-				{ className: 'liked-artist' },
-				_react2.default.createElement(
-					'span',
-					{ className: 'artist' },
-					artist
-				),
-				_react2.default.createElement(
-					'button',
-					{ ref: 'deleteArtist', onClick: this.deleteArtist },
-					'Delete'
-				)
-			);
-		}
-	});
-
-	exports.LikedArtist = LikedArtist;
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "LikedArtist.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
-
-/***/ },
-/* 236 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
 	exports.Utility = undefined;
 
-	var _axios = __webpack_require__(237);
+	var _axios = __webpack_require__(226);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
@@ -25391,18 +24684,21 @@
 
 	var Utility = function () {
 		var saveToLocalStorage = function saveToLocalStorage(data) {
-			var dataJSON = JSON.stringify(data);
+			var existingData = loadFromLocalStorage();
+			var newData = Object.assign({}, existingData, data);
+			var dataJSON = JSON.stringify(newData);
+
 			window.localStorage.setItem(STORAGE_KEY, dataJSON);
 		};
 
 		var loadFromLocalStorage = function loadFromLocalStorage() {
 			var dataJSON = window.localStorage.getItem(STORAGE_KEY);
-			return JSON.parse(dataJSON);
+			return JSON.parse(dataJSON) || {};
 		};
 
 		var loadSongs = function loadSongs(callback) {
 			_axios2.default.get('/get_songs').then(function (response) {
-				callback(response.data);
+				callback(response.data.songs);
 			});
 		};
 
@@ -25419,20 +24715,20 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
 
 /***/ },
-/* 237 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(238);
+	module.exports = __webpack_require__(227);
 
 /***/ },
-/* 238 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(239);
-	var bind = __webpack_require__(240);
-	var Axios = __webpack_require__(241);
+	var utils = __webpack_require__(228);
+	var bind = __webpack_require__(229);
+	var Axios = __webpack_require__(230);
 
 	/**
 	 * Create an instance of Axios
@@ -25468,16 +24764,16 @@
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(258);
+	axios.spread = __webpack_require__(247);
 
 
 /***/ },
-/* 239 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var bind = __webpack_require__(240);
+	var bind = __webpack_require__(229);
 
 	/*global toString:true*/
 
@@ -25777,7 +25073,7 @@
 
 
 /***/ },
-/* 240 */
+/* 229 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25794,17 +25090,17 @@
 
 
 /***/ },
-/* 241 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(242);
-	var utils = __webpack_require__(239);
-	var InterceptorManager = __webpack_require__(244);
-	var dispatchRequest = __webpack_require__(245);
-	var isAbsoluteURL = __webpack_require__(256);
-	var combineURLs = __webpack_require__(257);
+	var defaults = __webpack_require__(231);
+	var utils = __webpack_require__(228);
+	var InterceptorManager = __webpack_require__(233);
+	var dispatchRequest = __webpack_require__(234);
+	var isAbsoluteURL = __webpack_require__(245);
+	var combineURLs = __webpack_require__(246);
 
 	/**
 	 * Create a new instance of Axios
@@ -25885,13 +25181,13 @@
 
 
 /***/ },
-/* 242 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(239);
-	var normalizeHeaderName = __webpack_require__(243);
+	var utils = __webpack_require__(228);
+	var normalizeHeaderName = __webpack_require__(232);
 
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -25963,12 +25259,12 @@
 
 
 /***/ },
-/* 243 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(239);
+	var utils = __webpack_require__(228);
 
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -25981,12 +25277,12 @@
 
 
 /***/ },
-/* 244 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(239);
+	var utils = __webpack_require__(228);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -26039,13 +25335,13 @@
 
 
 /***/ },
-/* 245 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(239);
-	var transformData = __webpack_require__(246);
+	var utils = __webpack_require__(228);
+	var transformData = __webpack_require__(235);
 
 	/**
 	 * Dispatch a request to the server using whichever adapter
@@ -26086,10 +25382,10 @@
 	    adapter = config.adapter;
 	  } else if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(247);
+	    adapter = __webpack_require__(236);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(247);
+	    adapter = __webpack_require__(236);
 	  }
 
 	  return Promise.resolve(config)
@@ -26121,12 +25417,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 246 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(239);
+	var utils = __webpack_require__(228);
 
 	/**
 	 * Transform the data for a request or a response
@@ -26147,18 +25443,18 @@
 
 
 /***/ },
-/* 247 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(239);
-	var settle = __webpack_require__(248);
-	var buildURL = __webpack_require__(251);
-	var parseHeaders = __webpack_require__(252);
-	var isURLSameOrigin = __webpack_require__(253);
-	var createError = __webpack_require__(249);
-	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(254);
+	var utils = __webpack_require__(228);
+	var settle = __webpack_require__(237);
+	var buildURL = __webpack_require__(240);
+	var parseHeaders = __webpack_require__(241);
+	var isURLSameOrigin = __webpack_require__(242);
+	var createError = __webpack_require__(238);
+	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(243);
 
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -26252,7 +25548,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(255);
+	      var cookies = __webpack_require__(244);
 
 	      // Add xsrf header
 	      var xsrfValue = config.withCredentials || isURLSameOrigin(config.url) ?
@@ -26314,12 +25610,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 248 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var createError = __webpack_require__(249);
+	var createError = __webpack_require__(238);
 
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -26345,12 +25641,12 @@
 
 
 /***/ },
-/* 249 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var enhanceError = __webpack_require__(250);
+	var enhanceError = __webpack_require__(239);
 
 	/**
 	 * Create an Error with the specified message, config, error code, and response.
@@ -26368,7 +25664,7 @@
 
 
 /***/ },
-/* 250 */
+/* 239 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26393,12 +25689,12 @@
 
 
 /***/ },
-/* 251 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(239);
+	var utils = __webpack_require__(228);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -26467,12 +25763,12 @@
 
 
 /***/ },
-/* 252 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(239);
+	var utils = __webpack_require__(228);
 
 	/**
 	 * Parse headers into an object
@@ -26510,12 +25806,12 @@
 
 
 /***/ },
-/* 253 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(239);
+	var utils = __webpack_require__(228);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -26584,7 +25880,7 @@
 
 
 /***/ },
-/* 254 */
+/* 243 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26626,12 +25922,12 @@
 
 
 /***/ },
-/* 255 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(239);
+	var utils = __webpack_require__(228);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -26685,7 +25981,7 @@
 
 
 /***/ },
-/* 256 */
+/* 245 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26705,7 +26001,7 @@
 
 
 /***/ },
-/* 257 */
+/* 246 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26723,7 +26019,7 @@
 
 
 /***/ },
-/* 258 */
+/* 247 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26754,6 +26050,783 @@
 	  };
 	};
 
+
+/***/ },
+/* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.NowPlayingContainer = undefined;
+
+	var _react = __webpack_require__(82);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(201);
+
+	var _actions = __webpack_require__(217);
+
+	var _NowPlaying = __webpack_require__(249);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+		var currentSong = state.songs[0];
+
+		return {
+			artist: currentSong ? currentSong['artist'] : '',
+			title: currentSong ? currentSong['title'] : '',
+			image: currentSong ? currentSong['image'] : '',
+			preview: currentSong ? currentSong['preview'] : '',
+			isPlaying: state.isPlaying,
+			isLiked: currentSong ? state.likedSongs.filter(function (song) {
+				return song.title === currentSong['title'] && song.artist === currentSong['artist'];
+			}).length >= 1 : false
+		};
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+		return {
+			playSong: function playSong() {
+				dispatch((0, _actions.togglePlaying)(true));
+			},
+			pauseSong: function pauseSong() {
+				dispatch((0, _actions.togglePlaying)(false));
+			},
+			likeSong: function likeSong(song) {
+				dispatch((0, _actions.likeSong)(song));
+			},
+			unlikeSong: function unlikeSong(song) {
+				dispatch((0, _actions.unlikeSong)(song));
+			},
+			nextSong: function nextSong() {
+				dispatch((0, _actions.nextSong)());
+			}
+		};
+	};
+
+	var NowPlayingContainer = exports.NowPlayingContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_NowPlaying.NowPlaying);
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "NowPlayingContainer.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ },
+/* 249 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.NowPlaying = undefined;
+
+	var _react = __webpack_require__(82);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NowPlaying = _react2.default.createClass({
+		displayName: 'NowPlaying',
+
+		propTypes: {
+			playSong: _react2.default.PropTypes.func.isRequired,
+			pauseSong: _react2.default.PropTypes.func.isRequired,
+			likeSong: _react2.default.PropTypes.func.isRequired,
+			unlikeSong: _react2.default.PropTypes.func.isRequired,
+			nextSong: _react2.default.PropTypes.func.isRequired,
+			artist: _react2.default.PropTypes.string.isRequired,
+			title: _react2.default.PropTypes.string.isRequired,
+			image: _react2.default.PropTypes.string.isRequired,
+			preview: _react2.default.PropTypes.string.isRequired,
+			isPlaying: _react2.default.PropTypes.bool.isRequired,
+			isLiked: _react2.default.PropTypes.bool.isRequired
+		},
+
+		handlePlayClick: function handlePlayClick() {
+			this.props.playSong();
+			this.audio.play();
+		},
+
+		handlePauseClick: function handlePauseClick() {
+			this.props.pauseSong();
+			this.audio.pause();
+		},
+
+		handleLikeClick: function handleLikeClick() {
+			var song = {
+				title: this.props.title,
+				artist: this.props.artist
+			};
+			this.props.likeSong(song);
+		},
+
+		handleUnlikeClick: function handleUnlikeClick() {
+			var song = {
+				title: this.props.title,
+				artist: this.props.artist
+			};
+			this.props.unlikeSong(song);
+		},
+
+		handleSongLoaded: function handleSongLoaded() {
+			if (this.props.isPlaying) {
+				this.handlePlayClick();
+			}
+		},
+
+		handleSongEnd: function handleSongEnd() {
+			this.props.nextSong();
+		},
+
+		componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+			if (nextProps.preview === '') {
+				this.props.pauseSong();
+			}
+		},
+
+		render: function render() {
+			var _this = this;
+
+			var _props = this.props;
+			var artist = _props.artist;
+			var title = _props.title;
+			var image = _props.image;
+			var preview = _props.preview;
+			var isPlaying = _props.isPlaying;
+			var isLiked = _props.isLiked;
+
+
+			return _react2.default.createElement(
+				'div',
+				{ className: 'now-playing' },
+				_react2.default.createElement('img', { src: image, alt: title + ': ' + artist }),
+				_react2.default.createElement(
+					'span',
+					{ className: 'title' },
+					title
+				),
+				_react2.default.createElement(
+					'span',
+					{ className: 'artist' },
+					artist
+				),
+				isPlaying ? _react2.default.createElement(
+					'button',
+					{ ref: 'pauseSong', onClick: this.handlePauseClick },
+					'Pause'
+				) : _react2.default.createElement(
+					'button',
+					{ ref: 'playSong', onClick: this.handlePlayClick },
+					'Play'
+				),
+				isLiked ? _react2.default.createElement(
+					'button',
+					{ ref: 'unlikeSong', onClick: this.handleUnlikeClick },
+					'Unlike'
+				) : _react2.default.createElement(
+					'button',
+					{ ref: 'likeSong', onClick: this.handleLikeClick },
+					'Like'
+				),
+				preview !== '' ? _react2.default.createElement('audio', {
+					onCanPlay: this.handleSongLoaded,
+					onEnded: this.handleSongEnd,
+					ref: function ref(_ref) {
+						return _this.audio = _ref;
+					},
+					src: preview
+				}) : null
+			);
+		}
+	});
+
+	exports.NowPlaying = NowPlaying;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "NowPlaying.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ },
+/* 250 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.NextSongContainer = undefined;
+
+	var _react = __webpack_require__(82);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(201);
+
+	var _NextSong = __webpack_require__(251);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+		var nextSong = state.songs[1];
+
+		return {
+			title: nextSong ? nextSong['title'] : '',
+			artist: nextSong ? nextSong['artist'] : ''
+		};
+	};
+
+	var NextSongContainer = exports.NextSongContainer = (0, _reactRedux.connect)(mapStateToProps)(_NextSong.NextSong);
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "NextSongContainer.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.NextSong = undefined;
+
+	var _react = __webpack_require__(82);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var NextSong = _react2.default.createClass({
+		displayName: 'NextSong',
+
+		propTypes: {
+			title: _react2.default.PropTypes.string,
+			artist: _react2.default.PropTypes.string
+		},
+
+		render: function render() {
+			var _props = this.props;
+			var title = _props.title;
+			var artist = _props.artist;
+
+
+			return _react2.default.createElement(
+				'div',
+				{ className: 'next-song' },
+				_react2.default.createElement(
+					'span',
+					{ className: 'title' },
+					title
+				),
+				_react2.default.createElement(
+					'span',
+					{ className: 'artist' },
+					artist
+				)
+			);
+		}
+	});
+
+	exports.NextSong = NextSong;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "NextSong.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.LikedSongListContainer = undefined;
+
+	var _react = __webpack_require__(82);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(201);
+
+	var _actions = __webpack_require__(217);
+
+	var _LikedSongList = __webpack_require__(253);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+		return {
+			likedSongs: state.likedSongs
+		};
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+		return {
+			deleteSong: function deleteSong(song) {
+				dispatch((0, _actions.unlikeSong)(song));
+			}
+		};
+	};
+
+	var LikedSongListContainer = exports.LikedSongListContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LikedSongList.LikedSongList);
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "LikedSongListContainer.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ },
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.LikedSongList = undefined;
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _react = __webpack_require__(82);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _LikedSong = __webpack_require__(254);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var LikedSongList = _react2.default.createClass({
+		displayName: 'LikedSongList',
+
+		propTypes: {
+			likedSongs: _react2.default.PropTypes.array.isRequired,
+			deleteSong: _react2.default.PropTypes.func.isRequired
+		},
+
+		render: function render() {
+			var _props = this.props;
+			var likedSongs = _props.likedSongs;
+			var deleteSong = _props.deleteSong;
+
+
+			return _react2.default.createElement(
+				'div',
+				{ className: 'liked-song-list' },
+				_react2.default.createElement(
+					'ul',
+					null,
+					likedSongs.map(function (likedSong, index) {
+						return _react2.default.createElement(
+							'li',
+							{ key: index },
+							_react2.default.createElement(_LikedSong.LikedSong, _extends({}, likedSong, {
+								deleteSong: deleteSong
+							}))
+						);
+					})
+				)
+			);
+		}
+	});
+
+	exports.LikedSongList = LikedSongList;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "LikedSongList.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ },
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.LikedSong = undefined;
+
+	var _react = __webpack_require__(82);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var LikedSong = _react2.default.createClass({
+		displayName: 'LikedSong',
+
+		propTypes: {
+			title: _react2.default.PropTypes.string.isRequired,
+			artist: _react2.default.PropTypes.string.isRequired,
+			deleteSong: _react2.default.PropTypes.func.isRequired
+		},
+
+		createLink: function createLink(title, artist) {
+			return _react2.default.createElement(
+				'a',
+				{ href: 'youtube.com/' + title + '_' + artist },
+				'Youtube'
+			);
+		},
+
+		deleteSong: function deleteSong() {
+			var _props = this.props;
+			var title = _props.title;
+			var artist = _props.artist;
+
+			var song = {
+				title: this.props.title,
+				artist: this.props.artist
+			};
+
+			this.props.deleteSong(song);
+		},
+
+		render: function render() {
+			var _props2 = this.props;
+			var title = _props2.title;
+			var artist = _props2.artist;
+
+
+			return _react2.default.createElement(
+				'div',
+				{ className: 'liked-song' },
+				_react2.default.createElement(
+					'span',
+					{ className: 'title' },
+					title
+				),
+				_react2.default.createElement(
+					'span',
+					{ className: 'artist' },
+					artist
+				),
+				_react2.default.createElement(
+					'span',
+					{ className: 'link' },
+					this.createLink(title, artist)
+				),
+				_react2.default.createElement(
+					'button',
+					{ ref: 'deleteSong', onClick: this.deleteSong },
+					'Delete'
+				)
+			);
+		}
+	});
+
+	exports.LikedSong = LikedSong;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "LikedSong.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.AddArtistContainer = undefined;
+
+	var _react = __webpack_require__(82);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(201);
+
+	var _AddArtist = __webpack_require__(256);
+
+	var _actions = __webpack_require__(217);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+		return {
+			likedArtists: state.likedArtists
+		};
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+		return {
+			deleteArtist: function deleteArtist(artist) {
+				dispatch((0, _actions.removeArtist)(artist));
+			},
+			addArtist: function addArtist(artist) {
+				dispatch((0, _actions.addArtist)(artist));
+			}
+		};
+	};
+
+	var AddArtistContainer = exports.AddArtistContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_AddArtist.AddArtist);
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "AddArtistContainer.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.AddArtist = undefined;
+
+	var _react = __webpack_require__(82);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _ArtistInput = __webpack_require__(257);
+
+	var _LikedArtistList = __webpack_require__(258);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var AddArtist = _react2.default.createClass({
+		displayName: 'AddArtist',
+
+		propTypes: {
+			likedArtists: _react2.default.PropTypes.array.isRequired,
+			deleteArtist: _react2.default.PropTypes.func.isRequired,
+			addArtist: _react2.default.PropTypes.func.isRequired
+		},
+
+		render: function render() {
+			var _props = this.props;
+			var likedArtists = _props.likedArtists;
+			var deleteArtist = _props.deleteArtist;
+			var addArtist = _props.addArtist;
+
+
+			return _react2.default.createElement(
+				'div',
+				{ className: 'add-artist' },
+				_react2.default.createElement(_ArtistInput.ArtistInput, { addArtist: addArtist }),
+				_react2.default.createElement(_LikedArtistList.LikedArtistList, {
+					likedArtists: likedArtists,
+					deleteArtist: deleteArtist
+				})
+			);
+		}
+	});
+
+	exports.AddArtist = AddArtist;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "AddArtist.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.ArtistInput = undefined;
+
+	var _react = __webpack_require__(82);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ArtistInput = _react2.default.createClass({
+		displayName: 'ArtistInput',
+
+		propTypes: {
+			addArtist: _react2.default.PropTypes.func.isRequired
+		},
+
+		getInitialState: function getInitialState() {
+			return {
+				artist: ''
+			};
+		},
+
+		handleChange: function handleChange(e) {
+			this.setState({
+				artist: e.target.value
+			});
+		},
+
+		handleAddClick: function handleAddClick() {
+			this.props.addArtist(this.state.artist);
+			this.setState({
+				artist: ''
+			});
+		},
+
+		render: function render() {
+			return _react2.default.createElement(
+				'div',
+				{ className: 'artist-input' },
+				_react2.default.createElement('input', {
+					type: 'text',
+					value: this.state.artist,
+					onChange: this.handleChange
+				}),
+				_react2.default.createElement(
+					'button',
+					{ ref: 'addArtist', onClick: this.handleAddClick },
+					'Add Artist'
+				)
+			);
+		}
+	});
+
+	exports.ArtistInput = ArtistInput;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ArtistInput.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.LikedArtistList = undefined;
+
+	var _react = __webpack_require__(82);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _LikedArtist = __webpack_require__(259);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var LikedArtistList = _react2.default.createClass({
+		displayName: 'LikedArtistList',
+
+		propTypes: {
+			likedArtists: _react2.default.PropTypes.array.isRequired,
+			deleteArtist: _react2.default.PropTypes.func.isRequired
+		},
+
+		render: function render() {
+			var _props = this.props;
+			var likedArtists = _props.likedArtists;
+			var deleteArtist = _props.deleteArtist;
+
+
+			return _react2.default.createElement(
+				'div',
+				{ className: 'liked-artist-list' },
+				_react2.default.createElement(
+					'ul',
+					null,
+					likedArtists.map(function (likedArtist, index) {
+						return _react2.default.createElement(
+							'li',
+							{ key: index },
+							_react2.default.createElement(_LikedArtist.LikedArtist, {
+								artist: likedArtist,
+								deleteArtist: deleteArtist })
+						);
+					})
+				)
+			);
+		}
+	});
+
+	exports.LikedArtistList = LikedArtistList;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "LikedArtistList.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(module) {/* REACT HOT LOADER */ if (true) { (function () { var ReactHotAPI = __webpack_require__(3), RootInstanceProvider = __webpack_require__(11), ReactMount = __webpack_require__(13), React = __webpack_require__(82); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.LikedArtist = undefined;
+
+	var _react = __webpack_require__(82);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var LikedArtist = _react2.default.createClass({
+		displayName: 'LikedArtist',
+
+		propTypes: {
+			artist: _react2.default.PropTypes.string.isRequired,
+			deleteArtist: _react2.default.PropTypes.func.isRequired
+		},
+
+		deleteArtist: function deleteArtist() {
+			this.props.deleteArtist(this.props.artist);
+		},
+
+		render: function render() {
+			var artist = this.props.artist;
+
+
+			return _react2.default.createElement(
+				'div',
+				{ className: 'liked-artist' },
+				_react2.default.createElement(
+					'span',
+					{ className: 'artist' },
+					artist
+				),
+				_react2.default.createElement(
+					'button',
+					{ ref: 'deleteArtist', onClick: this.deleteArtist },
+					'Delete'
+				)
+			);
+		}
+	});
+
+	exports.LikedArtist = LikedArtist;
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(218); if (makeExportsHot(module, __webpack_require__(82))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "LikedArtist.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
 
 /***/ }
 /******/ ]);

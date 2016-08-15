@@ -8,7 +8,9 @@ const LikedSong = React.createClass({
 	},
 
 	createLink: function(title, artist) {
-		return 'youtube.com/' + title + '_' + artist;
+		return (
+			<a href={'youtube.com/' + title + '_' + artist}>Youtube</a>
+		);
 	},
 
 	deleteSong: function() {

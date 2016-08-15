@@ -38,13 +38,15 @@ const App = React.createClass({
 
 	render: function() {
 		return (
-			<div>
-				<NowPlayingContainer />
-				<br />
-				<NextSongContainer />
-				<LikedSongListContainer />
-				<br />
-				<AddArtistContainer />
+			<div className="row">
+				<div className="column-two">
+					<NowPlayingContainer />
+				</div>
+				<div className="column-two">
+					<NextSongContainer />
+					<LikedSongListContainer />
+					<AddArtistContainer />
+				</div>
 			</div>
 		);
 	}
