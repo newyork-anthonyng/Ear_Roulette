@@ -13,6 +13,20 @@ import { LikedArtist } from '../../../src/components/LikedArtist';
 import { expect } from 'chai';
 
 describe('AddArtist', () => {
+	it('renders a button to show list of LikedArtist components and ArtistInput component', () => {
+		const likedArtists = [
+			'Justin Bieber',
+			'Metallica'
+		];
+		const component = renderIntoDocument(
+			<AddArtist likedArtists={likedArtists} />
+		);
+		const showArtistButton = findRenderedDOMComponentWithTag(component, 'button');
+		const buttonText = showArtistButton.textContent;
+
+		expect(buttonText).to.equal('Liked Artists');
+	});
+
 	it('renders an ArtistInput and LikedArtistList component', () => {
 		const likedArtists = [
 			'Justin Bieber',
@@ -21,8 +35,16 @@ describe('AddArtist', () => {
 		const component = renderIntoDocument(
 			<AddArtist likedArtists={likedArtists} />
 		);
-		const likedArtistListEle = findRenderedComponentWithType(component, LikedArtistList);
-		const artistInputEle = findRenderedComponentWithType(component, ArtistInput);
+		let likedArtistListEle = scryRenderedComponentsWithType(component, LikedArtistList);
+		let artistInputEle = scryRenderedComponentsWithType(component, ArtistInput);
+		expect(likedArtistListEle.length).to.equal(0);
+		expect(artistInputEle.length).to.equal(0);
+
+		const showArtistButton = findRenderedDOMComponentWithTag(component, 'button');
+		Simulate.click(showArtistButton);
+
+		likedArtistListEle = findRenderedComponentWithType(component, LikedArtistList);
+		artistInputEle = findRenderedComponentWithType(component, ArtistInput);
 
 		expect(likedArtistListEle).to.be.ok;
 		expect(artistInputEle).to.be.ok;
@@ -36,6 +58,8 @@ describe('AddArtist', () => {
 		const component = renderIntoDocument(
 			<AddArtist likedArtists={likedArtists} />
 		);
+		const showArtistButton = findRenderedDOMComponentWithTag(component, 'button');
+		Simulate.click(showArtistButton);
 		const likedArtistsEle = scryRenderedComponentsWithType(component, LikedArtist);
 
 		expect(likedArtistsEle.length).to.equal(2);
@@ -54,6 +78,8 @@ describe('AddArtist', () => {
 				likedArtists={likedArtists}
 			/>
 		);
+		const showArtistButton = findRenderedDOMComponentWithTag(component, 'button');
+		Simulate.click(showArtistButton);
 		const likedArtistEle = scryRenderedComponentsWithType(component, LikedArtist)[0];
 		const deleteButtonEle = findRenderedDOMComponentWithTag(likedArtistEle, 'button');
 		Simulate.click(deleteButtonEle);
@@ -71,6 +97,8 @@ describe('AddArtist', () => {
 				likedArtists={likedArtists}
 			/>
 		);
+		const showArtistButton = findRenderedDOMComponentWithTag(component, 'button');
+		Simulate.click(showArtistButton);
 		const artistInputEle = findRenderedComponentWithType(component, ArtistInput);
 		const inputEle = findRenderedDOMComponentWithTag(artistInputEle, 'input');
 		const buttonEle = findRenderedDOMComponentWithTag(artistInputEle, 'button');

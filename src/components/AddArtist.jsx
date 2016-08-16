@@ -9,16 +9,38 @@ const AddArtist = React.createClass({
 		addArtist: React.PropTypes.func.isRequired
 	},
 
+	getInitialState: function() {
+		return {
+			isShowing: false
+		};
+	},
+
+	handleClick: function() {
+		this.setState({
+			isShowing: !this.state.isShowing
+		});
+	},
+
 	render: function() {
 		const { likedArtists, deleteArtist, addArtist } = this.props;
 
 		return (
-			<div className="add-artist">
-				<ArtistInput addArtist={addArtist} />
-				<LikedArtistList
-					likedArtists={likedArtists}
-					deleteArtist={deleteArtist}
-				/>
+			<div>
+				<button
+					className='show-liked-artists'
+					onClick={this.handleClick}
+				>
+					Liked Artists
+				</button>
+				{this.state.isShowing ?
+					<div className="add-artist">
+						<ArtistInput addArtist={addArtist} />
+						<LikedArtistList
+							likedArtists={likedArtists}
+							deleteArtist={deleteArtist}
+						/>
+					</div>
+				: null}
 			</div>
 		);
 	}
