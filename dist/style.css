@@ -4,6 +4,13 @@ body {
 	height: 100%;
 }
 
+h1 {
+	font-weight: 400;
+	position: relative;
+	text-align: center;
+	top: 35vh;
+}
+
 span {
 	display: block;
 }
@@ -53,13 +60,14 @@ span {
 }
 
 /* Liked Songs & Artists */
-.liked-artist-list ul,
-.liked-song-list ul {
+.add-artist,
+.liked-song-list {
 	box-shadow: 0px 0px 10px 6px rgba(194,194,194,1);
 	list-style: none;
 	margin: 0 auto;
 	padding-left: 0;
-	width: 90%;
+	position: absolute;
+	top: 40vw;
 }
 
 .liked-artist {
@@ -72,10 +80,29 @@ span {
 	display: inline-block;
 }
 
-.liked-artist button {
+button {
 	background-color: transparent;
 	border: none;
 	color: blue;
-	float: right;
+	cursor: pointer;
 	font-size: 16px;
+}
+
+.liked-artist {
+	float: right;
+}
+
+.show-liked-songs,
+.show-liked-artists {
+	display: block;
+	margin: 0 auto;
+	position: relative;
+}
+
+.show-liked-songs {
+	top: 40vh;
+}
+
+.show-liked-artists {
+	top: 44vh;
 }
