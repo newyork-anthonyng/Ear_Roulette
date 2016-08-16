@@ -22,11 +22,13 @@ describe('LikedSong', () => {
 		const artistText = scryRenderedDOMComponentsWithClass(component, 'artist')[0].textContent;
 		const titleText = scryRenderedDOMComponentsWithClass(component, 'title')[0].textContent;
 		const linkText = scryRenderedDOMComponentsWithClass(component, 'link')[0].textContent;
+		const linkHref = scryRenderedDOMComponentsWithTag(component, 'a')[0].href;
 		const deleteButton = scryRenderedDOMComponentsWithTag(component, 'button');
 
-		expect(artistText).to.contain('Justin Bieber');
-		expect(titleText).to.contain('Baby');
-		expect(linkText).to.contain('youtube.com/Baby_Justin Bieber');
+		expect(artistText).to.equal('Justin Bieber');
+		expect(titleText).to.equal('Baby');
+		expect(linkText).to.equal('Youtube');
+		expect(linkHref).to.equal('youtube.com/Baby_Justin Bieber');
 		expect(deleteButton.length).to.equal(1);
 	});
 
