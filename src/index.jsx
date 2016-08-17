@@ -43,8 +43,8 @@ const App = React.createClass({
 					<NowPlayingContainer />
 				</div>
 				<div className="column-two">
-					<h1>Ear Roulette</h1>
 					<NextSongContainer />
+					<h1>Ear Roulette</h1>
 					<LikedSongListContainer />
 					<AddArtistContainer />
 				</div>

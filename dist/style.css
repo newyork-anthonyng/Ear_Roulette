@@ -2,6 +2,7 @@ html,
 body {
 	font-family: Helvetica, sans-serif;
 	height: 100%;
+	line-height: 1.6;
 }
 
 h1 {
@@ -38,10 +39,15 @@ span {
 }
 
 .column-two {
-	border: 4px dashed pink;
 	float: left;
 	height: 100%;
+	padding: 21px;
+	position: relative;
 	width: 50%;
+}
+
+.column-two:first-of-type {
+	border-right: 2px solid #999999;
 }
 
 /* Now Playing */
@@ -51,12 +57,10 @@ span {
 }
 
 .now-playing img {
-	bottom: 40px;
+	bottom: 25vh;
 	display: inline-block;
 	left: 0;
-	margin: 0 auto;
 	position: absolute;
-	right: 0;
 }
 
 /* Liked Songs & Artists */
@@ -86,6 +90,11 @@ button {
 	color: blue;
 	cursor: pointer;
 	font-size: 16px;
+	padding: 0;
+}
+
+button:nth-of-type(2) {
+	margin-left: 16px;
 }
 
 .liked-artist {
