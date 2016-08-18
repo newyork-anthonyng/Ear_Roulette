@@ -65,6 +65,7 @@ ul {
 	bottom: 25vh;
 	display: inline-block;
 	left: 0;
+	max-width: 300px;
 	position: absolute;
 }
 
